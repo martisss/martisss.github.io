@@ -158,6 +158,95 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/11/21/kmp%E7%AE%97%E6%B3%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+      <meta itemprop="name" content="martisss">
+      <meta itemprop="description" content="孩子，快逃！！！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Martisss's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/11/21/kmp%E7%AE%97%E6%B3%95/" class="post-title-link" itemprop="url">kmp算法</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-11-21 22:40:01 / 修改时间：22:44:01" itemprop="dateCreated datePublished" datetime="2021-11-21T22:40:01+08:00">2021-11-21</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">学习</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h3 id="关键概念"><a href="#关键概念" class="headerlink" title="关键概念"></a>关键概念</h3><p><strong>前缀是指不包含最后一个字符的所有以第一个字符开头的连续子串</strong>；<strong>后缀是指不包含第一个字符的所有以最后一个字符结尾的连续子串</strong>。</p>
+<p>模式串与前缀表对应位置的数字表示的就是：<strong>下标i之前（包括i）的字符串中，有多大长度的相同前缀后缀。</strong></p>
+<p>next数组就可以是前缀表，但是很多实现都是把前缀表统一减一（右移一位，初始位置为-1）之后作为next数组。</p>
+<p><strong>j和next[0]初始化为-1，整个next数组是以 前缀表减一之后的效果来构建的</strong></p>
+<h3 id="时间复杂度"><a href="#时间复杂度" class="headerlink" title="时间复杂度"></a>时间复杂度</h3><p>生成next数组，时间复杂度是O (m), 后续匹配过程时间复杂度是O（n），时间复杂度是O(m+n)</p>
+<p>暴力解法是O(m*n)</p>
+<h3 id="构建next数组"><a href="#构建next数组" class="headerlink" title="构建next数组"></a>构建next数组</h3><ol>
+<li>初始化</li>
+</ol>
+<p>定义两个指针i和j，j指向前缀末尾位置，i指向后缀末尾位置。</p>
+<ol start="2">
+<li>处理前后缀不相同的情况: 回退</li>
+<li>处理前后缀相同的情况： j++</li>
+</ol>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> getNext = <span class="function"><span class="keyword">function</span>(<span class="params">s</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">let</span> next = []</span><br><span class="line">  <span class="keyword">let</span> j = -<span class="number">1</span></span><br><span class="line">  next[<span class="number">0</span>] = j</span><br><span class="line">  <span class="keyword">for</span>(<span class="keyword">let</span> i = <span class="number">1</span>; i &lt; s.length; i++) &#123;</span><br><span class="line">    <span class="keyword">while</span>(j &gt;= <span class="number">0</span> &amp;&amp; s[j+<span class="number">1</span>] !== s[i])&#123; <span class="comment">// s[j + 1] 与 s[i] 不相等</span></span><br><span class="line">      j = next[j] <span class="comment">// 回退</span></span><br><span class="line">        <span class="comment">// next[j]就是记录着j（包括j）之前的子串的最长相同前后缀的长度。</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(s[j+<span class="number">1</span>] === s[i]) j++  <span class="comment">//找到了相同的前后缀，同时向后移动i、j</span></span><br><span class="line">    next[i] = j  <span class="comment">// 将j(前缀的长度)赋给next[i],next[i]记录最长相同前后缀的长度</span></span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> next <span class="comment">//f</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> strStr = <span class="function"><span class="keyword">function</span>(<span class="params">haystack, needle</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span>(needle.length === <span class="number">0</span>) <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">  <span class="keyword">const</span> getNext = <span class="function"><span class="keyword">function</span>(<span class="params">s</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">let</span> next = []</span><br><span class="line">    <span class="keyword">let</span> j = -<span class="number">1</span></span><br><span class="line">    next[<span class="number">0</span>] = j</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">let</span> i = <span class="number">1</span>; i &lt; s.length; i++) &#123;</span><br><span class="line">      <span class="keyword">while</span>(j &gt;= <span class="number">0</span> &amp;&amp; s[j+<span class="number">1</span>] !== s[i])&#123;</span><br><span class="line">        j = next[j]</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">if</span>(s[j+<span class="number">1</span>] === s[i]) j++</span><br><span class="line">      next[i] = j </span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> next</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">let</span> next = getNext(next, needle)</span><br><span class="line">  <span class="keyword">let</span> j = -<span class="number">1</span></span><br><span class="line">  <span class="keyword">for</span>(<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; haystack.length; i++) &#123;</span><br><span class="line">    <span class="keyword">while</span>(j &gt;= <span class="number">0</span> &amp;&amp; haystack[i] !== needle[j+<span class="number">1</span>])&#123;</span><br><span class="line">      j = next[j]</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(haystack[i] === needle[j+<span class="number">1</span>]) j++</span><br><span class="line">    <span class="keyword">if</span>(j === needle.length - <span class="number">1</span>) &#123;</span><br><span class="line">      <span class="keyword">return</span> i - needle.length + <span class="number">1</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> -<span class="number">1</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="leetcode"><a href="#leetcode" class="headerlink" title="leetcode"></a>leetcode</h2><h3 id="459-重复的子字符串"><a href="#459-重复的子字符串" class="headerlink" title="459. 重复的子字符串"></a><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/repeated-substring-pattern/">459. 重复的子字符串</a></h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">repeatedSubstringPattern</span>(<span class="params">s: string</span>): <span class="title">boolean</span> </span>&#123;</span><br><span class="line">    <span class="keyword">const</span> getNext = <span class="function">(<span class="params">s</span>) =&gt;</span> &#123;</span><br><span class="line">        <span class="keyword">let</span> j = -<span class="number">1</span></span><br><span class="line">        <span class="keyword">let</span> next = [j]</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">let</span> i = <span class="number">1</span>; i &lt; s.length; i++) &#123;</span><br><span class="line">            <span class="keyword">while</span>(j &gt;= <span class="number">0</span> &amp;&amp; s[j+<span class="number">1</span>] !== s[i]) &#123;</span><br><span class="line">                j = next[j]</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span>(s[j+<span class="number">1</span>] === s[i])&#123;</span><br><span class="line">                j++</span><br><span class="line">            &#125;</span><br><span class="line">            next[i] = j</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> next</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(s.length === <span class="number">0</span>) <span class="keyword">return</span> <span class="literal">false</span></span><br><span class="line">    <span class="keyword">let</span> next = getNext(s)</span><br><span class="line">    <span class="keyword">if</span>(next[s.length - <span class="number">1</span>] !== -<span class="number">1</span> &amp;&amp; s.length % (s.length - (next[s.length - <span class="number">1</span>] + <span class="number">1</span>)) === <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">false</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
     <link itemprop="mainEntityOfPage" href="http://example.com/2021/11/20/cmder-config/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -602,7 +691,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">2</span>
+          <span class="site-state-item-count">3</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -615,7 +704,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-count">6</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
