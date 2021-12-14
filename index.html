@@ -158,6 +158,105 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/12/14/%E9%87%8D%E8%AF%86parseInt/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+      <meta itemprop="name" content="martisss">
+      <meta itemprop="description" content="孩子，快逃！！！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Martisss's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/12/14/%E9%87%8D%E8%AF%86parseInt/" class="post-title-link" itemprop="url">重识parseInt</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-12-14 10:56:20 / 修改时间：11:00:15" itemprop="dateCreated datePublished" datetime="2021-12-14T10:56:20+08:00">2021-12-14</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">学习</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0/JS/" itemprop="url" rel="index"><span itemprop="name">JS</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="parseInt"><a href="#parseInt" class="headerlink" title="parseInt"></a>parseInt</h1><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">parseInt</span>(<span class="number">021</span>)  <span class="comment">//17</span></span><br><span class="line"><span class="built_in">parseInt</span>(<span class="string">&#x27;021&#x27;</span>) <span class="comment">//21</span></span><br><span class="line"><span class="built_in">parseInt</span>(<span class="string">&#x27;021&#x27;</span>, <span class="number">8</span>) <span class="comment">//17</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h2><p><strong>parseInt(string, radix)</strong>  解析一个<strong>字符串</strong>并返回<strong>指定基数</strong>的<strong>十进制整数</strong>， <code>radix</code> 是<strong>2-36</strong>之间的整数，表示被解析字符串的基数。</p>
+<h2 id="注意点"><a href="#注意点" class="headerlink" title="注意点"></a>注意点</h2><ul>
+<li><p>解析的目标值是<strong>字符串</strong>，如果不是的话，会先进行<code>toString</code>转换(默认转换为十进制)，如果不能转换为数字，返回<code>NaN</code></p>
+</li>
+<li><p>返回值是一个<strong>十进制整数</strong> 或者 <strong><code>NaN</code></strong></p>
+</li>
+<li><p>在任何情况下都最好指定基数，范围是2-36</p>
+</li>
+<li><p>如果 <code>parseInt </code>遇到的字符不是指定 <code>radix </code>参数中的数字，它将忽略该字符以及所有后续字符，并返回到该点为止已解析的整数值。 <code>parseInt</code> 将数字截断为整数值。 允许前导和尾随空格。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">parseInt</span>(<span class="string">&quot;15e2&quot;</span>, <span class="number">10</span>); <span class="comment">//15</span></span><br><span class="line"><span class="built_in">parseInt</span>(<span class="string">&quot;15px&quot;</span>, <span class="number">10</span>); <span class="comment">//15</span></span><br><span class="line"><span class="built_in">parseInt</span>(<span class="number">4.7</span>, <span class="number">10</span>); <span class="comment">//4</span></span><br><span class="line"><span class="built_in">parseInt</span>(<span class="number">4.7</span> * <span class="number">1e22</span>, <span class="number">10</span>); <span class="comment">// 非常大的数值变成 4</span></span><br><span class="line"><span class="built_in">parseInt</span>(<span class="number">0.00000000000434</span>, <span class="number">10</span>); <span class="comment">// 非常小的数值变成 4</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>如果 <code>radix</code> 是 <code>undefined</code>、<code>0</code>或未指定的</p>
+<ol>
+<li>在解析以0开头的字符串时，有很多实现环境仍然把以 0 开头的数值字符串（numeric string）解释为一个八进制数，但<strong>ECMAScript 5 已经禁止了这种做法</strong></li>
+</ol>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">parseInt</span>(<span class="string">&quot;0e0&quot;</span>);</span><br><span class="line"><span class="comment">// 0</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">parseInt</span>(<span class="string">&quot;08&quot;</span>);</span><br><span class="line"><span class="comment">// 8</span></span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>如果输入的 <code>string</code>以 “<code>0x</code>“或 “<code>0x</code>“（一个0，后面是小写或大写的X）开头，那么radix被假定为16，字符串的其余部分被当做十六进制数去解析</li>
+</ol>
+</blockquote>
+</li>
+</ul>
+<h2 id="自测"><a href="#自测" class="headerlink" title="自测"></a>自测</h2><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">parseInt</span>(<span class="number">021</span>)  <span class="comment">//17</span></span><br><span class="line"><span class="comment">// (021).toString() --&gt;  &#x27;17&#x27; --&gt; 17</span></span><br><span class="line"><span class="built_in">parseInt</span>(<span class="string">&#x27;021&#x27;</span>) <span class="comment">//21</span></span><br><span class="line"><span class="comment">//未指定radix, 默认radix=10</span></span><br><span class="line"><span class="built_in">parseInt</span>(<span class="string">&#x27;021&#x27;</span>, <span class="number">8</span>) <span class="comment">//17</span></span><br><span class="line"><span class="comment">//指定 radix=8</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">// 返回15</span></span><br><span class="line"><span class="built_in">parseInt</span>(<span class="string">&quot;0xF&quot;</span>, <span class="number">16</span>);</span><br><span class="line"><span class="built_in">parseInt</span>(<span class="string">&quot;17&quot;</span>, <span class="number">8</span>);</span><br><span class="line"><span class="built_in">parseInt</span>(<span class="number">021</span>, <span class="number">8</span>);</span><br><span class="line"><span class="built_in">parseInt</span>(<span class="string">&quot;015&quot;</span>, <span class="number">10</span>);   <span class="comment">// parseInt(015, 8); 返回 13</span></span><br><span class="line"><span class="built_in">parseInt</span>(<span class="number">15.99</span>, <span class="number">10</span>);</span><br><span class="line"><span class="built_in">parseInt</span>(<span class="string">&quot;15,123&quot;</span>, <span class="number">10</span>);</span><br><span class="line"><span class="built_in">parseInt</span>(<span class="string">&quot;FXX123&quot;</span>, <span class="number">16</span>);</span><br><span class="line"><span class="built_in">parseInt</span>(<span class="string">&quot;1111&quot;</span>, <span class="number">2</span>);</span><br><span class="line"><span class="built_in">parseInt</span>(<span class="string">&quot;15 * 3&quot;</span>, <span class="number">10</span>);</span><br><span class="line"><span class="built_in">parseInt</span>(<span class="string">&quot;15e2&quot;</span>, <span class="number">10</span>);</span><br><span class="line"><span class="built_in">parseInt</span>(<span class="string">&quot;15px&quot;</span>, <span class="number">10</span>);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">//返回NaN</span></span><br><span class="line"><span class="built_in">parseInt</span>(<span class="string">&quot;Hello&quot;</span>, <span class="number">8</span>); <span class="comment">// 根本就不是数值</span></span><br><span class="line"><span class="built_in">parseInt</span>(<span class="string">&quot;546&quot;</span>, <span class="number">2</span>);   <span class="comment">// 除了“0、1”外，其它数字都不是有效二进制数字</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//返回-15</span></span><br><span class="line"><span class="built_in">parseInt</span>(<span class="string">&quot;-F&quot;</span>, <span class="number">16</span>);</span><br><span class="line"><span class="built_in">parseInt</span>(<span class="string">&quot;-0XF&quot;</span>, <span class="number">16</span>);</span><br><span class="line"><span class="built_in">parseInt</span>(-<span class="number">15.1</span>, <span class="number">10</span>);</span><br><span class="line"><span class="built_in">parseInt</span>(<span class="string">&quot; -17&quot;</span>, <span class="number">8</span>);</span><br><span class="line"><span class="built_in">parseInt</span>(<span class="string">&quot;-1111&quot;</span>, <span class="number">2</span>);</span><br><span class="line"><span class="built_in">parseInt</span>(<span class="string">&quot;-15e1&quot;</span>, <span class="number">10</span>);</span><br><span class="line"><span class="built_in">parseInt</span>(<span class="string">&quot;-12&quot;</span>, <span class="number">13</span>);</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
     <link itemprop="mainEntityOfPage" href="http://example.com/2021/12/03/morris%E4%B8%AD%E5%BA%8F%E9%81%8D%E5%8E%86/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -877,7 +976,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">5</span>
+          <span class="site-state-item-count">6</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -890,7 +989,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-count">9</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
