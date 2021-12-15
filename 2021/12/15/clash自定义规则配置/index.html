@@ -20,22 +20,27 @@
     var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="配置环境变量 在控制面板中的如下路径找到高级系统设置&gt;环境变量，点击 用户变量 系统变量 12CMDER_ROOT  &#x3D; C:\Program Files\cmder  PATH       +&#x3D; %CMDER_ROOT% 管理员运行cmd（注意是cmd，不是Cmder）运行一下命令：Cmder.exe &#x2F;REGISTER ALL  右键菜单    高亮插件下载 Cmder-powerlin">
+  <meta name="description" content="目的​    最终希望达到的一个效果就是通过clash自定义规则配置，使得在clash处于工作状态时访问国内网站可以直接使用国内网络连接。 步骤1.:raising_hand_man: 配置Profiles下的Parsers点击Settings，点击Profiles下的Parsers那一栏右侧对应的edit，打开配置页面  打开后使用下方代码覆盖原有代码，然后退出 1234567parsers:">
 <meta property="og:type" content="article">
-<meta property="og:title" content="cmder-config">
-<meta property="og:url" content="http://example.com/2021/11/20/cmder-config/index.html">
+<meta property="og:title" content="clash自定义规则配置">
+<meta property="og:url" content="http://example.com/2021/12/15/clash%E8%87%AA%E5%AE%9A%E4%B9%89%E8%A7%84%E5%88%99%E9%85%8D%E7%BD%AE/index.html">
 <meta property="og:site_name" content="Martisss&#39;s blog">
-<meta property="og:description" content="配置环境变量 在控制面板中的如下路径找到高级系统设置&gt;环境变量，点击 用户变量 系统变量 12CMDER_ROOT  &#x3D; C:\Program Files\cmder  PATH       +&#x3D; %CMDER_ROOT% 管理员运行cmd（注意是cmd，不是Cmder）运行一下命令：Cmder.exe &#x2F;REGISTER ALL  右键菜单    高亮插件下载 Cmder-powerlin">
+<meta property="og:description" content="目的​    最终希望达到的一个效果就是通过clash自定义规则配置，使得在clash处于工作状态时访问国内网站可以直接使用国内网络连接。 步骤1.:raising_hand_man: 配置Profiles下的Parsers点击Settings，点击Profiles下的Parsers那一栏右侧对应的edit，打开配置页面  打开后使用下方代码覆盖原有代码，然后退出 1234567parsers:">
 <meta property="og:locale">
-<meta property="og:image" content="https://i.loli.net/2021/11/20/kqSEn8IuLXAHhWr.png">
-<meta property="article:published_time" content="2021-11-20T06:12:26.000Z">
-<meta property="article:modified_time" content="2021-11-20T06:16:29.929Z">
+<meta property="og:image" content="https://s2.loli.net/2021/12/15/sbpcIFEmxz7jOWB.png">
+<meta property="og:image" content="https://s2.loli.net/2021/12/15/F7p9fJPqAgdbSCt.png">
+<meta property="og:image" content="https://s2.loli.net/2021/12/15/NBn5CVJvmAMWGOz.png">
+<meta property="og:image" content="https://s2.loli.net/2021/12/15/ripHyVKk3swUuYv.png">
+<meta property="og:image" content="https://s2.loli.net/2021/12/15/obxWZ4H85VpPafq.png">
+<meta property="og:image" content="https://s2.loli.net/2021/12/15/2VgsQAWbdOuCByj.png">
+<meta property="article:published_time" content="2021-12-15T08:29:47.000Z">
+<meta property="article:modified_time" content="2021-12-15T08:57:56.575Z">
 <meta property="article:author" content="martisss">
-<meta property="article:tag" content="cmder">
+<meta property="article:tag" content="工具">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://i.loli.net/2021/11/20/kqSEn8IuLXAHhWr.png">
+<meta name="twitter:image" content="https://s2.loli.net/2021/12/15/sbpcIFEmxz7jOWB.png">
 
-<link rel="canonical" href="http://example.com/2021/11/20/cmder-config/">
+<link rel="canonical" href="http://example.com/2021/12/15/clash%E8%87%AA%E5%AE%9A%E4%B9%89%E8%A7%84%E5%88%99%E9%85%8D%E7%BD%AE/">
 
 
 <script id="page-configurations">
@@ -48,7 +53,7 @@
   };
 </script>
 
-  <title>cmder-config | Martisss's blog</title>
+  <title>clash自定义规则配置 | Martisss's blog</title>
   
 
 
@@ -164,7 +169,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/11/20/cmder-config/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/12/15/clash%E8%87%AA%E5%AE%9A%E4%B9%89%E8%A7%84%E5%88%99%E9%85%8D%E7%BD%AE/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/uploads/avatar.gif">
@@ -177,7 +182,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          cmder-config
+          clash自定义规则配置
         </h1>
 
         <div class="post-meta">
@@ -188,7 +193,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2021-11-20 14:12:26 / 修改时间：14:16:29" itemprop="dateCreated datePublished" datetime="2021-11-20T14:12:26+08:00">2021-11-20</time>
+              <time title="创建时间：2021-12-15 16:29:47 / 修改时间：16:57:56" itemprop="dateCreated datePublished" datetime="2021-12-15T16:29:47+08:00">2021-12-15</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -196,7 +201,7 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">学习</span></a>
+                  <a href="/categories/%E5%B7%A5%E5%85%B7/" itemprop="url" rel="index"><span itemprop="name">工具</span></a>
                 </span>
             </span>
 
@@ -218,18 +223,27 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h2 id="配置环境变量"><a href="#配置环境变量" class="headerlink" title="配置环境变量"></a><strong>配置环境变量</strong></h2><ol>
-<li><p>在控制面板中的如下路径找到高级系统设置&gt;环境变量，点击</p>
-<p>用户变量</p>
-<p>系统变量</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">CMDER_ROOT  = C:\Program Files\cmder  </span><br><span class="line">PATH       += %CMDER_ROOT%</span><br></pre></td></tr></table></figure></li>
-<li><p>管理员运行cmd（注意是<code>cmd</code>，不是Cmder）运行一下命令：<br><code>Cmder.exe /REGISTER ALL</code></p>
-</li>
-<li><p>右键菜单</p>
-</li>
-</ol>
-<p><img src="https://i.loli.net/2021/11/20/kqSEn8IuLXAHhWr.png" alt="image.png"></p>
-<h2 id="高亮插件"><a href="#高亮插件" class="headerlink" title="高亮插件"></a>高亮插件</h2><p>下载 <a href="https://link.zhihu.com/?target=https://github.com/AmrEldib/cmder-powerline-prompt">Cmder-powerline-prompt</a> 项目中的所有 <code>.lua</code> 文件，放置在 <code>%CMDER_ROOT%/config</code> 目录中，然后重启 Cmder</p>
+        <h1 id="目的"><a href="#目的" class="headerlink" title="目的"></a>目的</h1><p>​    最终希望达到的一个效果就是通过clash自定义规则配置，使得在clash处于工作状态时访问国内网站可以直接使用国内网络连接。</p>
+<h1 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h1><h2 id="1-raising-hand-man-配置Profiles下的Parsers"><a href="#1-raising-hand-man-配置Profiles下的Parsers" class="headerlink" title="1.:raising_hand_man: 配置Profiles下的Parsers"></a>1.:raising_hand_man: 配置Profiles下的Parsers</h2><p>点击Settings，点击Profiles下的Parsers那一栏右侧对应的edit，打开配置页面</p>
+<p><img src="https://s2.loli.net/2021/12/15/sbpcIFEmxz7jOWB.png" alt="image.png"></p>
+<p>打开后使用下方代码覆盖原有代码，然后退出</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">parsers: # array</span><br><span class="line">  - url: xxxxxxxxx</span><br><span class="line">    <span class="attr">yaml</span>:</span><br><span class="line">      prepend-rules:</span><br><span class="line">        - DOMAIN-SUFFIX,hdbits.org,🎯 国内网络</span><br><span class="line">        - DOMAIN-SUFFIX,xthor.tk,🎯 国内网络</span><br><span class="line">        - DOMAIN-SUFFIX,filelist.io,🎯 国内网络</span><br></pre></td></tr></table></figure>
+
+<h2 id="2-raising-hand-man-复制订阅地址"><a href="#2-raising-hand-man-复制订阅地址" class="headerlink" title="2 .:raising_hand_man: 复制订阅地址"></a>2 .:raising_hand_man: 复制订阅地址</h2><p>点击小齿轮</p>
+<p><img src="https://s2.loli.net/2021/12/15/F7p9fJPqAgdbSCt.png" alt="image.png"></p>
+<p>复制订阅地址</p>
+<p><img src="https://s2.loli.net/2021/12/15/NBn5CVJvmAMWGOz.png" alt="image.png"></p>
+<h2 id="3-raising-hand-man-更换url字段"><a href="#3-raising-hand-man-更换url字段" class="headerlink" title="3.:raising_hand_man: 更换url字段"></a>3.:raising_hand_man: 更换url字段</h2><p>按照步骤1打开对应页面，将其中的url字段替换为刚才复制的订阅地址</p>
+<p><img src="https://s2.loli.net/2021/12/15/ripHyVKk3swUuYv.png" alt="image.png"></p>
+<h2 id="4-raising-hand-man-检测"><a href="#4-raising-hand-man-检测" class="headerlink" title="4. :raising_hand_man: 检测"></a>4. :raising_hand_man: 检测</h2><p>点击对应图标</p>
+<p><img src="https://s2.loli.net/2021/12/15/obxWZ4H85VpPafq.png" alt="image.png"></p>
+<p>可以看到新的规则已经添加，像taobao, baidu, zhihu等网站等都采用的是国内网站直连的方式进行连接:sparkler:</p>
+<p><img src="https://s2.loli.net/2021/12/15/2VgsQAWbdOuCByj.png" alt="image.png"></p>
+<h1 id="更多"><a href="#更多" class="headerlink" title="更多"></a>更多</h1><p>还有其他的自定义选项</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">DOMAIN-SUFFIX：域名后缀匹配</span><br><span class="line">DOMAIN：域名匹配</span><br><span class="line">DOMAIN-KEYWORD：域名关键字匹配</span><br><span class="line">IP-CIDR：IP段匹配</span><br><span class="line">SRC-IP-CIDR：源IP段匹配</span><br><span class="line">GEOIP：GEOIP数据库（国家代码）匹配</span><br><span class="line">DST-PORT：目标端口匹配</span><br><span class="line">SRC-PORT：源端口匹配</span><br><span class="line">PROCESS-NAME：源进程名匹配</span><br><span class="line">RULE-SET：Rule Provider规则匹配</span><br><span class="line">MATCH：全匹配</span><br></pre></td></tr></table></figure>
+
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p><a target="_blank" rel="noopener" href="https://docs.cfw.lbyczf.com/contents/quickstart.html#url-%E5%AF%BC%E5%85%A5">clash文档</a></p>
+<p><a target="_blank" rel="noopener" href="https://yattazen.com/tutorial/clash-custom-config.html">简易教程 | Clash | 自定义在线分流规则策略组</a></p>
 
     </div>
 
@@ -239,7 +253,7 @@
 
       <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/cmder/" rel="tag"># cmder</a>
+              <a href="/tags/%E5%B7%A5%E5%85%B7/" rel="tag"># 工具</a>
           </div>
 
         
@@ -248,13 +262,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2021/10/29/WTFJS-%E8%81%8A%E4%B8%80%E8%81%8AJS%E4%B8%AD%E7%9A%84%E9%9A%90%E5%BC%8F%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2/" rel="prev" title="WTFJS | 聊一聊JS中的隐式类型转换">
-      <i class="fa fa-chevron-left"></i> WTFJS | 聊一聊JS中的隐式类型转换
+    <a href="/2021/12/14/%E9%87%8D%E8%AF%86parseInt/" rel="prev" title="重识parseInt">
+      <i class="fa fa-chevron-left"></i> 重识parseInt
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2021/11/21/kmp%E7%AE%97%E6%B3%95/" rel="next" title="kmp算法">
-      kmp算法 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -313,7 +324,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F"><span class="nav-number">1.</span> <span class="nav-text">配置环境变量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%AB%98%E4%BA%AE%E6%8F%92%E4%BB%B6"><span class="nav-number">2.</span> <span class="nav-text">高亮插件</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%9B%AE%E7%9A%84"><span class="nav-number">1.</span> <span class="nav-text">目的</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%AD%A5%E9%AA%A4"><span class="nav-number">2.</span> <span class="nav-text">步骤</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-raising-hand-man-%E9%85%8D%E7%BD%AEProfiles%E4%B8%8B%E7%9A%84Parsers"><span class="nav-number">2.1.</span> <span class="nav-text">1.:raising_hand_man: 配置Profiles下的Parsers</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-raising-hand-man-%E5%A4%8D%E5%88%B6%E8%AE%A2%E9%98%85%E5%9C%B0%E5%9D%80"><span class="nav-number">2.2.</span> <span class="nav-text">2 .:raising_hand_man: 复制订阅地址</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-raising-hand-man-%E6%9B%B4%E6%8D%A2url%E5%AD%97%E6%AE%B5"><span class="nav-number">2.3.</span> <span class="nav-text">3.:raising_hand_man: 更换url字段</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-raising-hand-man-%E6%A3%80%E6%B5%8B"><span class="nav-number">2.4.</span> <span class="nav-text">4. :raising_hand_man: 检测</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9B%B4%E5%A4%9A"><span class="nav-number">3.</span> <span class="nav-text">更多</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">4.</span> <span class="nav-text">参考</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
