@@ -161,6 +161,155 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/12/20/JS%E4%B8%AD%E7%9A%84%E7%BB%A7%E6%89%BF/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+      <meta itemprop="name" content="martisss">
+      <meta itemprop="description" content="孩子，快逃！！！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Martisss's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/12/20/JS%E4%B8%AD%E7%9A%84%E7%BB%A7%E6%89%BF/" class="post-title-link" itemprop="url">JS中的继承</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-12-20 12:23:00 / 修改时间：12:23:42" itemprop="dateCreated datePublished" datetime="2021-12-20T12:23:00+08:00">2021-12-20</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">学习</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h3 id="原型链继承"><a href="#原型链继承" class="headerlink" title="原型链继承"></a>原型链继承</h3><blockquote>
+<p>将父类的实例作为子类实例的原型</p>
+</blockquote>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Parent</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">this</span>.names = [<span class="string">&#x27;kevin&#x27;</span>, <span class="string">&#x27;daisy&#x27;</span>];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Child</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Child.prototype = <span class="keyword">new</span> Parent();</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> child1 = <span class="keyword">new</span> Child();</span><br><span class="line"></span><br><span class="line">child1.names.push(<span class="string">&#x27;yayu&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(child1.names); <span class="comment">// [&quot;kevin&quot;, &quot;daisy&quot;, &quot;yayu&quot;]</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> child2 = <span class="keyword">new</span> Child();</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(child2.names); <span class="comment">// [&quot;kevin&quot;, &quot;daisy&quot;, &quot;yayu&quot;]</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>问题：</p>
+<ol>
+<li><p>父类<strong>引用类型</strong>的属性被所有实例共享</p>
+</li>
+<li><p>创建子类型实例时不能给父类型构造函数传参</p>
+<blockquote>
+<p>可以看到Child其实是 ‘’空’‘ 的，自然无法传参</p>
+</blockquote>
+</li>
+</ol>
+<h3 id="借用构造函数"><a href="#借用构造函数" class="headerlink" title="借用构造函数"></a>借用构造函数</h3><blockquote>
+<p>在子类构造函数中调用父类构造函数，可以在子类构造函数中使用<code>call()</code>和<code>apply()</code>方法</p>
+</blockquote>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Parent</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">this</span>.names = [<span class="string">&#x27;kevin&#x27;</span>, <span class="string">&#x27;daisy&#x27;</span>];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Child</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    Parent.call(<span class="built_in">this</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> child1 = <span class="keyword">new</span> Child();</span><br><span class="line"></span><br><span class="line">child1.names.push(<span class="string">&#x27;yayu&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(child1.names); <span class="comment">// [&quot;kevin&quot;, &quot;daisy&quot;, &quot;yayu&quot;]</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> child2 = <span class="keyword">new</span> Child();</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(child2.names); <span class="comment">// [&quot;kevin&quot;, &quot;daisy&quot;]</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>优点：</p>
+<ol>
+<li><p>避免了引用类型的属性被所有实例共享</p>
+</li>
+<li><p>可以在 Child 中向 Parent 传参</p>
+</li>
+</ol>
+<p>缺点：</p>
+<ol>
+<li>子类不能访问父类<code>prototype</code>（这里即<code>Parent.prototype</code>）上的方法</li>
+<li>所有方法属性都写在构造函数中，每次创建实例都会初始化</li>
+</ol>
+<h3 id="组合继承"><a href="#组合继承" class="headerlink" title="组合继承 *"></a>组合继承 *</h3><blockquote>
+<p>基本的思路就是使用原型链继承父类prototype上的属性和方法，而通过构造函数继承实例属性，这样既可以实现方法重用，又可以让每个实例都有自己的属性</p>
+</blockquote>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Parent</span> (<span class="params">name</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">this</span>.name = name;</span><br><span class="line">    <span class="built_in">this</span>.colors = [<span class="string">&#x27;red&#x27;</span>, <span class="string">&#x27;blue&#x27;</span>, <span class="string">&#x27;green&#x27;</span>];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Parent.prototype.getName = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="built_in">this</span>.name)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Child</span> (<span class="params">name, age</span>) </span>&#123;</span><br><span class="line"></span><br><span class="line">    Parent.call(<span class="built_in">this</span>, name);</span><br><span class="line">    </span><br><span class="line">    <span class="built_in">this</span>.age = age;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Child.prototype = <span class="keyword">new</span> Parent();</span><br><span class="line">Child.prototype.constructor = Child;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> child1 = <span class="keyword">new</span> Child(<span class="string">&#x27;kevin&#x27;</span>, <span class="string">&#x27;18&#x27;</span>);</span><br><span class="line"></span><br><span class="line">child1.colors.push(<span class="string">&#x27;black&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(child1.name); <span class="comment">// kevin</span></span><br><span class="line"><span class="built_in">console</span>.log(child1.age); <span class="comment">// 18</span></span><br><span class="line"><span class="built_in">console</span>.log(child1.colors); <span class="comment">// [&quot;red&quot;, &quot;blue&quot;, &quot;green&quot;, &quot;black&quot;]</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> child2 = <span class="keyword">new</span> Child(<span class="string">&#x27;daisy&#x27;</span>, <span class="string">&#x27;20&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(child2.name); <span class="comment">// daisy</span></span><br><span class="line"><span class="built_in">console</span>.log(child2.age); <span class="comment">// 20</span></span><br><span class="line"><span class="built_in">console</span>.log(child2.colors); <span class="comment">// [&quot;red&quot;, &quot;blue&quot;, &quot;green&quot;]</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>组合继承结合了原型链继承和借用构造函数继承的优点，这很棒，但是也存在一个小问题，在上述过程中父类构造函数执行了两次，带来的后果是什么呢？后果是子类实例和其原型上存在同名属性，最后子类属性会屏蔽原型上的属性，这虽然不影响使用，但却不够优雅，后面的寄生式组合继承会解决这个问题。</p>
+<h3 id="原型式继承"><a href="#原型式继承" class="headerlink" title="原型式继承"></a>原型式继承</h3><blockquote>
+<p>就是 ES5 Object.create 的模拟实现，<strong>将传入的对象作为创建的对象的原型</strong></p>
+</blockquote>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">createObj</span>(<span class="params">o</span>) </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">F</span>(<span class="params"></span>)</span>&#123;&#125;</span><br><span class="line">    F.prototype = o;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> F();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>缺点: 与原型链继承一样, 引用类型的属性会被所有实例共享，同时不能</p>
+<h3 id="寄生式继承"><a href="#寄生式继承" class="headerlink" title="寄生式继承"></a>寄生式继承</h3><p>创建一个仅用于封装继承过程的函数，该函数在内部以某种形式来做增强对象，最后返回对象。可以看到内部使用了<code>Object.create()</code>，因此其本质上是在原型式继承返回的新对象上增加了新的属性和方法，实现<strong>增强</strong>效果。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">createObj</span> (<span class="params">o</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> clone = <span class="built_in">Object</span>.create(o);</span><br><span class="line">    clone.sayName = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">&#x27;hi&#x27;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> clone;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>缺点： 同借用构造函数继承，每次都会重新创建方法，且<code>Object.create()</code>执行浅复制，多个实例的引用类型指向相同，造成污染。</p>
+<h3 id="寄生组合式继承"><a href="#寄生组合式继承" class="headerlink" title="寄生组合式继承 *"></a>寄生组合式继承 *</h3><blockquote>
+<p>组合式继承</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Parent</span> (<span class="params">name</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">this</span>.name = name;</span><br><span class="line">    <span class="built_in">this</span>.colors = [<span class="string">&#x27;red&#x27;</span>, <span class="string">&#x27;blue&#x27;</span>, <span class="string">&#x27;green&#x27;</span>];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Parent.prototype.getName = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="built_in">this</span>.name)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Child</span> (<span class="params">name, age</span>) </span>&#123;</span><br><span class="line">    Parent.call(<span class="built_in">this</span>, name);   </span><br><span class="line">    <span class="built_in">this</span>.age = age;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Child.prototype = <span class="keyword">new</span> Parent();</span><br><span class="line">Child.prototype.constructor = Child;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+</blockquote>
+<p>组合式继承中父类构造函数<code>Parent()</code>调用了两次</p>
+<p>一次是设置子类实例的原型，</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Child.prototype = <span class="keyword">new</span> Parent()</span><br></pre></td></tr></table></figure>
+
+<p> 一次是调用子类构造函数，为什么在这里也调用了一次Parent()呢？</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> child1 = <span class="keyword">new</span> Child(<span class="string">&#x27;kevin&#x27;</span>, <span class="string">&#x27;18&#x27;</span>);</span><br></pre></td></tr></table></figure>
+
+<p>因为首先Child是这样的：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Child</span> (<span class="params">name, age</span>) </span>&#123;</span><br><span class="line">    Parent.call(<span class="built_in">this</span>, name); </span><br><span class="line">    <span class="built_in">this</span>.age = age;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在用<code>new</code>创建<code>Child</code>实例的过程中会经历如下阶段：</p>
+<ul>
+<li>生成一个以<code>Child.prototype</code>为原型的对象</li>
+<li>使用给定的参数调用构造函数<code>Child</code>, 然后将<code>this</code>指向新创建的对象</li>
+<li>返回新创建的对象（<code>Child</code>中并没有return语句指定返回哪个对象，因此默认返回新创建的对象）</li>
+</ul>
+<p>因此在第二步调用构造函数的过程中又调用了一次父类构造函数<code>Parent</code></p>
+<p>而<code>寄生组合式继承 </code>就是为了避免重复调用父类构造函数:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Child.prototype = <span class="built_in">Object</span>.create(Parent.prototype);</span><br><span class="line"><span class="comment">// Child.prototype = Parent.prototype</span></span><br><span class="line"><span class="comment">// 直接这样的话会存在隐患，如果修改Child.prototype的话会影响Parent.prototype</span></span><br><span class="line">Child.prototype.constructor = Child;</span><br></pre></td></tr></table></figure>
+
+<p>这样就避免了在设置子类实例的原型时调用父类构造函数。</p>
+<blockquote>
+<p>Object.create(o)的作用是返回一个新对象，该对象以给定对象<code>o</code>为原型</p>
+<p>其实现类似：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">createObj</span>(<span class="params">o</span>) </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">F</span>(<span class="params"></span>)</span>&#123;&#125;</span><br><span class="line">    F.prototype = o;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> F();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>可以理解为原型式继承</p>
+</blockquote>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Parent</span> (<span class="params">name</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">this</span>.name = name;</span><br><span class="line">    <span class="built_in">this</span>.colors = [<span class="string">&#x27;red&#x27;</span>, <span class="string">&#x27;blue&#x27;</span>, <span class="string">&#x27;green&#x27;</span>];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Parent.prototype.getName = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="built_in">this</span>.name)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Child</span> (<span class="params">name, age</span>) </span>&#123;</span><br><span class="line">    Parent.call(<span class="built_in">this</span>, name); </span><br><span class="line">    <span class="built_in">this</span>.age = age;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Child.prototype = <span class="built_in">Object</span>.create(Parent.prototype);</span><br><span class="line"><span class="comment">// Child.prototype = Parent.prototype</span></span><br><span class="line"><span class="comment">// 直接这样的话会存在隐患，如果修改Child.prototype的话会影响Parent.prototype</span></span><br><span class="line">Child.prototype.constructor = Child;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">// 可以封装一下</span></span><br><span class="line"><span class="comment">// function prototype(child, parent) &#123;</span></span><br><span class="line"><span class="comment">//   var prototype = Object.create(parent.prototype);</span></span><br><span class="line"><span class="comment">//   prototype.constructor = child;</span></span><br><span class="line"><span class="comment">//   child.prototype = prototype;</span></span><br><span class="line"><span class="comment">// &#125;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// // 当我们使用的时候：</span></span><br><span class="line"><span class="comment">// prototype(Child, Parent);</span></span><br></pre></td></tr></table></figure>
+
+<h3 id=""><a href="#" class="headerlink" title=""></a></h3>
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
     <link itemprop="mainEntityOfPage" href="http://example.com/2021/12/15/clash%E8%87%AA%E5%AE%9A%E4%B9%89%E8%A7%84%E5%88%99%E9%85%8D%E7%BD%AE/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1083,7 +1232,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">7</span>
+          <span class="site-state-item-count">8</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1096,7 +1245,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-count">11</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
