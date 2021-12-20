@@ -186,7 +186,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2021-12-20 12:23:00 / 修改时间：12:23:42" itemprop="dateCreated datePublished" datetime="2021-12-20T12:23:00+08:00">2021-12-20</time>
+              <time title="创建时间：2021-12-20 12:23:00 / 修改时间：12:28:35" itemprop="dateCreated datePublished" datetime="2021-12-20T12:23:00+08:00">2021-12-20</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -291,7 +291,12 @@
 </blockquote>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Parent</span> (<span class="params">name</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">this</span>.name = name;</span><br><span class="line">    <span class="built_in">this</span>.colors = [<span class="string">&#x27;red&#x27;</span>, <span class="string">&#x27;blue&#x27;</span>, <span class="string">&#x27;green&#x27;</span>];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Parent.prototype.getName = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="built_in">this</span>.name)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Child</span> (<span class="params">name, age</span>) </span>&#123;</span><br><span class="line">    Parent.call(<span class="built_in">this</span>, name); </span><br><span class="line">    <span class="built_in">this</span>.age = age;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Child.prototype = <span class="built_in">Object</span>.create(Parent.prototype);</span><br><span class="line"><span class="comment">// Child.prototype = Parent.prototype</span></span><br><span class="line"><span class="comment">// 直接这样的话会存在隐患，如果修改Child.prototype的话会影响Parent.prototype</span></span><br><span class="line">Child.prototype.constructor = Child;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">// 可以封装一下</span></span><br><span class="line"><span class="comment">// function prototype(child, parent) &#123;</span></span><br><span class="line"><span class="comment">//   var prototype = Object.create(parent.prototype);</span></span><br><span class="line"><span class="comment">//   prototype.constructor = child;</span></span><br><span class="line"><span class="comment">//   child.prototype = prototype;</span></span><br><span class="line"><span class="comment">// &#125;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// // 当我们使用的时候：</span></span><br><span class="line"><span class="comment">// prototype(Child, Parent);</span></span><br></pre></td></tr></table></figure>
 
-<h3 id=""><a href="#" class="headerlink" title=""></a></h3>
+<blockquote>
+<p>《JavaScript高级程序设计》</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/mqyqingfeng/Blog/issues/16">JavaScript深入之继承</a></p>
+<p><a target="_blank" rel="noopener" href="https://juejin.cn/post/6844903475021627400">JS原型链与继承别再被问倒了</a></p>
+</blockquote>
+
       
     </div>
 
