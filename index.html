@@ -161,6 +161,140 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/11/%E9%9D%A2%E8%AF%95%E5%AE%98%EF%BC%9AstopImmediatePropagation%E4%B8%8EstopPropagation%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+      <meta itemprop="name" content="martisss">
+      <meta itemprop="description" content="孩子，快逃！！！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Martisss's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/03/11/%E9%9D%A2%E8%AF%95%E5%AE%98%EF%BC%9AstopImmediatePropagation%E4%B8%8EstopPropagation%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F/" class="post-title-link" itemprop="url">面试官：stopImmediatePropagation与stopPropagation有什么区别？</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-03-11 15:04:49" itemprop="dateCreated datePublished" datetime="2022-03-11T15:04:49+08:00">2022-03-11</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-03-15 15:42:25" itemprop="dateModified" datetime="2022-03-15T15:42:25+08:00">2022-03-15</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">学习</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="开篇"><a href="#开篇" class="headerlink" title="开篇"></a>开篇</h1><p><img src="https://s2.loli.net/2022/03/11/AEI93P2UnDzl1a7.png" alt="image.png"></p>
+<p><code>stopImmediatePropagation</code>与<code>stopPropagation</code>是一对亲兄弟，他们两实现的功能是相似的，那么这两个函数的区别在哪里呢？如果你对于事件传播已经很了解，那么可以直接跳到总结部分，反之可以按照顺序阅读。</p>
+<h1 id="什么是DOM事件流？"><a href="#什么是DOM事件流？" class="headerlink" title="什么是DOM事件流？"></a>什么是DOM事件流？</h1><p>早上起床你都会做些什么呢？闹钟响了，你摸索着掐掉闹钟，再眯一会，然后起床，刷牙，吃早餐……..，这一系列事件连接起来就构成了你起床的事件流。而DOM事件也是有一个流程的，<a target="_blank" rel="noopener" href="http://www.w3.org/TR/DOM-Level-3-Events/">DOM 事件</a>标准描述了<strong>事件传播</strong>的 3 个阶段：</p>
+<ol>
+<li> 捕获阶段（Capturing phase）—— 事件（从 Window）向下走近元素。</li>
+<li> 目标阶段（Target phase）—— 事件到达目标元素。</li>
+<li> 冒泡阶段（Bubbling phase）—— 事件从元素上开始冒泡。<h2 id="事件捕获"><a href="#事件捕获" class="headerlink" title="事件捕获"></a>事件捕获</h2>DOM事件触发时（被触发DOM事件的这个元素被叫作事件源），浏览器会从根节点开始 <strong>由外到内</strong> 进行事件传播。即事件从文档的根节点流向目标对象节点，途中经过各个层次的DOM节点，最终到目标节点，完成事件捕获，<h2 id="事件冒泡"><a href="#事件冒泡" class="headerlink" title="事件冒泡"></a>事件冒泡</h2>事件冒泡与事件捕获顺序相反。事件捕获的顺序是从外到内，事件冒泡是从内到外。<br>当事件传播到了目标阶段后，处于目标阶段的元素就会将接收到的时间向上传播，就是顺着事件捕获的路径，反着传播一次，逐级的向上传播到该元素的祖先元素，直到window对象。<blockquote>
+<p>引发事件的那个嵌套层级最深的元素被称为目标元素,可以通过 <code>event.target</code> 访问。注意与 <code>this</code>（=<code>event.currentTarget</code>）之间的区别：</p>
+<ul>
+<li>  <code>event.target</code> —— 是引发事件的“目标”元素，它在冒泡过程中不会发生变化。</li>
+<li>  <code>this</code> —— 是“当前”元素，其中有一个当前正在运行的处理程序。</li>
+</ul>
+</blockquote>
+<h2 id="使用addEventListener监听事件"><a href="#使用addEventListener监听事件" class="headerlink" title="使用addEventListener监听事件"></a>使用addEventListener监听事件</h2>使用<code>EventTarget.addEventListeners</code>可以指定的侦听器注册到EventTarget上，我们可以监听页面上发生的诸多事件（<code>mousedown</code>,<code>click</code>, <code>scroll</code>等），当事件发生时就可以调用相应的函数进行事件处理。</li>
+</ol>
+<p>它接收三个参数：分别是<code>type</code>, <code>listener</code>, <code>options</code>, 其中<code>type</code>表示监听<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/Events">事件类型</a>的字符串，<code>listener</code>通常传入的是一个函数，在相应事件发生时调用它进行事件处理，<code>options</code>是一个与<code>listener</code>有关的可选参数对象，可用的参数有<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/API/EventTarget/addEventListener"><code>capture</code>,<code>once</code>,<code>passive</code>, <code>signal</code></a>,<br>在本文中比较关注的是<code>capture</code>, 默认为<code>false</code>, 代表该侦听器在时间冒泡阶段触发，反之在事件捕获阶段触发。</p>
+<h1 id="如何阻止事件传播？"><a href="#如何阻止事件传播？" class="headerlink" title="如何阻止事件传播？"></a>如何阻止事件传播？</h1><p>很经典的一个问题是如何阻止事件冒泡，很多人应该马上就能想到使用<code>event.cancleBuble = true</code>或者使用<code>event.stopPropagation()</code>, 这的确能够阻止事件冒泡。其实更准确的说，应该是阻止了事件传播, 因为这两者不仅仅可以在冒泡阶段使用，也可以在捕获阶段使用。看下面这一个例子。</p>
+<blockquote>
+<p><code>Event.cancelBubble</code> 属性是 <a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/API/Event/stopPropagation"><code>Event.stopPropagation()</code></a>的一个曾用名。在从事件处理程序返回之前将其值设置为true可阻止事件的传播。</p>
+</blockquote>
+<p>dom结构如下：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;A&quot;</span> <span class="attr">style</span>=<span class="string">&quot;font-size:30px&quot;</span>&gt;</span></span><br><span class="line">  A</span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;B&quot;</span> <span class="attr">style</span>=<span class="string">&quot;font-size:30px&quot;</span>&gt;</span></span><br><span class="line">    B</span><br><span class="line">    <span class="tag">&lt;<span class="name">p</span> <span class="attr">style</span>=<span class="string">&quot;font-size:30px&quot;</span>&gt;</span></span><br><span class="line">      <span class="symbol">&amp;#128513;</span>P</span><br><span class="line">    <span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/5b2ae93adef543259379636ba1bcdcc6~tplv-k3u1fbpfcp-zoom-1.image" alt="image.png"></p>
+<p>script部分：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> p = <span class="built_in">document</span>.querySelector(<span class="string">&#x27;p&#x27;</span>)</span><br><span class="line">p.addEventListener(<span class="string">&quot;mousedown&quot;</span>, <span class="function">(<span class="params">event</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="comment">// event.cancelBubble = true</span></span><br><span class="line">  event.stopPropagation()</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&quot;我是p元素上被绑定的第一个监听函数: mousedown&quot;</span>);</span><br><span class="line">&#125;, <span class="literal">false</span>);</span><br><span class="line"></span><br><span class="line">p.addEventListener(<span class="string">&quot;mousedown&quot;</span>, <span class="function">(<span class="params">event</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&quot;我是p元素上被绑定的第二个监听函数: mousedown&quot;</span>);</span><br><span class="line">&#125;, <span class="literal">false</span>);</span><br><span class="line"><span class="built_in">document</span>.querySelector(<span class="string">&quot;.A&quot;</span>).addEventListener(<span class="string">&quot;mousedown&quot;</span>, <span class="function">(<span class="params">event</span>) =&gt;</span> &#123;</span><br><span class="line">  event.cancelBubble = <span class="literal">true</span></span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&quot;我是div &amp; class A元素&quot;</span>);</span><br><span class="line">&#125;, <span class="literal">false</span>);</span><br><span class="line"><span class="built_in">document</span>.querySelector(<span class="string">&quot;.B&quot;</span>).addEventListener(<span class="string">&quot;mousedown&quot;</span>, <span class="function">(<span class="params">event</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&quot;我是div &amp; class B元素&quot;</span>);</span><br><span class="line">&#125;, <span class="literal">false</span>);</span><br></pre></td></tr></table></figure>
+<p>上述事件传播的路径是：A -&gt; B -&gt; P -&gt; B -&gt; A, 选定<code>&lt;p&gt;&lt;/p&gt;</code>作为目标元素，每次试验时点击图中的笑脸所在的绿色区域。<br><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/3cabe55d46ac474ca954152e7d9e971b~tplv-k3u1fbpfcp-zoom-1.image" alt="image.png"><br>我们在P元素上绑定了两个事件侦听器，并使用了<code>event.cancleBuble = true</code>(<code>event.stopPropagation()</code>)成功阻止了事件冒泡。如果我在事件捕获阶段使用会怎么样呢？</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> p = <span class="built_in">document</span>.querySelector(<span class="string">&#x27;p&#x27;</span>)</span><br><span class="line">p.addEventListener(<span class="string">&quot;mousedown&quot;</span>, <span class="function">(<span class="params">event</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="comment">// event.cancelBubble = true</span></span><br><span class="line">  event.stopPropagation()</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&quot;我是p元素上被绑定的第一个监听函数: mousedown&quot;</span>);</span><br><span class="line">&#125;, <span class="literal">false</span>);</span><br><span class="line"></span><br><span class="line">p.addEventListener(<span class="string">&quot;mousedown&quot;</span>, <span class="function">(<span class="params">event</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&quot;我是p元素上被绑定的第二个监听函数: mousedown&quot;</span>);</span><br><span class="line">&#125;, <span class="literal">false</span>);</span><br><span class="line"><span class="built_in">document</span>.querySelector(<span class="string">&quot;.A&quot;</span>).addEventListener(<span class="string">&quot;mousedown&quot;</span>, <span class="function">(<span class="params">event</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="comment">// event.cancelBubble = true</span></span><br><span class="line">    event.stopPropagation()</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&quot;我是div &amp; class A元素&quot;</span>);</span><br><span class="line">&#125;, <span class="literal">true</span>);</span><br><span class="line"><span class="built_in">document</span>.querySelector(<span class="string">&quot;.B&quot;</span>).addEventListener(<span class="string">&quot;mousedown&quot;</span>, <span class="function">(<span class="params">event</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&quot;我是div &amp; class B元素&quot;</span>);</span><br><span class="line">&#125;, <span class="literal">true</span>);</span><br></pre></td></tr></table></figure>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/898ac07e82994ce8aa39d573f4bbc76e~tplv-k3u1fbpfcp-zoom-1.image" alt="image.png"><br>从结果可以清楚地看到成功地阻止了事件传播。</p>
+<p>那么现在让我们回到最初的问题：<strong>stopImmediatePropagation与stopPropagation有什么区别？</strong><br>可以这样简单第理解：<code>stopImmediatePropagation</code>是<code>stopPropagation</code>的加强版，前者不仅仅可以阻止事件传播，它还可以在<strong>多个事件监听器</strong>被附加到<strong>相同元素</strong>的<strong>相同事件</strong>类型上时保证只有一个事件侦听器被调用。换句话说，当同一个元素上有多个事件侦听器侦听同一事件时，这些事件侦听器都会被按照初始添加顺序被调用，如上文中p元素就绑定了两个监听<code>mousedown</code>事件的侦听器；但如果在其中一个事件侦听器中使用了<code>event.stopImmediatePropagation()</code>的话，在该侦听器之后的侦听器就不会被调用了。<br>将代码改造成如下：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> p = <span class="built_in">document</span>.querySelector(<span class="string">&#x27;p&#x27;</span>)</span><br><span class="line">p.addEventListener(<span class="string">&quot;mousedown&quot;</span>, <span class="function">(<span class="params">event</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&quot;我是p元素上被绑定的第一个监听函数: mousedown&quot;</span>);</span><br><span class="line">&#125;, <span class="literal">false</span>);</span><br><span class="line"></span><br><span class="line">p.addEventListener(<span class="string">&quot;mousedown&quot;</span>, <span class="function">(<span class="params">event</span>) =&gt;</span> &#123;</span><br><span class="line">  event.stopImmediatePropagation()</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&quot;我是p元素上被绑定的第二个监听函数: mousedown&quot;</span>);</span><br><span class="line">&#125;, <span class="literal">false</span>);</span><br><span class="line"></span><br><span class="line">p.addEventListener(<span class="string">&quot;mousedown&quot;</span>,<span class="function">(<span class="params">event</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&quot;我是p元素上被绑定的第三个监听函数: mousedown&quot;</span>);</span><br><span class="line">  <span class="comment">// 该监听函数排在上个函数后面，该函数不会被执行</span></span><br><span class="line">&#125;, <span class="literal">false</span>);</span><br><span class="line"></span><br><span class="line">p.addEventListener(<span class="string">&#x27;click&#x27;</span>, <span class="function">(<span class="params">event</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="comment">// 嘿嘿嘿，虽然监听的是同一元素，但却是不同事件！</span></span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;我是p元素上被绑定的第四个监听函数: click&#x27;</span>)</span><br><span class="line">&#125;, <span class="literal">false</span>)</span><br><span class="line"></span><br><span class="line"><span class="built_in">document</span>.querySelector(<span class="string">&quot;.A&quot;</span>).addEventListener(<span class="string">&quot;mousedown&quot;</span>, <span class="function">(<span class="params">event</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&quot;我是div &amp; class A元素&quot;</span>);</span><br><span class="line">&#125;, <span class="literal">false</span>);</span><br><span class="line"></span><br><span class="line"><span class="built_in">document</span>.querySelector(<span class="string">&quot;.B&quot;</span>).addEventListener(<span class="string">&quot;mousedown&quot;</span>, <span class="function">(<span class="params">event</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&quot;我是div &amp; class B元素&quot;</span>);</span><br><span class="line">&#125;, <span class="literal">false</span>);</span><br></pre></td></tr></table></figure>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/4c6c4f5ca980487d8c994025ccbea21f~tplv-k3u1fbpfcp-zoom-1.image" alt="image.png"><br>可以看到<code>stopImmediatePropagation</code>成功阻止了事件冒泡，A元素，B元素的侦听器都没有被调用，此外元素p上绑定了四个侦听器，其中三个侦听<code>mousedown</code>事件，剩下一个侦听<code>click</code>事件，我们在第二个侦听器中调用<code>stopImmediatePropagation</code>，前两个侦听器顺利调用，此外，由于最后一个侦听器侦听<code>click</code>事件，不受影响。</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><ul>
+<li>事件传播： 捕获 -&gt; 目标元素 -&gt; 冒泡</li>
+<li><code>event</code><blockquote>
+<ul>
+<li><code>event.target</code> —— 引发事件的层级最深的元素。</li>
+<li><code>event.currentTarget</code>（=<code>this</code>）—— 处理事件的当前元素（具有处理程序的元素）</li>
+<li><code>event.eventPhase</code> —— 当前阶段（capturing=1，target=2，bubbling=3）。</li>
+</ul>
+</blockquote>
+</li>
+<li>阻止事件传播的方法：<blockquote>
+<ul>
+<li>event.stopPropagation()</li>
+<li>event.cancelBubble = true</li>
+<li>event.stopImmediatePropagation()</li>
+</ul>
+</blockquote>
+</li>
+<li><code>event.stopImmediatePropagation()</code><blockquote>
+<ul>
+<li>可以阻止事件传播</li>
+<li><strong>多个</strong>事件侦听器侦听<strong>同一元素</strong>的<strong>同一事件</strong>时，执行<code>event.stopImmediatePropagation()</code>的侦听器之后的侦听器被忽略</li>
+<li>侦听同一元素的<strong>不同事件</strong>的侦听器不受影响<br>最好自己动手试一试，加深理解。<br><a target="_blank" rel="noopener" href="https://codepen.io/martisss/pen/WNdepoN?editors=1111">源代码在此处</a></li>
+</ul>
+</blockquote>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/API/Event">Event - MDN</a></li>
+</ul>
+<p><a target="_blank" rel="noopener" href="https://zh.javascript.info/bubbling-and-capturing">冒泡和捕获</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.debugger.wiki/article/html/1636445881135788">JavaScript事件捕获冒泡与捕获</a></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
     <link itemprop="mainEntityOfPage" href="http://example.com/2022/02/12/%E5%BE%AA%E7%8E%AF%E5%86%97%E4%BD%99%E6%A0%A1%E9%AA%8C/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1327,7 +1461,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">9</span>
+          <span class="site-state-item-count">10</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1340,7 +1474,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-count">13</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
