@@ -161,6 +161,287 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/04/06/%E4%BD%A0%E7%9F%A5%E9%81%93Canvas%E4%B8%8ESvg%E4%B9%8B%E9%97%B4%E7%9A%84%E5%8C%BA%E5%88%AB%E5%90%97/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+      <meta itemprop="name" content="martisss">
+      <meta itemprop="description" content="孩子，快逃！！！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Martisss's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/04/06/%E4%BD%A0%E7%9F%A5%E9%81%93Canvas%E4%B8%8ESvg%E4%B9%8B%E9%97%B4%E7%9A%84%E5%8C%BA%E5%88%AB%E5%90%97/" class="post-title-link" itemprop="url">你知道Canvas与Svg之间的区别吗？</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-04-06 11:26:35" itemprop="dateCreated datePublished" datetime="2022-04-06T11:26:35+08:00">2022-04-06</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-04-09 11:29:52" itemprop="dateModified" datetime="2022-04-09T11:29:52+08:00">2022-04-09</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">学习</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="svg"><a href="#svg" class="headerlink" title="svg"></a>svg</h2><p><strong>可缩放矢量图形</strong>（<strong>Scalable Vector Graphics，SVG</strong>），是一种用于描述二维的<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E7%9F%A2%E9%87%8F%E5%9B%BE%E5%BD%A2">矢量图形</a>，基于 <a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/XML/XML_Introduction">XML</a> 的标记语言, 这意味着可以使用任何文本编辑器(如记事本)创建和编辑<code>SVG</code>图像。</p>
+<p>与<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Glossary/jpeg">JPEG</a>和<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Glossary/PNG">PNG</a>这种传统的点阵图像模式不同，SVG格式提供的是矢量图，这意味着它的图像能够被<strong>无限放大而不失真或降低质量</strong>，并且可以方便地修改内容。</p>
+<p><code>HTML</code> <code>&lt;svg&gt;</code>元素是<code>svg</code>图形的容器。</p>
+<hr/>
+
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://jsbin.com/yejohebuvo/2/edit?html,console,output=">svg demo</a></p>
+</blockquote>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">svg</span> <span class="attr">id</span>=<span class="string">&quot;svgelem&quot;</span> <span class="attr">height</span>=<span class="string">&quot;200&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">circle</span> <span class="attr">id</span>=<span class="string">&quot;greencircle&quot;</span> <span class="attr">cx</span>=<span class="string">&quot;60&quot;</span> <span class="attr">cy</span>=<span class="string">&quot;60&quot;</span> <span class="attr">r</span>=<span class="string">&quot;50&quot;</span> <span class="attr">fill</span>=<span class="string">&quot;#1E81FF&quot;</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">svg</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/7a84cb8161344125a65d9a5243c45d9c~tplv-k3u1fbpfcp-watermark.image" alt="image.png"></p>
+<h2 id="canvas"><a href="#canvas" class="headerlink" title="canvas"></a>canvas</h2><p><code>&lt;canvas&gt;</code>本身只是相当于一块画布，不具有绘图能力，必须通过脚本(通常是JavaScript)动态地绘制图形，脚本充当画笔的角色。元素只是图形的容器, 必须使用脚本来实际绘制图形。Canvas有几种绘制路径、框、圆、文本和添加图像的方法</p>
+<hr/>
+
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://jsbin.com/weduxufura/edit?html,console,output=">canvas demo</a></p>
+</blockquote>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">canvas</span> <span class="attr">id</span>=<span class="string">&quot;newCanvas&quot;</span> <span class="attr">width</span>=<span class="string">&quot;100&quot;</span> <span class="attr">height</span>=<span class="string">&quot;100&quot;</span> <span class="attr">style</span>=<span class="string">&quot;border:1px solid #000000;&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">canvas</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="javascript"></span></span><br><span class="line"><span class="javascript">    <span class="keyword">var</span> c = <span class="built_in">document</span>.getElementById(<span class="string">&#x27;newCanvas&#x27;</span>);</span></span><br><span class="line"><span class="javascript">    <span class="keyword">var</span> ctx = c.getContext(<span class="string">&#x27;2d&#x27;</span>);</span></span><br><span class="line"><span class="javascript">    ctx.fillStyle = <span class="string">&#x27;#1E81FF&#x27;</span>;</span></span><br><span class="line"><span class="javascript">    ctx.fillRect(<span class="number">0</span>, <span class="number">0</span>, <span class="number">100</span>, <span class="number">100</span>);</span></span><br><span class="line"><span class="javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/4d10aba1ba1a4916ad0da0d5ebebf326~tplv-k3u1fbpfcp-watermark.image" alt="image.png"></p>
+<h2 id="二者的区别"><a href="#二者的区别" class="headerlink" title="二者的区别"></a>二者的区别</h2><p><code>SVG</code>是一种基于<code>XML</code>中的2D图形的语言。</p>
+<p><code>Canvas</code>通过脚本动态绘制2D图形。</p>
+<p><code>SVG</code>是基于<code>XML</code>的，这意味着每个元素都在<code>SVG DOM</code>中可用, 可以为元素附加<code>JavaScript</code>事件处理程序。在SVG中，将每个绘制的形状记住为对象。如果更改了SVG对象的属性，则浏览器可以自动重新呈现形状。</p>
+<p><code>Canvas</code>由像素呈现,一旦图形在画布中绘制完成，浏览器撒手不管了。如果需要更改其位置，则需要重新绘制整个场景，其中许多对象会被频繁重绘。</p>
+<p><strong>详细对比如下：</strong></p>
+<table>
+<thead>
+<tr>
+<th>SVG</th>
+<th>Canvas</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>不依赖分辨率（矢量图）</td>
+<td>依赖分辨率（位图）</td>
+</tr>
+<tr>
+<td>每一个图形都是一个 <code>DOM</code>元素</td>
+<td>单个HTML元素，相当于<code>&lt;img&gt;</code></td>
+</tr>
+<tr>
+<td>支持事件处理器</td>
+<td>不支持事件处理器</td>
+</tr>
+<tr>
+<td>适合大型渲染区域的应用程序(谷歌地图)</td>
+<td>文本渲染能力差</td>
+</tr>
+<tr>
+<td>可以通过脚本和CSS进行修改</td>
+<td>只能通过脚本修改</td>
+</tr>
+<tr>
+<td>对象数量较小 (<code>&lt;10k</code>)、图面更大时性能更佳</td>
+<td>图面较小，对象数量较大（<code>&gt;10k</code>）时性能最佳</td>
+</tr>
+<tr>
+<td>不适合游戏应用</td>
+<td>适合图像密集型的游戏应用</td>
+</tr>
+</tbody></table>
+<h2 id="兼容性"><a href="#兼容性" class="headerlink" title="兼容性"></a>兼容性</h2><p><a target="_blank" rel="noopener" href="https://caniuse.com/?search=svg">Can I use Svg ?</a></p>
+<p><img src="https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/09e94e23b7394d24a38911645c4c2190~tplv-k3u1fbpfcp-watermark.image" alt="image.png"></p>
+<p><a target="_blank" rel="noopener" href="https://caniuse.com/?search=Canvas">Can I use Canvas ?</a></p>
+<p><img src="https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/b068616852114a3eac8ef42d4a3c5bba~tplv-k3u1fbpfcp-watermark.image" alt="image.png"></p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a target="_blank" rel="noopener" href="https://caniuse.com/">Can I use</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.w3schools.com/html/html5_svg.asp">W3cSchool</a></p>
+<p><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/SVG">MDN</a></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/04/03/StrictMode%E5%BC%95%E5%8F%91%E7%9A%84%E7%BB%84%E4%BB%B6%E9%87%8D%E5%A4%8D%E6%89%A7%E8%A1%8C/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+      <meta itemprop="name" content="martisss">
+      <meta itemprop="description" content="孩子，快逃！！！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Martisss's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/04/03/StrictMode%E5%BC%95%E5%8F%91%E7%9A%84%E7%BB%84%E4%BB%B6%E9%87%8D%E5%A4%8D%E6%89%A7%E8%A1%8C/" class="post-title-link" itemprop="url">StrictMode引发的组件重复执行</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-04-03 11:35:25" itemprop="dateCreated datePublished" datetime="2022-04-03T11:35:25+08:00">2022-04-03</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-04-09 11:37:14" itemprop="dateModified" datetime="2022-04-09T11:37:14+08:00">2022-04-09</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">学习</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0/JS/" itemprop="url" rel="index"><span itemprop="name">JS</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>2022年3月29号，<code>React 18</code>正式版发布，小明也兴冲冲地开始<code>hooks</code>学习之旅。某天他使用<code>codesandbox</code>写了一个小<code>demo</code>时，他发现组件诡异地渲染了多次，函数组件代码如下：</p>
+<p><strong>count.jsx</strong></p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="function"><span class="keyword">function</span> <span class="title">Count</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> [counter, setCounter] = useState(<span class="number">0</span>);</span><br><span class="line">  useEffect(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&quot;effect&quot;</span>);</span><br><span class="line">    <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">      setCounter(counter + <span class="number">1</span>);</span><br><span class="line">    &#125;, <span class="number">3000</span>);</span><br><span class="line">  &#125;);</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&quot;before render&quot;</span>);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> (</span><br><span class="line">    <span class="xml"><span class="tag">&lt;<span class="name">div</span> <span class="attr">className</span>=<span class="string">&quot;container&quot;</span>&gt;</span></span></span><br><span class="line"><span class="xml">      <span class="tag">&lt;<span class="name">div</span> <span class="attr">className</span>=<span class="string">&quot;el&quot;</span>&gt;</span>&#123;counter&#125;<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line"><span class="xml">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line">  );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>实现的效果很简单，每隔三秒将<code>count</code>加1，很简单对不对？</p>
+<p>打开这个 <a target="_blank" rel="noopener" href="https://codesandbox.io/s/hooks-hxbc7x?file=/src/count2.js:227-228">demo</a>，同时打开控制台，你就可以看到如下输入：</p>
+<p><img src="https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/2066baafb6e54b85aad7258eee6cb095~tplv-k3u1fbpfcp-watermark.image" alt="CPT2204012224-580x267.gif"></p>
+<p><code>before render</code>与<code>effect</code>一开始都打印了两次，之后<code>before render</code>每次都诡异地打印了两次</p>
+<h2 id="React-StrictMode"><a href="#React-StrictMode" class="headerlink" title="React.StrictMode"></a>React.StrictMode</h2><p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/bb0b22840a1445a6a03581f597456da3~tplv-k3u1fbpfcp-zoom-1.image"></p>
+<p>这是为什么呢？经过一番查找，发现是<code>React.StrictMode</code>的锅。<code>React 17</code>文档中是这样描述 <a target="_blank" rel="noopener" href="https://zh-hans.reactjs.org/docs/strict-mode.html">React.StrictMode</a>:</p>
+<blockquote>
+<p><code>StrictMode</code> 是一个用来突出显示应用程序中潜在问题的工具。与 <code>Fragment</code> 一样，<code>StrictMode</code> 不会渲染任何可见的 UI。它为其后代元素触发额外的检查和警告。</p>
+</blockquote>
+<p><code>React 17</code>文档中关于它的作用大概可以归为两类：</p>
+<ul>
+<li>  检测副作用</li>
+<li>  对于在应用中使用已经废弃、过时的方法会发出警告</li>
+</ul>
+<p>对于第二点，相信大家都可以理解，毕竟<code>React</code>现在都发布<code>18</code>版了，不少以前的方法已经过时或者废弃了，在较新版本的<code>React</code>中再使用这些方法肯定时不安全的。</p>
+<p>那么对于第一点呢？</p>
+<p>这不得不提<code>React 18</code>文档对于<code>StrictMode</code>的描述：</p>
+<blockquote>
+<p>React offers a “Strict Mode” in which it calls each component’s function twice during development.</p>
+</blockquote>
+<p>大意就是在开发者模式中，<code>StrictMode</code>会将相应组件执行两次，这下重复执行的疑惑解决了。</p>
+<p>但新的疑问产生了，文档中一直提的副作用又是啥？<code>副作用</code>这个词在<code>React 17</code>文档中提到的次数很多，如何理解它呢？</p>
+<blockquote>
+<p>在计算机科学中，<strong>函数副作用</strong>指当调用函数时，除了<strong>返回函数值</strong>之外，还<strong>对主调用函数产生附加的影响</strong> – 维基百科</p>
+</blockquote>
+<p>举个通俗易懂的例子：张三不小心感冒了，鼻塞流涕，医生给他开了感冒药，感冒药的作用就是让我们的身体恢复健康，但是服用的过程中，张三感冒的症状的确是减轻了，但同时他感到浑身乏力、嗜睡，这就<code>副作用</code>，即意料之外的结果。</p>
+<p>事实上，<code>React 18</code>的文档提到的更多的是<code>purity</code>，即纯度，这其实是函数式编程的理念，这与React 17文档中提到的无副作用是一个意思，<code>react hooks</code>函数式组件实际上就是函数式编程理念的体现。编写纯函数带来了一定的心智负担，但随着开发者对其接受度的提高，新文档中大量使用了<code>purity</code>进行相关描述。文档中提到，纯函数带来了以下优势：</p>
+<blockquote>
+<ul>
+<li>  多环境运行。例如可以运行在服务端，因为同样的输入，总是对应同样的输出，因此组件可以被其他人复用；</li>
+<li>  减少重复渲染。如果函数组件的输入没有改变，直接复用就好啦，不需要重复渲染。</li>
+<li>  随时中断渲染。在渲染层级较深的组件树时，数据发生了改变，那么<code>React</code>可以马上重新开始渲染，而不用等待过时的渲染完成。</li>
+</ul>
+</blockquote>
+<p>因此<code>StrictMode</code>就是在开发中帮助我们进行检测，保证我们编写的函数组件都是 <strong><code>&#39;纯&#39;</code></strong> 的，这也就解释了为什么开头提到的为什么组件会执行两次，<code>StrictMode</code>会多执行一次，两次执行的结果相同，证明我们编写的的确是纯函数。</p>
+<h2 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h2><p>以下列举了一些引发<code>StrictMode</code>的其他例子</p>
+<ol>
+<li> 在函数内部修改一个已经存在的变量</li>
+</ol>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> guest = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Cup</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="comment">// Bad: changing a preexisting variable!</span></span><br><span class="line">  guest = guest + <span class="number">1</span>;</span><br><span class="line">  <span class="keyword">return</span> <span class="xml"><span class="tag">&lt;<span class="name">h2</span>&gt;</span>Tea cup for guest #&#123;guest&#125;<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="function"><span class="keyword">function</span> <span class="title">TeaSet</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> (</span><br><span class="line">    <span class="xml"><span class="tag">&lt;&gt;</span></span></span><br><span class="line"><span class="xml">      <span class="tag">&lt;<span class="name">Cup</span> /&gt;</span></span></span><br><span class="line"><span class="xml">      <span class="tag">&lt;<span class="name">Cup</span> /&gt;</span></span></span><br><span class="line"><span class="xml">      <span class="tag">&lt;<span class="name">Cup</span> /&gt;</span></span></span><br><span class="line"><span class="xml">    <span class="tag">&lt;/&gt;</span></span></span><br><span class="line">  )</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>很明显，当这个组件执行多次，guest的值是逐渐增长的，回想一下纯函数的定义，上述函数组件不是纯函数，因此<code>StrictMode</code>会进行警告。</p>
+<ol start="2">
+<li> useState</li>
+</ol>
+<p>下面的组件定义了<code>counter</code>变量，我们给<code>useState</code>传入了初始化函数，组件首次运行时会执行一次这个函数，返回的值作为<code>counter</code>的初始值，在之后的执行中这个初始化函数会被忽略。</p>
+<p>此外，在使用<code>setState</code>改变<code>counter</code>的值时，我们为其提供了一个<code>updater</code>函数，当点击按钮时会更新<code>counter</code>的值。</p>
+<p>因此，理论上首先会打印一次<code>initializer</code>，然后每按一次按钮，都会打印一次<code>updater</code></p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> React, &#123; useState &#125; <span class="keyword">from</span> <span class="string">&quot;react&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="function"><span class="keyword">function</span> <span class="title">Count2</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> [counter, setCounter] = useState(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;initializer&#x27;</span>)</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">  &#125;);</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">const</span> handleClick = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    setCounter(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">      <span class="built_in">console</span>.log(<span class="string">&#x27;updater&#x27;</span>)</span><br><span class="line">      <span class="keyword">return</span> counter+<span class="number">1</span></span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> (</span><br><span class="line">    <span class="xml"><span class="tag">&lt;<span class="name">div</span> <span class="attr">className</span>=<span class="string">&quot;container&quot;</span>&gt;</span></span></span><br><span class="line"><span class="xml">      <span class="tag">&lt;<span class="name">div</span> <span class="attr">className</span>=<span class="string">&quot;el&quot;</span>&gt;</span>&#123;counter&#125;<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line"><span class="xml">      <span class="tag">&lt;<span class="name">button</span> <span class="attr">onClick</span>=<span class="string">&#123;handleClick&#125;</span>&gt;</span>增加<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span></span><br><span class="line"><span class="xml">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line">  );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><a target="_blank" rel="noopener" href="https://codesandbox.io/s/hooks-hxbc7x?file=/src/count2.js">demo</a></p>
+<p>而事实上，<code>StrictMode</code>会帮我们把这两个函数都调用两次，保证其为纯函数。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p><code>React.StrictMode</code>在开发模式下会重复调用组件，保证我们编写的组件</p>
+<ul>
+<li>  检测意外的副作用，确保函数组件时纯函数</li>
+<li>  对于在应用中使用已经废弃、过时的方法会发出警告</li>
+<li>仅在开发者模式下运行，不影响生产构建<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><a target="_blank" rel="noopener" href="https://beta.reactjs.org/learn/keeping-components-pure#side-effects-unintended-consequences=">Side Effects: (un)intended consequences</a></li>
+</ul>
+<p><a target="_blank" rel="noopener" href="https://juejin.cn/post/7009189602506309640"># 略微探究React StrictMode两次渲染的问题</a></p>
+<p><a target="_blank" rel="noopener" href="https://zh-hans.reactjs.org/docs/strict-mode.html#gatsby-focus-wrapper">严格模式</a></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
     <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/23/%E6%89%8B%E6%8A%8A%E6%89%8B%E6%95%99%E4%BD%A0%E5%AE%9E%E7%8E%B0%E5%9B%BE%E7%89%87%E6%87%92%E5%8A%A0%E8%BD%BD/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -184,10 +465,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2022-03-23 23:03:04 / 修改时间：23:04:33" itemprop="dateCreated datePublished" datetime="2022-03-23T23:03:04+08:00">2022-03-23</time>
+              <time title="创建时间：2022-03-23 23:03:04" itemprop="dateCreated datePublished" datetime="2022-03-23T23:03:04+08:00">2022-03-23</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-04-09 11:20:49" itemprop="dateModified" datetime="2022-04-09T11:20:49+08:00">2022-04-09</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -209,173 +496,43 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p># 什么是图片懒加载？</p>
-<p>如今一张图片的大小可以轻松达到几<code>M</code>的大小，如果一个页面中同时有比较多这样的图片，同时加载的话会造成页面加载缓慢，当目标图片未加载成功时，通常会使用一个小图片占位，例如一个转圈圈的gif来表示图片正处于<code>loading</code>状态，但这改变不了很多图片同时加载带来的加载缓慢的问题。</p>
-<p><strong><em>*<strong><strong>因此很多时候我们需要将页面内未出现在可视区域内的图片先不做加载， 等到滚动到可视区域后再去加载，这样对页面的加载性能有较大提升，同时也改善了用户体验。</strong></strong></em>*</strong></p>
+          <hr>
+<h1 id="什么是图片懒加载？"><a href="#什么是图片懒加载？" class="headerlink" title="什么是图片懒加载？"></a>什么是图片懒加载？</h1><p>如今一张图片的大小可以轻松达到几<code>M</code>的大小，如果一个页面中同时有比较多这样的图片，同时加载的话会造成页面加载缓慢，当目标图片未加载成功时，通常会使用一个小图片占位，例如一个转圈圈的gif来表示图片正处于<code>loading</code>状态，但这改变不了很多图片同时加载带来的加载缓慢的问题。</p>
+<p><strong>因此很多时候我们需要将页面内未出现在可视区域内的图片先不做加载， 等到滚动到可视区域后再去加载，这样对页面的加载性能有较大提升，同时也改善了用户体验。</strong></p>
 <hr/>
+主要实现思路如下：
 
-<p>主要实现思路如下：</p>
 <p>1、<code>img</code>元素的自定义属性上<code>data-xxx</code>上挂载目标图片<code>url</code>, <code>src</code>属性指向默认图片地址。</p>
 <p>2、监听图片是否出现在用户的可视区域内。</p>
 <p>3、出现在可视区域内后更新<code>src</code>属性为目标图片<code>url</code>。</p>
 <p>以下两种实现方式的区别主要体现在第二步。</p>
-<p># 监听scroll事件+节流 实现</p>
-<p>```html</p>
-<!DOCTYPE *html*>
-
-<html *lang*="en">
-
- <head>
-
-<p>    <meta charset="UTF-8" /></p>
-<p>    <meta http-equiv="X-UA-Compatible" content="IE=edge" /></p>
-<p>    <meta name="viewport" content="width=device-width, initial-scale=1.0" /></p>
-  <title>Document</title>
-
- </head>
-
- <body>
-
-<p>    <div></div></p>
- </body>
-
-<p>  <style></p>
-<p>  div {</p>
-<p>   display: flex;</p>
-<p>   justify-content: center;</p>
-<p>   flex-direction: column;</p>
-<p>  }</p>
-<p>  *.*<em>img</em> {</p>
-<p>   width: 50%;</p>
-<p>   height: 50%;</p>
-<p>  }</p>
-<p> </style></p>
-<p>  <script></p>
-<p>  <em>const</em> loadingSrc = ‘<a target="_blank" rel="noopener" href="https://c.tenor.com/j-sGh5ZtdaEAAAAi/hongfei-fei.gif&#39;">https://c.tenor.com/j-sGh5ZtdaEAAAAi/hongfei-fei.gif&#39;</a></p>
-<p>  <em>const</em> srcs = [</p>
-<p>   ‘<a target="_blank" rel="noopener" href="https://w.wallhaven.cc/full/wq/wallhaven-wq855r.png&#39;">https://w.wallhaven.cc/full/wq/wallhaven-wq855r.png&#39;</a>,</p>
-<p>   ‘<a target="_blank" rel="noopener" href="https://w.wallhaven.cc/full/6o/wallhaven-6ooo66.png&#39;">https://w.wallhaven.cc/full/6o/wallhaven-6ooo66.png&#39;</a>,</p>
-<p>   ‘<a target="_blank" rel="noopener" href="https://w.wallhaven.cc/full/eo/wallhaven-eoqk88.png&#39;">https://w.wallhaven.cc/full/eo/wallhaven-eoqk88.png&#39;</a>,</p>
-<p>   ‘<a target="_blank" rel="noopener" href="https://w.wallhaven.cc/full/8x/wallhaven-8xlx2o.png&#39;">https://w.wallhaven.cc/full/8x/wallhaven-8xlx2o.png&#39;</a>,</p>
-<p>   ‘<a target="_blank" rel="noopener" href="https://w.wallhaven.cc/full/q2/wallhaven-q2drrl.jpg&#39;">https://w.wallhaven.cc/full/q2/wallhaven-q2drrl.jpg&#39;</a>,</p>
-<p>   ‘<a target="_blank" rel="noopener" href="https://w.wallhaven.cc/full/ym/wallhaven-ymrrex.png&#39;">https://w.wallhaven.cc/full/ym/wallhaven-ymrrex.png&#39;</a>,</p>
-<p>   ‘<a target="_blank" rel="noopener" href="https://w.wallhaven.cc/full/mp/wallhaven-mp8wkm.png&#39;">https://w.wallhaven.cc/full/mp/wallhaven-mp8wkm.png&#39;</a>,</p>
-<p>   ‘<a target="_blank" rel="noopener" href="https://w.wallhaven.cc/full/dg/wallhaven-dgzp2m.jpg&#39;">https://w.wallhaven.cc/full/dg/wallhaven-dgzp2m.jpg&#39;</a>,</p>
-<p>   ‘<a target="_blank" rel="noopener" href="https://w.wallhaven.cc/full/lq/wallhaven-lqek12.png&#39;">https://w.wallhaven.cc/full/lq/wallhaven-lqek12.png&#39;</a>,</p>
-<p>   ‘<a target="_blank" rel="noopener" href="https://w.wallhaven.cc/full/r7/wallhaven-r7mkzq.jpg&#39;">https://w.wallhaven.cc/full/r7/wallhaven-r7mkzq.jpg&#39;</a>,</p>
-<p>   ‘<a target="_blank" rel="noopener" href="https://w.wallhaven.cc/full/qd/wallhaven-qd12jl.png&#39;">https://w.wallhaven.cc/full/qd/wallhaven-qd12jl.png&#39;</a>,</p>
-<p>   ‘<a target="_blank" rel="noopener" href="https://w.wallhaven.cc/full/0q/wallhaven-0q23r5.jpg&#39;">https://w.wallhaven.cc/full/0q/wallhaven-0q23r5.jpg&#39;</a>,</p>
-<p>   ‘<a target="_blank" rel="noopener" href="https://w.wallhaven.cc/full/76/wallhaven-76wj9o.png&#39;">https://w.wallhaven.cc/full/76/wallhaven-76wj9o.png&#39;</a>,</p>
-<p>   ‘<a target="_blank" rel="noopener" href="https://w.wallhaven.cc/full/5d/wallhaven-5d6gd5.jpg&#39;">https://w.wallhaven.cc/full/5d/wallhaven-5d6gd5.jpg&#39;</a>,</p>
-<p>   ‘<a target="_blank" rel="noopener" href="https://w.wallhaven.cc/full/gj/wallhaven-gjmd9q.png&#39;">https://w.wallhaven.cc/full/gj/wallhaven-gjmd9q.png&#39;</a>,</p>
-<p>   ‘<a target="_blank" rel="noopener" href="https://w.wallhaven.cc/full/pk/wallhaven-pk91m3.png&#39;">https://w.wallhaven.cc/full/pk/wallhaven-pk91m3.png&#39;</a>,</p>
-<p>   ‘<a target="_blank" rel="noopener" href="https://w.wallhaven.cc/full/pk/wallhaven-pk9zm9.png&#39;">https://w.wallhaven.cc/full/pk/wallhaven-pk9zm9.png&#39;</a>,</p>
-<p>   ‘<a target="_blank" rel="noopener" href="https://w.wallhaven.cc/full/j8/wallhaven-j85wv5.png&#39;">https://w.wallhaven.cc/full/j8/wallhaven-j85wv5.png&#39;</a>,</p>
-<p>  ]</p>
-<p>  for (<em>let</em> src of srcs) {</p>
-<p>   <em>let</em> imgNode = document.createElement(‘img’)</p>
-<p>   document.body.appendChild(imgNode)</p>
-<p>   imgNode.src = loadingSrc</p>
-<p>   imgNode.className = ‘img’</p>
-<p>   imgNode.setAttribute(‘data-src’, src)</p>
-<p>  }</p>
-<p>  <em>let</em> imgList = […document.querySelectorAll(‘img’)]</p>
-<p>  <em>let</em> length = imgList.length</p>
-<p> </script></p>
-</html>
-
-<p>```</p>
-<p>渲染后的结构如下图所示，<code>src</code>属性指向一张默认加载图片的地址，<code>data-src</code>属性上是目标图片的地址</p>
-<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/6bd626e3b74a40279a466c740a78b742~tplv-k3u1fbpfcp-zoom-1.image" alt="image.png"></p>
-<p><strong><em>*<strong><strong>在此方法中懒加载的核心逻辑为：</strong></strong></em>*</strong><code>监听scroll事件，对比容器的高度、滚动高度、和图片距离容器顶部的高度，判断是否滚动到可视区域</code></p>
+<h1 id="监听scroll事件-节流-实现"><a href="#监听scroll事件-节流-实现" class="headerlink" title="监听scroll事件+节流 实现"></a>监听scroll事件+节流 实现</h1><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">&quot;en&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">&quot;UTF-8&quot;</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">&quot;X-UA-Compatible&quot;</span> <span class="attr">content</span>=<span class="string">&quot;IE=edge&quot;</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">&quot;viewport&quot;</span> <span class="attr">content</span>=<span class="string">&quot;width=device-width, initial-scale=1.0&quot;</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>Document<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">style</span>&gt;</span><span class="css"></span></span><br><span class="line"><span class="css">    <span class="selector-tag">div</span> &#123;</span></span><br><span class="line"><span class="css">      <span class="attribute">display</span>: flex;</span></span><br><span class="line"><span class="css">      <span class="attribute">justify-content</span>: center;</span></span><br><span class="line"><span class="css">      <span class="attribute">flex-direction</span>: column;</span></span><br><span class="line"><span class="css">    &#125;</span></span><br><span class="line"><span class="css">    <span class="selector-class">.img</span> &#123;</span></span><br><span class="line"><span class="css">      <span class="attribute">width</span>: <span class="number">50%</span>;</span></span><br><span class="line"><span class="css">      <span class="attribute">height</span>: <span class="number">50%</span>;</span></span><br><span class="line"><span class="css">    &#125;</span></span><br><span class="line"><span class="css">  </span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="javascript"></span></span><br><span class="line"><span class="javascript">    <span class="keyword">const</span> loadingSrc = <span class="string">&#x27;https://c.tenor.com/j-sGh5ZtdaEAAAAi/hongfei-fei.gif&#x27;</span></span></span><br><span class="line"><span class="javascript">    <span class="keyword">const</span> srcs = [</span></span><br><span class="line"><span class="javascript">      <span class="string">&#x27;https://w.wallhaven.cc/full/wq/wallhaven-wq855r.png&#x27;</span>,</span></span><br><span class="line"><span class="javascript">      <span class="string">&#x27;https://w.wallhaven.cc/full/6o/wallhaven-6ooo66.png&#x27;</span>,</span></span><br><span class="line"><span class="javascript">      <span class="string">&#x27;https://w.wallhaven.cc/full/eo/wallhaven-eoqk88.png&#x27;</span>,</span></span><br><span class="line"><span class="javascript">      <span class="string">&#x27;https://w.wallhaven.cc/full/8x/wallhaven-8xlx2o.png&#x27;</span>,</span></span><br><span class="line"><span class="javascript">      <span class="string">&#x27;https://w.wallhaven.cc/full/q2/wallhaven-q2drrl.jpg&#x27;</span>,</span></span><br><span class="line"><span class="javascript">      <span class="string">&#x27;https://w.wallhaven.cc/full/ym/wallhaven-ymrrex.png&#x27;</span>,</span></span><br><span class="line"><span class="javascript">      <span class="string">&#x27;https://w.wallhaven.cc/full/mp/wallhaven-mp8wkm.png&#x27;</span>,</span></span><br><span class="line"><span class="javascript">      <span class="string">&#x27;https://w.wallhaven.cc/full/dg/wallhaven-dgzp2m.jpg&#x27;</span>,</span></span><br><span class="line"><span class="javascript">      <span class="string">&#x27;https://w.wallhaven.cc/full/lq/wallhaven-lqek12.png&#x27;</span>,</span></span><br><span class="line"><span class="javascript">      <span class="string">&#x27;https://w.wallhaven.cc/full/r7/wallhaven-r7mkzq.jpg&#x27;</span>,</span></span><br><span class="line"><span class="javascript">      <span class="string">&#x27;https://w.wallhaven.cc/full/qd/wallhaven-qd12jl.png&#x27;</span>,</span></span><br><span class="line"><span class="javascript">      <span class="string">&#x27;https://w.wallhaven.cc/full/0q/wallhaven-0q23r5.jpg&#x27;</span>,</span></span><br><span class="line"><span class="javascript">      <span class="string">&#x27;https://w.wallhaven.cc/full/76/wallhaven-76wj9o.png&#x27;</span>,</span></span><br><span class="line"><span class="javascript">      <span class="string">&#x27;https://w.wallhaven.cc/full/5d/wallhaven-5d6gd5.jpg&#x27;</span>,</span></span><br><span class="line"><span class="javascript">      <span class="string">&#x27;https://w.wallhaven.cc/full/gj/wallhaven-gjmd9q.png&#x27;</span>,</span></span><br><span class="line"><span class="javascript">      <span class="string">&#x27;https://w.wallhaven.cc/full/pk/wallhaven-pk91m3.png&#x27;</span>,</span></span><br><span class="line"><span class="javascript">      <span class="string">&#x27;https://w.wallhaven.cc/full/pk/wallhaven-pk9zm9.png&#x27;</span>,</span></span><br><span class="line"><span class="javascript">      <span class="string">&#x27;https://w.wallhaven.cc/full/j8/wallhaven-j85wv5.png&#x27;</span>,</span></span><br><span class="line"><span class="javascript">    ]</span></span><br><span class="line"><span class="javascript"></span></span><br><span class="line"><span class="javascript">    <span class="keyword">for</span> (<span class="keyword">let</span> src <span class="keyword">of</span> srcs) &#123;</span></span><br><span class="line"><span class="javascript">      <span class="keyword">let</span> imgNode = <span class="built_in">document</span>.createElement(<span class="string">&#x27;img&#x27;</span>)</span></span><br><span class="line"><span class="javascript">      <span class="built_in">document</span>.body.appendChild(imgNode)</span></span><br><span class="line"><span class="javascript">      imgNode.src = loadingSrc</span></span><br><span class="line"><span class="javascript">      imgNode.className = <span class="string">&#x27;img&#x27;</span></span></span><br><span class="line"><span class="javascript">      imgNode.setAttribute(<span class="string">&#x27;data-src&#x27;</span>, src)</span></span><br><span class="line"><span class="javascript">    &#125;</span></span><br><span class="line"><span class="javascript">    </span></span><br><span class="line"><span class="javascript">    <span class="keyword">let</span> imgList = [...document.querySelectorAll(<span class="string">&#x27;img&#x27;</span>)]</span></span><br><span class="line"><span class="javascript">    <span class="keyword">let</span> length = imgList.length</span></span><br><span class="line"><span class="javascript">  </span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>渲染后的结构如下图所示，<code>src</code>属性指向一张默认加载图片的地址，<code>data-src</code>属性上是目标图片的地址<br><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/6bd626e3b74a40279a466c740a78b742~tplv-k3u1fbpfcp-zoom-1.image" alt="image.png"><br><strong>在此方法中懒加载的核心逻辑为：</strong><code>监听scroll事件，对比容器的高度、滚动高度、和图片距离容器顶部的高度，判断是否滚动到可视区域</code></p>
 <p>主要实现如下：</p>
-<p>```js</p>
-<p>  <em>const</em> imgLazyLoad = (<em>function</em> () {</p>
-<p>   <em>let</em> count = 0</p>
-<p>   return <em>function</em> () {</p>
-<p>​    <em>let</em> deleteIndexList = []</p>
-<p>​    imgList.forEach((<em>img</em>, <em>index</em>) =&gt; {</p>
-<p>​     <em>let</em> rect = img.getBoundingClientRect()</p>
-<p>​     if (rect.top &lt; window.innerHeight) {</p>
-<p>​      console.log(<code>加载第$&#123;index&#125;张图片</code>)</p>
-<p>​      img.src = img.dataset.src</p>
-<p>​      deleteIndexList.push(index)</p>
-<p>​      count++</p>
-<p>​     }</p>
-<p>​     <em>// 说明图片已经全部加载完成了，移除监听事件</em></p>
-<p>​     if (count === length) {</p>
-<p>​      document.removeEventListener(‘scroll’, imgLazyLoad)</p>
-<p>​     }</p>
-<p>​    })</p>
-<p>​    <em>// 剔除已经完成加载的图片的地址</em></p>
-<p>​    imgList = imgList.filter(</p>
-<p>​     (<em>img</em>, <em>index</em>) =&gt; !deleteIndexList.includes(index)</p>
-<p>​    )</p>
-<p>   }</p>
-<p>  })()</p>
-<p>  <em>// 监听鼠标滚动事件</em></p>
-<p>  document.addEventListener(‘scroll’, imgLazyLoad)</p>
-<p>```</p>
-<p><em>&gt;</em> <em><a href="*!https://developer.mozilla.org/zh-CN/docs/Web/API/Element/getBoundingClientRect*"><strong>Element.getBoundingClientRect()</strong></a></em> <em>返回元素的大小以及相对于视口的位置.</em></p>
-<p><em>&gt;</em> <em><a href="*https://developer.mozilla.org/zh-CN/docs/Web/API/Window/innerHeight*"><strong>window.innerheight</strong></a></em> <em>是视口的高度.</em></p>
-<p>当<code>img.top</code> &lt; <code>window.innerHeight</code>时说明该图片元素正处于视口之内，应该进行加载，将<code>img.src</code>的值更换为<code>img.dataset.src</code>的值，加载目标图片。</p>
-<p>让我们来看一下使用效果：</p>
-<p><img src="https://s2.loli.net/2022/03/23/WZq7iPdwF3Nvs95.gif" alt="tutieshi_640x360_8s.gif"></p>
-<p>可以看出，当鼠标滚动时，首先加载在当前视口内的图片，当新的图片进入视口内时，加载新的图片，所有图片并没有同时进行加载，达到了预期效果。</p>
-<p>但是，直接将函数绑定在<code>scroll</code>事件上，当页面滚动时，函数会被高频触发。因此我们再使用节流函数优化一下。</p>
-<p>```js</p>
-<p>  <em>function</em> throttle(<em>func</em>, <em>wait</em>) {</p>
-<p>   <em>let</em> prev = 0,</p>
-<p>​    context,</p>
-<p>​    args</p>
-<p>   return <em>function</em> () {</p>
-<p>​    <em>let</em> now = +new Date()</p>
-<p>​    context = <em>this</em></p>
-<p>​    args = <em>arguments</em></p>
-<p>​    if (now - prev &gt; wait) {</p>
-<p>​     func.apply(context, args)</p>
-<p>​     prev = now</p>
-<p>​    }</p>
-<p>   }</p>
-<p>  }</p>
-<p>  <em>// 监听鼠标滚动事件</em></p>
-<p>  document.addEventListener(‘scroll’, throttle(imgLazyLoad, 500))</p>
-<p>```</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> imgLazyLoad = (<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">let</span> count = <span class="number">0</span></span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">let</span> deleteIndexList = []</span><br><span class="line">    imgList.forEach(<span class="function">(<span class="params">img, index</span>) =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">let</span> rect = img.getBoundingClientRect()</span><br><span class="line">      <span class="keyword">if</span> (rect.top &lt; <span class="built_in">window</span>.innerHeight) &#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">`加载第<span class="subst">$&#123;index&#125;</span>张图片`</span>)</span><br><span class="line">        img.src = img.dataset.src</span><br><span class="line">        deleteIndexList.push(index)</span><br><span class="line">        count++</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="comment">// 说明图片已经全部加载完成了，移除监听事件</span></span><br><span class="line">      <span class="keyword">if</span> (count === length) &#123;</span><br><span class="line">        <span class="built_in">document</span>.removeEventListener(<span class="string">&#x27;scroll&#x27;</span>, imgLazyLoad)</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;)</span><br><span class="line">    <span class="comment">// 剔除已经完成加载的图片的地址</span></span><br><span class="line">    imgList = imgList.filter(</span><br><span class="line">      <span class="function">(<span class="params">img, index</span>) =&gt;</span> !deleteIndexList.includes(index)</span><br><span class="line">    )</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)()</span><br><span class="line"><span class="comment">// 监听鼠标滚动事件</span></span><br><span class="line"><span class="built_in">document</span>.addEventListener(<span class="string">&#x27;scroll&#x27;</span>, imgLazyLoad)</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><a href="!https://developer.mozilla.org/zh-CN/docs/Web/API/Element/getBoundingClientRect">Element.getBoundingClientRect()</a> 返回元素的大小以及相对于视口的位置.<br><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/API/Window/innerHeight">window.innerheight</a> 是视口的高度.<br>当<code>img.top</code> &lt; <code>window.innerHeight</code>时说明该图片元素正处于视口之内，应该进行加载，将<code>img.src</code>的值更换为<code>img.dataset.src</code>的值，加载目标图片。</p>
+</blockquote>
+<p>让我们来看一下使用效果：<br><img src="https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/bcea4659e2aa4fbea320723605eafb77~tplv-k3u1fbpfcp-watermark.image" alt="CPT2204051626-585x381.gif"><br>可以看出，当鼠标滚动时，首先加载在当前视口内的图片，当新的图片进入视口内时，加载新的图片，所有图片并没有同时进行加载，达到了预期效果。<br>但是，直接将函数绑定在<code>scroll</code>事件上，当页面滚动时，函数会被高频触发。因此我们再使用节流函数优化一下。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">throttle</span>(<span class="params">func, wait</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">let</span> prev = <span class="number">0</span>,</span><br><span class="line">    context,</span><br><span class="line">    args</span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">let</span> now = +<span class="keyword">new</span> <span class="built_in">Date</span>()</span><br><span class="line">    context = <span class="built_in">this</span></span><br><span class="line">    args = <span class="built_in">arguments</span></span><br><span class="line">    <span class="keyword">if</span> (now - prev &gt; wait) &#123;</span><br><span class="line">      func.apply(context, args)</span><br><span class="line">      prev = now</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 监听鼠标滚动事件</span></span><br><span class="line"><span class="built_in">document</span>.addEventListener(<span class="string">&#x27;scroll&#x27;</span>, throttle(imgLazyLoad, <span class="number">500</span>))</span><br></pre></td></tr></table></figure>
 <p><a target="_blank" rel="noopener" href="https://jsbin.com/rarukex/1/edit?html,console,output">在线地址</a></p>
-<p><strong><em>*<strong><strong>但是！！！</strong></strong></em>*</strong></p>
-<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/48dd5ee96338406ebf553269ee0774b5~tplv-k3u1fbpfcp-zoom-1.image" alt="imag"></p>
-<p><code>getBoundingClientRect</code>返回最新的位置信息，会触发回流重绘以返回正确值</p>
-<p><em>&gt;</em> <em>与</em>*<code>**getBoundingClientRect**</code>*<em>一样会触发回流重绘的还有：</em></p>
-<p><em>&gt;</em> <em>-</em>  <em>offsetTop、offsetLeft、offsetWidth、offsetHeight</em></p>
-<p><em>&gt;-</em>  <em>scrollTop、scrollLeft、scrollWidth、scrollHeight</em></p>
-<p><em>&gt;-</em>  <em>clientTop、clientLeft、clientWidth、clientHeight</em></p>
-<p><em>&gt;-</em>  <em>getComputedStyle() 具体请看</em><em><a href="*https://gist.github.com/paulirish/5d52fb081b3570c81e3a*"><strong>这里</strong></a></em></p>
+<p><strong>但是！！！</strong><br><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/48dd5ee96338406ebf553269ee0774b5~tplv-k3u1fbpfcp-zoom-1.image" alt="imag"></p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/bcd9e4b45cf64939889ebc77e48ca04e~tplv-k3u1fbpfcp-watermark.image" alt="CPT2204051626-585x381.gif"><br><code>getBoundingClientRect</code>返回最新的位置信息，会触发回流重绘以返回正确值</p>
+<blockquote>
+<p>与<code>getBoundingClientRect</code>一样会触发回流重绘的还有：</p>
+<ul>
+<li>  offsetTop、offsetLeft、offsetWidth、offsetHeight</li>
+<li>  scrollTop、scrollLeft、scrollWidth、scrollHeight</li>
+<li>  clientTop、clientLeft、clientWidth、clientHeight</li>
+<li>  getComputedStyle() 具体请看<a target="_blank" rel="noopener" href="https://gist.github.com/paulirish/5d52fb081b3570c81e3a">这里</a></li>
+</ul>
+</blockquote>
 <p>这里使用了节流减少了回调函数的调用次数，但有没有办法不触发回流重绘也能检测到图片处于当前视口呢？这就是接下来要介绍的<code>intersectionObserver</code> API </p>
-<p># 使用 <code>intersectionObserver</code> API 实现</p>
-<p><code>IntersectionObserver</code> 是浏览器原生提供的构造函数，接受两个参数：callback 是可见性变化时的回调函数，option 是配置对象（该参数可选）。</p>
-<p>callback 函数的参数（entries）是一个数组，每个成员都是一个 IntersectionObserverEntry 对象</p>
-<p>其中：isIntersecting表示目标是否可见，即是否在视口中</p>
-<p>具体可见<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/API/IntersectionObserver/IntersectionObserver">MDN</a></p>
-<p>```js</p>
-<p>  <em>function</em> imgLazyLoad() {</p>
-<p>   <em>const</em> io = new IntersectionObserver((<em>inters</em>) =&gt; {</p>
-<p>​    inters.forEach((<em>item</em>, <em>index</em>) =&gt; {</p>
-<p>​     <em>// 进入可视区域</em></p>
-<p>​     if (item.isIntersecting) {</p>
-<p>​      item.target.src = item.target.dataset.src</p>
-<p>​      <em>//停止监听该元素</em></p>
-<p>​      io.unobserve(item.target)</p>
-<p>​     }</p>
-<p>​    })</p>
-<p>   })</p>
-<p>   <em>// 监听每一个元素</em></p>
-<p>   imgList.forEach((<em>el</em>) =&gt; io.observe(el))</p>
-<p>  }</p>
-<p>```</p>
+<h1 id="使用-intersectionObserver-API-实现"><a href="#使用-intersectionObserver-API-实现" class="headerlink" title="使用 intersectionObserver API 实现"></a>使用 <code>intersectionObserver</code> API 实现</h1><p><code>IntersectionObserver</code> 是浏览器原生提供的构造函数，接受两个参数：callback 是可见性变化时的回调函数，option 是配置对象（该参数可选）。<br>callback 函数的参数（entries）是一个数组，每个成员都是一个 IntersectionObserverEntry 对象<br>其中：isIntersecting表示目标是否可见，即是否在视口中<br>具体可见<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/API/IntersectionObserver/IntersectionObserver">MDN</a></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">imgLazyLoad</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> io = <span class="keyword">new</span> IntersectionObserver(<span class="function">(<span class="params">inters</span>) =&gt;</span> &#123;</span><br><span class="line">    inters.forEach(<span class="function">(<span class="params">item, index</span>) =&gt;</span> &#123;</span><br><span class="line">      <span class="comment">// 进入可视区域</span></span><br><span class="line">      <span class="keyword">if</span> (item.isIntersecting) &#123;</span><br><span class="line">        item.target.src = item.target.dataset.src</span><br><span class="line">        <span class="comment">//停止监听该元素</span></span><br><span class="line">        io.unobserve(item.target)</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;)</span><br><span class="line">  <span class="comment">// 监听每一个元素</span></span><br><span class="line">  imgList.forEach(<span class="function">(<span class="params">el</span>) =&gt;</span> io.observe(el))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>相比于使用<code>getBoundingClientRect</code>，实现了相同的懒加载效果，但避免了不必要的回流重绘。</p>
 <p><a target="_blank" rel="noopener" href="https://jsbin.com/dicuzeq/edit?html,console,output">在线地址</a></p>
-<p># 参考</p>
-<p><a target="_blank" rel="noopener" href="https://juejin.cn/post/6903774214780616718">前端性能优化之图片懒加载</a></p>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p><a target="_blank" rel="noopener" href="https://juejin.cn/post/6903774214780616718">前端性能优化之图片懒加载</a></p>
 <p><a target="_blank" rel="noopener" href="https://juejin.cn/post/6844903455048335368#heading-5">实现图片懒加载(Lazyload)</a></p>
 <p><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/API/IntersectionObserver">MDN - Intersection Observer</a></p>
 
@@ -1160,174 +1317,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/11/21/kmp%E7%AE%97%E6%B3%95/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/avatar.gif">
-      <meta itemprop="name" content="martisss">
-      <meta itemprop="description" content="孩子，快逃！！！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Martisss's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/11/21/kmp%E7%AE%97%E6%B3%95/" class="post-title-link" itemprop="url">kmp算法</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2021-11-21 22:40:01 / 修改时间：22:44:01" itemprop="dateCreated datePublished" datetime="2021-11-21T22:40:01+08:00">2021-11-21</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">学习</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h3 id="关键概念"><a href="#关键概念" class="headerlink" title="关键概念"></a>关键概念</h3><p><strong>前缀是指不包含最后一个字符的所有以第一个字符开头的连续子串</strong>；<strong>后缀是指不包含第一个字符的所有以最后一个字符结尾的连续子串</strong>。</p>
-<p>模式串与前缀表对应位置的数字表示的就是：<strong>下标i之前（包括i）的字符串中，有多大长度的相同前缀后缀。</strong></p>
-<p>next数组就可以是前缀表，但是很多实现都是把前缀表统一减一（右移一位，初始位置为-1）之后作为next数组。</p>
-<p><strong>j和next[0]初始化为-1，整个next数组是以 前缀表减一之后的效果来构建的</strong></p>
-<h3 id="时间复杂度"><a href="#时间复杂度" class="headerlink" title="时间复杂度"></a>时间复杂度</h3><p>生成next数组，时间复杂度是O (m), 后续匹配过程时间复杂度是O（n），时间复杂度是O(m+n)</p>
-<p>暴力解法是O(m*n)</p>
-<h3 id="构建next数组"><a href="#构建next数组" class="headerlink" title="构建next数组"></a>构建next数组</h3><ol>
-<li>初始化</li>
-</ol>
-<p>定义两个指针i和j，j指向前缀末尾位置，i指向后缀末尾位置。</p>
-<ol start="2">
-<li>处理前后缀不相同的情况: 回退</li>
-<li>处理前后缀相同的情况： j++</li>
-</ol>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> getNext = <span class="function"><span class="keyword">function</span>(<span class="params">s</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">let</span> next = []</span><br><span class="line">  <span class="keyword">let</span> j = -<span class="number">1</span></span><br><span class="line">  next[<span class="number">0</span>] = j</span><br><span class="line">  <span class="keyword">for</span>(<span class="keyword">let</span> i = <span class="number">1</span>; i &lt; s.length; i++) &#123;</span><br><span class="line">    <span class="keyword">while</span>(j &gt;= <span class="number">0</span> &amp;&amp; s[j+<span class="number">1</span>] !== s[i])&#123; <span class="comment">// s[j + 1] 与 s[i] 不相等</span></span><br><span class="line">      j = next[j] <span class="comment">// 回退</span></span><br><span class="line">        <span class="comment">// next[j]就是记录着j（包括j）之前的子串的最长相同前后缀的长度。</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(s[j+<span class="number">1</span>] === s[i]) j++  <span class="comment">//找到了相同的前后缀，同时向后移动i、j</span></span><br><span class="line">    next[i] = j  <span class="comment">// 将j(前缀的长度)赋给next[i],next[i]记录最长相同前后缀的长度</span></span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> next <span class="comment">//f</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> strStr = <span class="function"><span class="keyword">function</span>(<span class="params">haystack, needle</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span>(needle.length === <span class="number">0</span>) <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">  <span class="keyword">const</span> getNext = <span class="function"><span class="keyword">function</span>(<span class="params">s</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">let</span> next = []</span><br><span class="line">    <span class="keyword">let</span> j = -<span class="number">1</span></span><br><span class="line">    next[<span class="number">0</span>] = j</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">let</span> i = <span class="number">1</span>; i &lt; s.length; i++) &#123;</span><br><span class="line">      <span class="keyword">while</span>(j &gt;= <span class="number">0</span> &amp;&amp; s[j+<span class="number">1</span>] !== s[i])&#123;</span><br><span class="line">        j = next[j]</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">if</span>(s[j+<span class="number">1</span>] === s[i]) j++</span><br><span class="line">      next[i] = j </span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> next</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">let</span> next = getNext(next, needle)</span><br><span class="line">  <span class="keyword">let</span> j = -<span class="number">1</span></span><br><span class="line">  <span class="keyword">for</span>(<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; haystack.length; i++) &#123;</span><br><span class="line">    <span class="keyword">while</span>(j &gt;= <span class="number">0</span> &amp;&amp; haystack[i] !== needle[j+<span class="number">1</span>])&#123;</span><br><span class="line">      j = next[j]</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(haystack[i] === needle[j+<span class="number">1</span>]) j++</span><br><span class="line">    <span class="keyword">if</span>(j === needle.length - <span class="number">1</span>) &#123;</span><br><span class="line">      <span class="keyword">return</span> i - needle.length + <span class="number">1</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> -<span class="number">1</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="leetcode"><a href="#leetcode" class="headerlink" title="leetcode"></a>leetcode</h2><h3 id="459-重复的子字符串"><a href="#459-重复的子字符串" class="headerlink" title="459. 重复的子字符串"></a><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/repeated-substring-pattern/">459. 重复的子字符串</a></h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">repeatedSubstringPattern</span>(<span class="params">s: string</span>): <span class="title">boolean</span> </span>&#123;</span><br><span class="line">    <span class="keyword">const</span> getNext = <span class="function">(<span class="params">s</span>) =&gt;</span> &#123;</span><br><span class="line">        <span class="keyword">let</span> j = -<span class="number">1</span></span><br><span class="line">        <span class="keyword">let</span> next = [j]</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">let</span> i = <span class="number">1</span>; i &lt; s.length; i++) &#123;</span><br><span class="line">            <span class="keyword">while</span>(j &gt;= <span class="number">0</span> &amp;&amp; s[j+<span class="number">1</span>] !== s[i]) &#123;</span><br><span class="line">                j = next[j]</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span>(s[j+<span class="number">1</span>] === s[i])&#123;</span><br><span class="line">                j++</span><br><span class="line">            &#125;</span><br><span class="line">            next[i] = j</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> next</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(s.length === <span class="number">0</span>) <span class="keyword">return</span> <span class="literal">false</span></span><br><span class="line">    <span class="keyword">let</span> next = getNext(s)</span><br><span class="line">    <span class="keyword">if</span>(next[s.length - <span class="number">1</span>] !== -<span class="number">1</span> &amp;&amp; s.length % (s.length - (next[s.length - <span class="number">1</span>] + <span class="number">1</span>)) === <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">false</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/11/20/cmder-config/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/avatar.gif">
-      <meta itemprop="name" content="martisss">
-      <meta itemprop="description" content="孩子，快逃！！！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Martisss's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/11/20/cmder-config/" class="post-title-link" itemprop="url">cmder-config</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2021-11-20 14:12:26 / 修改时间：14:16:29" itemprop="dateCreated datePublished" datetime="2021-11-20T14:12:26+08:00">2021-11-20</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">学习</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="配置环境变量"><a href="#配置环境变量" class="headerlink" title="配置环境变量"></a><strong>配置环境变量</strong></h2><ol>
-<li><p>在控制面板中的如下路径找到高级系统设置&gt;环境变量，点击</p>
-<p>用户变量</p>
-<p>系统变量</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">CMDER_ROOT  = C:\Program Files\cmder  </span><br><span class="line">PATH       += %CMDER_ROOT%</span><br></pre></td></tr></table></figure></li>
-<li><p>管理员运行cmd（注意是<code>cmd</code>，不是Cmder）运行一下命令：<br><code>Cmder.exe /REGISTER ALL</code></p>
-</li>
-<li><p>右键菜单</p>
-</li>
-</ol>
-<p><img src="https://i.loli.net/2021/11/20/kqSEn8IuLXAHhWr.png" alt="image.png"></p>
-<h2 id="高亮插件"><a href="#高亮插件" class="headerlink" title="高亮插件"></a>高亮插件</h2><p>下载 <a href="https://link.zhihu.com/?target=https://github.com/AmrEldib/cmder-powerline-prompt">Cmder-powerline-prompt</a> 项目中的所有 <code>.lua</code> 文件，放置在 <code>%CMDER_ROOT%/config</code> 目录中，然后重启 Cmder</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1399,7 +1388,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">11</span>
+          <span class="site-state-item-count">13</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1412,7 +1401,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-count">16</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>

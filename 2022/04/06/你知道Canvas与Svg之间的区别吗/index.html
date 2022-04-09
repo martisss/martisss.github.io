@@ -22,23 +22,25 @@
     var CONFIG = {"hostname":"example.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="校验原理 baidu 循环冗余校验（Cyclic Redundancy Check， CRC）是一种根据网络数据包或计算机文件等数据产生简短固定位数校验码的一种信道编码技术，主要用来检测或校验数据传输或者保存后可能出现的错误。 它是利用除法及余数的原理来作错误侦测的。  简单的说就是在发送帧后附加一个数（用来校验的校验码），生成新帧，发送给接收端，接收端收到之后除以某个特定的数（接收方和发送方共同">
+  <meta name="description" content="svg可缩放矢量图形（Scalable Vector Graphics，SVG），是一种用于描述二维的矢量图形，基于 XML 的标记语言, 这意味着可以使用任何文本编辑器(如记事本)创建和编辑SVG图像。 与JPEG和PNG这种传统的点阵图像模式不同，SVG格式提供的是矢量图，这意味着它的图像能够被无限放大而不失真或降低质量，并且可以方便地修改内容。 HTML &lt;svg&gt;元素是svg图">
 <meta property="og:type" content="article">
-<meta property="og:title" content="循环冗余校验">
-<meta property="og:url" content="http://example.com/2022/02/12/%E5%BE%AA%E7%8E%AF%E5%86%97%E4%BD%99%E6%A0%A1%E9%AA%8C/index.html">
+<meta property="og:title" content="你知道Canvas与Svg之间的区别吗？">
+<meta property="og:url" content="http://example.com/2022/04/06/%E4%BD%A0%E7%9F%A5%E9%81%93Canvas%E4%B8%8ESvg%E4%B9%8B%E9%97%B4%E7%9A%84%E5%8C%BA%E5%88%AB%E5%90%97/index.html">
 <meta property="og:site_name" content="Martisss&#39;s blog">
-<meta property="og:description" content="校验原理 baidu 循环冗余校验（Cyclic Redundancy Check， CRC）是一种根据网络数据包或计算机文件等数据产生简短固定位数校验码的一种信道编码技术，主要用来检测或校验数据传输或者保存后可能出现的错误。 它是利用除法及余数的原理来作错误侦测的。  简单的说就是在发送帧后附加一个数（用来校验的校验码），生成新帧，发送给接收端，接收端收到之后除以某个特定的数（接收方和发送方共同">
+<meta property="og:description" content="svg可缩放矢量图形（Scalable Vector Graphics，SVG），是一种用于描述二维的矢量图形，基于 XML 的标记语言, 这意味着可以使用任何文本编辑器(如记事本)创建和编辑SVG图像。 与JPEG和PNG这种传统的点阵图像模式不同，SVG格式提供的是矢量图，这意味着它的图像能够被无限放大而不失真或降低质量，并且可以方便地修改内容。 HTML &lt;svg&gt;元素是svg图">
 <meta property="og:locale">
-<meta property="og:image" content="https://s2.loli.net/2022/02/12/kf2onszQpygPR8O.png">
-<meta property="og:image" content="https://s2.loli.net/2022/02/12/TJQLKVA4HodNFgk.png">
-<meta property="article:published_time" content="2022-02-12T06:09:47.000Z">
-<meta property="article:modified_time" content="2022-02-12T06:49:43.210Z">
+<meta property="og:image" content="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/7a84cb8161344125a65d9a5243c45d9c~tplv-k3u1fbpfcp-watermark.image">
+<meta property="og:image" content="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/4d10aba1ba1a4916ad0da0d5ebebf326~tplv-k3u1fbpfcp-watermark.image">
+<meta property="og:image" content="https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/09e94e23b7394d24a38911645c4c2190~tplv-k3u1fbpfcp-watermark.image">
+<meta property="og:image" content="https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/b068616852114a3eac8ef42d4a3c5bba~tplv-k3u1fbpfcp-watermark.image">
+<meta property="article:published_time" content="2022-04-06T03:26:35.000Z">
+<meta property="article:modified_time" content="2022-04-09T03:29:52.116Z">
 <meta property="article:author" content="martisss">
-<meta property="article:tag" content="计网">
+<meta property="article:tag" content="DOM">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://s2.loli.net/2022/02/12/kf2onszQpygPR8O.png">
+<meta name="twitter:image" content="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/7a84cb8161344125a65d9a5243c45d9c~tplv-k3u1fbpfcp-watermark.image">
 
-<link rel="canonical" href="http://example.com/2022/02/12/%E5%BE%AA%E7%8E%AF%E5%86%97%E4%BD%99%E6%A0%A1%E9%AA%8C/">
+<link rel="canonical" href="http://example.com/2022/04/06/%E4%BD%A0%E7%9F%A5%E9%81%93Canvas%E4%B8%8ESvg%E4%B9%8B%E9%97%B4%E7%9A%84%E5%8C%BA%E5%88%AB%E5%90%97/">
 
 
 <script id="page-configurations">
@@ -51,7 +53,7 @@
   };
 </script>
 
-  <title>循环冗余校验 | Martisss's blog</title>
+  <title>你知道Canvas与Svg之间的区别吗？ | Martisss's blog</title>
   
 
 
@@ -168,7 +170,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/02/12/%E5%BE%AA%E7%8E%AF%E5%86%97%E4%BD%99%E6%A0%A1%E9%AA%8C/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/04/06/%E4%BD%A0%E7%9F%A5%E9%81%93Canvas%E4%B8%8ESvg%E4%B9%8B%E9%97%B4%E7%9A%84%E5%8C%BA%E5%88%AB%E5%90%97/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/uploads/avatar.gif">
@@ -181,7 +183,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          循环冗余校验
+          你知道Canvas与Svg之间的区别吗？
         </h1>
 
         <div class="post-meta">
@@ -190,10 +192,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2022-02-12 14:09:47 / 修改时间：14:49:43" itemprop="dateCreated datePublished" datetime="2022-02-12T14:09:47+08:00">2022-02-12</time>
+              <time title="创建时间：2022-04-06 11:26:35" itemprop="dateCreated datePublished" datetime="2022-04-06T11:26:35+08:00">2022-04-06</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-04-09 11:29:52" itemprop="dateModified" datetime="2022-04-09T11:29:52+08:00">2022-04-09</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -222,29 +230,73 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="校验原理"><a href="#校验原理" class="headerlink" title="校验原理"></a>校验原理</h1><blockquote>
-<p>baidu</p>
-<p>循环冗余校验（Cyclic Redundancy Check， CRC）是一种根据网络数据包或计算机文件等数据产生简短固定位数校验码的一种信道编码技术，主要用来检测或校验数据传输或者保存后可能出现的错误。 它是利用除法及余数的原理来作错误侦测的。</p>
-</blockquote>
-<p>简单的说就是在发送帧后附加一个数（用来校验的校验码），生成新帧，发送给接收端，接收端收到之后除以某个特定的数（接收方和发送方共同选定）如果能够整除，说明传输正确；如果不能整除，说明传输过程中发生了差错。</p>
-<p>​    以上只是一个通俗的解释，有几个问题需要解决，这里的’除‘是通常意义上的除法吗？校验码是如何生成的？发送端如何生成新帧？接下来一个个解决这些问题。</p>
-<p>:sparkler: 这里的’除’指的是’模2除法‘，既不向上位借位，也不比较除数和被除数的相同位数值的大小，只要以相同位数进行相除即可，相当于<strong>异或运算</strong>。</p>
-<p><img src="https://s2.loli.net/2022/02/12/kf2onszQpygPR8O.png" alt="image.png"></p>
-<p>:sparkler:校验码是如何生成的？</p>
-<p>假定所选定的除数二进制位数（假设为k位），然后<strong>在要发送的数据帧（假设为m位）后面加上k-1位“0”，</strong>然后以这个加了k-1个“0“的新帧（一共是m+k-1位）以“模2除法”方式除以上面这个除数，所得到的余数（也是二进制的比特串）就是该帧的<strong>CRC校验码</strong>，也称之为<strong>FCS（帧校验序列）</strong>。</p>
-<blockquote>
-<p>但要注意的是，<strong>余数的位数一定要是比除数位数只能少一位，哪怕前面位是0，甚至是全为0（附带好整除时）也都不能省略。</strong></p>
-</blockquote>
-<p>:sparkler: 如何生成新帧？</p>
-<p>将生成的校验码直接添加在<strong>原数据帧</strong>（注意是原数据帧）后面</p>
+        <h2 id="svg"><a href="#svg" class="headerlink" title="svg"></a>svg</h2><p><strong>可缩放矢量图形</strong>（<strong>Scalable Vector Graphics，SVG</strong>），是一种用于描述二维的<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E7%9F%A2%E9%87%8F%E5%9B%BE%E5%BD%A2">矢量图形</a>，基于 <a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/XML/XML_Introduction">XML</a> 的标记语言, 这意味着可以使用任何文本编辑器(如记事本)创建和编辑<code>SVG</code>图像。</p>
+<p>与<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Glossary/jpeg">JPEG</a>和<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Glossary/PNG">PNG</a>这种传统的点阵图像模式不同，SVG格式提供的是矢量图，这意味着它的图像能够被<strong>无限放大而不失真或降低质量</strong>，并且可以方便地修改内容。</p>
+<p><code>HTML</code> <code>&lt;svg&gt;</code>元素是<code>svg</code>图形的容器。</p>
 <hr/>
 
-<p>接收端接收之后，接收端会把这个新帧再用上面选定的除数以“模2除法”方式去除，验证余数是否为0，如果为0，则证明该帧数据在传输过程中没有出现差错，否则出现了差错。</p>
-<p>以上就是CRC校验的基本原理，此外上文提到除数是发送端与接收端约定得到的，具体是如何得到的呢？:question: </p>
-<p>实际上是通过crc多项式得到的，假如选取的多项式为 x^5+x^2+1（CRC-5-USB)，那么除数的二级制位数就有6位，即总位数等于最高位的幂次加1，其二进制比特串为 100101。</p>
-<h1 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h1><p>假设多项式为<code>G(X) = X^4 + X^3 + 1</code>，要求出二进制序列10110011的CRC校验码</p>
-<p>按照上文提到的方法，除数有五位：11001，crc校验码有4位，用来求crc校验码的新帧为101100110000（补4个0），使用模2除法相除，得到余数0100。</p>
-<p><img src="https://s2.loli.net/2022/02/12/TJQLKVA4HodNFgk.png" alt="image.png"></p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://jsbin.com/yejohebuvo/2/edit?html,console,output=">svg demo</a></p>
+</blockquote>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">svg</span> <span class="attr">id</span>=<span class="string">&quot;svgelem&quot;</span> <span class="attr">height</span>=<span class="string">&quot;200&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">circle</span> <span class="attr">id</span>=<span class="string">&quot;greencircle&quot;</span> <span class="attr">cx</span>=<span class="string">&quot;60&quot;</span> <span class="attr">cy</span>=<span class="string">&quot;60&quot;</span> <span class="attr">r</span>=<span class="string">&quot;50&quot;</span> <span class="attr">fill</span>=<span class="string">&quot;#1E81FF&quot;</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">svg</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/7a84cb8161344125a65d9a5243c45d9c~tplv-k3u1fbpfcp-watermark.image" alt="image.png"></p>
+<h2 id="canvas"><a href="#canvas" class="headerlink" title="canvas"></a>canvas</h2><p><code>&lt;canvas&gt;</code>本身只是相当于一块画布，不具有绘图能力，必须通过脚本(通常是JavaScript)动态地绘制图形，脚本充当画笔的角色。元素只是图形的容器, 必须使用脚本来实际绘制图形。Canvas有几种绘制路径、框、圆、文本和添加图像的方法</p>
+<hr/>
+
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://jsbin.com/weduxufura/edit?html,console,output=">canvas demo</a></p>
+</blockquote>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">canvas</span> <span class="attr">id</span>=<span class="string">&quot;newCanvas&quot;</span> <span class="attr">width</span>=<span class="string">&quot;100&quot;</span> <span class="attr">height</span>=<span class="string">&quot;100&quot;</span> <span class="attr">style</span>=<span class="string">&quot;border:1px solid #000000;&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">canvas</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="javascript"></span></span><br><span class="line"><span class="javascript">    <span class="keyword">var</span> c = <span class="built_in">document</span>.getElementById(<span class="string">&#x27;newCanvas&#x27;</span>);</span></span><br><span class="line"><span class="javascript">    <span class="keyword">var</span> ctx = c.getContext(<span class="string">&#x27;2d&#x27;</span>);</span></span><br><span class="line"><span class="javascript">    ctx.fillStyle = <span class="string">&#x27;#1E81FF&#x27;</span>;</span></span><br><span class="line"><span class="javascript">    ctx.fillRect(<span class="number">0</span>, <span class="number">0</span>, <span class="number">100</span>, <span class="number">100</span>);</span></span><br><span class="line"><span class="javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/4d10aba1ba1a4916ad0da0d5ebebf326~tplv-k3u1fbpfcp-watermark.image" alt="image.png"></p>
+<h2 id="二者的区别"><a href="#二者的区别" class="headerlink" title="二者的区别"></a>二者的区别</h2><p><code>SVG</code>是一种基于<code>XML</code>中的2D图形的语言。</p>
+<p><code>Canvas</code>通过脚本动态绘制2D图形。</p>
+<p><code>SVG</code>是基于<code>XML</code>的，这意味着每个元素都在<code>SVG DOM</code>中可用, 可以为元素附加<code>JavaScript</code>事件处理程序。在SVG中，将每个绘制的形状记住为对象。如果更改了SVG对象的属性，则浏览器可以自动重新呈现形状。</p>
+<p><code>Canvas</code>由像素呈现,一旦图形在画布中绘制完成，浏览器撒手不管了。如果需要更改其位置，则需要重新绘制整个场景，其中许多对象会被频繁重绘。</p>
+<p><strong>详细对比如下：</strong></p>
+<table>
+<thead>
+<tr>
+<th>SVG</th>
+<th>Canvas</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>不依赖分辨率（矢量图）</td>
+<td>依赖分辨率（位图）</td>
+</tr>
+<tr>
+<td>每一个图形都是一个 <code>DOM</code>元素</td>
+<td>单个HTML元素，相当于<code>&lt;img&gt;</code></td>
+</tr>
+<tr>
+<td>支持事件处理器</td>
+<td>不支持事件处理器</td>
+</tr>
+<tr>
+<td>适合大型渲染区域的应用程序(谷歌地图)</td>
+<td>文本渲染能力差</td>
+</tr>
+<tr>
+<td>可以通过脚本和CSS进行修改</td>
+<td>只能通过脚本修改</td>
+</tr>
+<tr>
+<td>对象数量较小 (<code>&lt;10k</code>)、图面更大时性能更佳</td>
+<td>图面较小，对象数量较大（<code>&gt;10k</code>）时性能最佳</td>
+</tr>
+<tr>
+<td>不适合游戏应用</td>
+<td>适合图像密集型的游戏应用</td>
+</tr>
+</tbody></table>
+<h2 id="兼容性"><a href="#兼容性" class="headerlink" title="兼容性"></a>兼容性</h2><p><a target="_blank" rel="noopener" href="https://caniuse.com/?search=svg">Can I use Svg ?</a></p>
+<p><img src="https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/09e94e23b7394d24a38911645c4c2190~tplv-k3u1fbpfcp-watermark.image" alt="image.png"></p>
+<p><a target="_blank" rel="noopener" href="https://caniuse.com/?search=Canvas">Can I use Canvas ?</a></p>
+<p><img src="https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/b068616852114a3eac8ef42d4a3c5bba~tplv-k3u1fbpfcp-watermark.image" alt="image.png"></p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a target="_blank" rel="noopener" href="https://caniuse.com/">Can I use</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.w3schools.com/html/html5_svg.asp">W3cSchool</a></p>
+<p><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/SVG">MDN</a></p>
 
     </div>
 
@@ -254,7 +306,7 @@
 
       <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/%E8%AE%A1%E7%BD%91/" rel="tag"># 计网</a>
+              <a href="/tags/DOM/" rel="tag"># DOM</a>
           </div>
 
         
@@ -263,13 +315,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2021/12/20/JS%E4%B8%AD%E7%9A%84%E7%BB%A7%E6%89%BF/" rel="prev" title="JS中的继承">
-      <i class="fa fa-chevron-left"></i> JS中的继承
+    <a href="/2022/04/03/StrictMode%E5%BC%95%E5%8F%91%E7%9A%84%E7%BB%84%E4%BB%B6%E9%87%8D%E5%A4%8D%E6%89%A7%E8%A1%8C/" rel="prev" title="StrictMode引发的组件重复执行">
+      <i class="fa fa-chevron-left"></i> StrictMode引发的组件重复执行
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2022/03/11/%E9%9D%A2%E8%AF%95%E5%AE%98%EF%BC%9AstopImmediatePropagation%E4%B8%8EstopPropagation%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F/" rel="next" title="面试官：stopImmediatePropagation与stopPropagation有什么区别？">
-      面试官：stopImmediatePropagation与stopPropagation有什么区别？ <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -328,7 +377,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%A0%A1%E9%AA%8C%E5%8E%9F%E7%90%86"><span class="nav-number">1.</span> <span class="nav-text">校验原理</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%A4%BA%E4%BE%8B"><span class="nav-number">2.</span> <span class="nav-text">示例</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#svg"><span class="nav-number">1.</span> <span class="nav-text">svg</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#canvas"><span class="nav-number">2.</span> <span class="nav-text">canvas</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E8%80%85%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-number">3.</span> <span class="nav-text">二者的区别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%BC%E5%AE%B9%E6%80%A7"><span class="nav-number">4.</span> <span class="nav-text">兼容性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">5.</span> <span class="nav-text">参考</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 

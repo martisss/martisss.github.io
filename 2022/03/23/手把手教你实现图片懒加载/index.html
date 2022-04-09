@@ -22,18 +22,19 @@
     var CONFIG = {"hostname":"example.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="# 什么是图片懒加载？ 如今一张图片的大小可以轻松达到几M的大小，如果一个页面中同时有比较多这样的图片，同时加载的话会造成页面加载缓慢，当目标图片未加载成功时，通常会使用一个小图片占位，例如一个转圈圈的gif来表示图片正处于loading状态，但这改变不了很多图片同时加载带来的加载缓慢的问题。 *因此很多时候我们需要将页面内未出现在可视区域内的图片先不做加载， 等到滚动到可视区域后再去加载，这样对">
+  <meta name="description" content="什么是图片懒加载？如今一张图片的大小可以轻松达到几M的大小，如果一个页面中同时有比较多这样的图片，同时加载的话会造成页面加载缓慢，当目标图片未加载成功时，通常会使用一个小图片占位，例如一个转圈圈的gif来表示图片正处于loading状态，但这改变不了很多图片同时加载带来的加载缓慢的问题。 因此很多时候我们需要将页面内未出现在可视区域内的图片先不做加载， 等到滚动到可视区域后再去加载，这样对页面的">
 <meta property="og:type" content="article">
 <meta property="og:title" content="手把手教你实现图片懒加载">
 <meta property="og:url" content="http://example.com/2022/03/23/%E6%89%8B%E6%8A%8A%E6%89%8B%E6%95%99%E4%BD%A0%E5%AE%9E%E7%8E%B0%E5%9B%BE%E7%89%87%E6%87%92%E5%8A%A0%E8%BD%BD/index.html">
 <meta property="og:site_name" content="Martisss&#39;s blog">
-<meta property="og:description" content="# 什么是图片懒加载？ 如今一张图片的大小可以轻松达到几M的大小，如果一个页面中同时有比较多这样的图片，同时加载的话会造成页面加载缓慢，当目标图片未加载成功时，通常会使用一个小图片占位，例如一个转圈圈的gif来表示图片正处于loading状态，但这改变不了很多图片同时加载带来的加载缓慢的问题。 *因此很多时候我们需要将页面内未出现在可视区域内的图片先不做加载， 等到滚动到可视区域后再去加载，这样对">
+<meta property="og:description" content="什么是图片懒加载？如今一张图片的大小可以轻松达到几M的大小，如果一个页面中同时有比较多这样的图片，同时加载的话会造成页面加载缓慢，当目标图片未加载成功时，通常会使用一个小图片占位，例如一个转圈圈的gif来表示图片正处于loading状态，但这改变不了很多图片同时加载带来的加载缓慢的问题。 因此很多时候我们需要将页面内未出现在可视区域内的图片先不做加载， 等到滚动到可视区域后再去加载，这样对页面的">
 <meta property="og:locale">
 <meta property="og:image" content="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/6bd626e3b74a40279a466c740a78b742~tplv-k3u1fbpfcp-zoom-1.image">
-<meta property="og:image" content="https://s2.loli.net/2022/03/23/WZq7iPdwF3Nvs95.gif">
+<meta property="og:image" content="https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/bcea4659e2aa4fbea320723605eafb77~tplv-k3u1fbpfcp-watermark.image">
 <meta property="og:image" content="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/48dd5ee96338406ebf553269ee0774b5~tplv-k3u1fbpfcp-zoom-1.image">
+<meta property="og:image" content="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/bcd9e4b45cf64939889ebc77e48ca04e~tplv-k3u1fbpfcp-watermark.image">
 <meta property="article:published_time" content="2022-03-23T15:03:04.000Z">
-<meta property="article:modified_time" content="2022-03-23T15:04:33.562Z">
+<meta property="article:modified_time" content="2022-04-09T03:20:49.167Z">
 <meta property="article:author" content="martisss">
 <meta property="article:tag" content="JS">
 <meta property="article:tag" content="性能优化">
@@ -192,10 +193,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2022-03-23 23:03:04 / 修改时间：23:04:33" itemprop="dateCreated datePublished" datetime="2022-03-23T23:03:04+08:00">2022-03-23</time>
+              <time title="创建时间：2022-03-23 23:03:04" itemprop="dateCreated datePublished" datetime="2022-03-23T23:03:04+08:00">2022-03-23</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-04-09 11:20:49" itemprop="dateModified" datetime="2022-04-09T11:20:49+08:00">2022-04-09</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -224,173 +231,43 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p># 什么是图片懒加载？</p>
-<p>如今一张图片的大小可以轻松达到几<code>M</code>的大小，如果一个页面中同时有比较多这样的图片，同时加载的话会造成页面加载缓慢，当目标图片未加载成功时，通常会使用一个小图片占位，例如一个转圈圈的gif来表示图片正处于<code>loading</code>状态，但这改变不了很多图片同时加载带来的加载缓慢的问题。</p>
-<p><strong><em>*<strong><strong>因此很多时候我们需要将页面内未出现在可视区域内的图片先不做加载， 等到滚动到可视区域后再去加载，这样对页面的加载性能有较大提升，同时也改善了用户体验。</strong></strong></em>*</strong></p>
+        <hr>
+<h1 id="什么是图片懒加载？"><a href="#什么是图片懒加载？" class="headerlink" title="什么是图片懒加载？"></a>什么是图片懒加载？</h1><p>如今一张图片的大小可以轻松达到几<code>M</code>的大小，如果一个页面中同时有比较多这样的图片，同时加载的话会造成页面加载缓慢，当目标图片未加载成功时，通常会使用一个小图片占位，例如一个转圈圈的gif来表示图片正处于<code>loading</code>状态，但这改变不了很多图片同时加载带来的加载缓慢的问题。</p>
+<p><strong>因此很多时候我们需要将页面内未出现在可视区域内的图片先不做加载， 等到滚动到可视区域后再去加载，这样对页面的加载性能有较大提升，同时也改善了用户体验。</strong></p>
 <hr/>
+主要实现思路如下：
 
-<p>主要实现思路如下：</p>
 <p>1、<code>img</code>元素的自定义属性上<code>data-xxx</code>上挂载目标图片<code>url</code>, <code>src</code>属性指向默认图片地址。</p>
 <p>2、监听图片是否出现在用户的可视区域内。</p>
 <p>3、出现在可视区域内后更新<code>src</code>属性为目标图片<code>url</code>。</p>
 <p>以下两种实现方式的区别主要体现在第二步。</p>
-<p># 监听scroll事件+节流 实现</p>
-<p>```html</p>
-<!DOCTYPE *html*>
-
-<html *lang*="en">
-
- <head>
-
-<p>    <meta charset="UTF-8" /></p>
-<p>    <meta http-equiv="X-UA-Compatible" content="IE=edge" /></p>
-<p>    <meta name="viewport" content="width=device-width, initial-scale=1.0" /></p>
-  <title>Document</title>
-
- </head>
-
- <body>
-
-<p>    <div></div></p>
- </body>
-
-<p>  <style></p>
-<p>  div {</p>
-<p>   display: flex;</p>
-<p>   justify-content: center;</p>
-<p>   flex-direction: column;</p>
-<p>  }</p>
-<p>  *.*<em>img</em> {</p>
-<p>   width: 50%;</p>
-<p>   height: 50%;</p>
-<p>  }</p>
-<p> </style></p>
-<p>  <script></p>
-<p>  <em>const</em> loadingSrc = ‘<a target="_blank" rel="noopener" href="https://c.tenor.com/j-sGh5ZtdaEAAAAi/hongfei-fei.gif&#39;">https://c.tenor.com/j-sGh5ZtdaEAAAAi/hongfei-fei.gif&#39;</a></p>
-<p>  <em>const</em> srcs = [</p>
-<p>   ‘<a target="_blank" rel="noopener" href="https://w.wallhaven.cc/full/wq/wallhaven-wq855r.png&#39;">https://w.wallhaven.cc/full/wq/wallhaven-wq855r.png&#39;</a>,</p>
-<p>   ‘<a target="_blank" rel="noopener" href="https://w.wallhaven.cc/full/6o/wallhaven-6ooo66.png&#39;">https://w.wallhaven.cc/full/6o/wallhaven-6ooo66.png&#39;</a>,</p>
-<p>   ‘<a target="_blank" rel="noopener" href="https://w.wallhaven.cc/full/eo/wallhaven-eoqk88.png&#39;">https://w.wallhaven.cc/full/eo/wallhaven-eoqk88.png&#39;</a>,</p>
-<p>   ‘<a target="_blank" rel="noopener" href="https://w.wallhaven.cc/full/8x/wallhaven-8xlx2o.png&#39;">https://w.wallhaven.cc/full/8x/wallhaven-8xlx2o.png&#39;</a>,</p>
-<p>   ‘<a target="_blank" rel="noopener" href="https://w.wallhaven.cc/full/q2/wallhaven-q2drrl.jpg&#39;">https://w.wallhaven.cc/full/q2/wallhaven-q2drrl.jpg&#39;</a>,</p>
-<p>   ‘<a target="_blank" rel="noopener" href="https://w.wallhaven.cc/full/ym/wallhaven-ymrrex.png&#39;">https://w.wallhaven.cc/full/ym/wallhaven-ymrrex.png&#39;</a>,</p>
-<p>   ‘<a target="_blank" rel="noopener" href="https://w.wallhaven.cc/full/mp/wallhaven-mp8wkm.png&#39;">https://w.wallhaven.cc/full/mp/wallhaven-mp8wkm.png&#39;</a>,</p>
-<p>   ‘<a target="_blank" rel="noopener" href="https://w.wallhaven.cc/full/dg/wallhaven-dgzp2m.jpg&#39;">https://w.wallhaven.cc/full/dg/wallhaven-dgzp2m.jpg&#39;</a>,</p>
-<p>   ‘<a target="_blank" rel="noopener" href="https://w.wallhaven.cc/full/lq/wallhaven-lqek12.png&#39;">https://w.wallhaven.cc/full/lq/wallhaven-lqek12.png&#39;</a>,</p>
-<p>   ‘<a target="_blank" rel="noopener" href="https://w.wallhaven.cc/full/r7/wallhaven-r7mkzq.jpg&#39;">https://w.wallhaven.cc/full/r7/wallhaven-r7mkzq.jpg&#39;</a>,</p>
-<p>   ‘<a target="_blank" rel="noopener" href="https://w.wallhaven.cc/full/qd/wallhaven-qd12jl.png&#39;">https://w.wallhaven.cc/full/qd/wallhaven-qd12jl.png&#39;</a>,</p>
-<p>   ‘<a target="_blank" rel="noopener" href="https://w.wallhaven.cc/full/0q/wallhaven-0q23r5.jpg&#39;">https://w.wallhaven.cc/full/0q/wallhaven-0q23r5.jpg&#39;</a>,</p>
-<p>   ‘<a target="_blank" rel="noopener" href="https://w.wallhaven.cc/full/76/wallhaven-76wj9o.png&#39;">https://w.wallhaven.cc/full/76/wallhaven-76wj9o.png&#39;</a>,</p>
-<p>   ‘<a target="_blank" rel="noopener" href="https://w.wallhaven.cc/full/5d/wallhaven-5d6gd5.jpg&#39;">https://w.wallhaven.cc/full/5d/wallhaven-5d6gd5.jpg&#39;</a>,</p>
-<p>   ‘<a target="_blank" rel="noopener" href="https://w.wallhaven.cc/full/gj/wallhaven-gjmd9q.png&#39;">https://w.wallhaven.cc/full/gj/wallhaven-gjmd9q.png&#39;</a>,</p>
-<p>   ‘<a target="_blank" rel="noopener" href="https://w.wallhaven.cc/full/pk/wallhaven-pk91m3.png&#39;">https://w.wallhaven.cc/full/pk/wallhaven-pk91m3.png&#39;</a>,</p>
-<p>   ‘<a target="_blank" rel="noopener" href="https://w.wallhaven.cc/full/pk/wallhaven-pk9zm9.png&#39;">https://w.wallhaven.cc/full/pk/wallhaven-pk9zm9.png&#39;</a>,</p>
-<p>   ‘<a target="_blank" rel="noopener" href="https://w.wallhaven.cc/full/j8/wallhaven-j85wv5.png&#39;">https://w.wallhaven.cc/full/j8/wallhaven-j85wv5.png&#39;</a>,</p>
-<p>  ]</p>
-<p>  for (<em>let</em> src of srcs) {</p>
-<p>   <em>let</em> imgNode = document.createElement(‘img’)</p>
-<p>   document.body.appendChild(imgNode)</p>
-<p>   imgNode.src = loadingSrc</p>
-<p>   imgNode.className = ‘img’</p>
-<p>   imgNode.setAttribute(‘data-src’, src)</p>
-<p>  }</p>
-<p>  <em>let</em> imgList = […document.querySelectorAll(‘img’)]</p>
-<p>  <em>let</em> length = imgList.length</p>
-<p> </script></p>
-</html>
-
-<p>```</p>
-<p>渲染后的结构如下图所示，<code>src</code>属性指向一张默认加载图片的地址，<code>data-src</code>属性上是目标图片的地址</p>
-<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/6bd626e3b74a40279a466c740a78b742~tplv-k3u1fbpfcp-zoom-1.image" alt="image.png"></p>
-<p><strong><em>*<strong><strong>在此方法中懒加载的核心逻辑为：</strong></strong></em>*</strong><code>监听scroll事件，对比容器的高度、滚动高度、和图片距离容器顶部的高度，判断是否滚动到可视区域</code></p>
+<h1 id="监听scroll事件-节流-实现"><a href="#监听scroll事件-节流-实现" class="headerlink" title="监听scroll事件+节流 实现"></a>监听scroll事件+节流 实现</h1><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">&quot;en&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">&quot;UTF-8&quot;</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">&quot;X-UA-Compatible&quot;</span> <span class="attr">content</span>=<span class="string">&quot;IE=edge&quot;</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">&quot;viewport&quot;</span> <span class="attr">content</span>=<span class="string">&quot;width=device-width, initial-scale=1.0&quot;</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>Document<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">style</span>&gt;</span><span class="css"></span></span><br><span class="line"><span class="css">    <span class="selector-tag">div</span> &#123;</span></span><br><span class="line"><span class="css">      <span class="attribute">display</span>: flex;</span></span><br><span class="line"><span class="css">      <span class="attribute">justify-content</span>: center;</span></span><br><span class="line"><span class="css">      <span class="attribute">flex-direction</span>: column;</span></span><br><span class="line"><span class="css">    &#125;</span></span><br><span class="line"><span class="css">    <span class="selector-class">.img</span> &#123;</span></span><br><span class="line"><span class="css">      <span class="attribute">width</span>: <span class="number">50%</span>;</span></span><br><span class="line"><span class="css">      <span class="attribute">height</span>: <span class="number">50%</span>;</span></span><br><span class="line"><span class="css">    &#125;</span></span><br><span class="line"><span class="css">  </span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="javascript"></span></span><br><span class="line"><span class="javascript">    <span class="keyword">const</span> loadingSrc = <span class="string">&#x27;https://c.tenor.com/j-sGh5ZtdaEAAAAi/hongfei-fei.gif&#x27;</span></span></span><br><span class="line"><span class="javascript">    <span class="keyword">const</span> srcs = [</span></span><br><span class="line"><span class="javascript">      <span class="string">&#x27;https://w.wallhaven.cc/full/wq/wallhaven-wq855r.png&#x27;</span>,</span></span><br><span class="line"><span class="javascript">      <span class="string">&#x27;https://w.wallhaven.cc/full/6o/wallhaven-6ooo66.png&#x27;</span>,</span></span><br><span class="line"><span class="javascript">      <span class="string">&#x27;https://w.wallhaven.cc/full/eo/wallhaven-eoqk88.png&#x27;</span>,</span></span><br><span class="line"><span class="javascript">      <span class="string">&#x27;https://w.wallhaven.cc/full/8x/wallhaven-8xlx2o.png&#x27;</span>,</span></span><br><span class="line"><span class="javascript">      <span class="string">&#x27;https://w.wallhaven.cc/full/q2/wallhaven-q2drrl.jpg&#x27;</span>,</span></span><br><span class="line"><span class="javascript">      <span class="string">&#x27;https://w.wallhaven.cc/full/ym/wallhaven-ymrrex.png&#x27;</span>,</span></span><br><span class="line"><span class="javascript">      <span class="string">&#x27;https://w.wallhaven.cc/full/mp/wallhaven-mp8wkm.png&#x27;</span>,</span></span><br><span class="line"><span class="javascript">      <span class="string">&#x27;https://w.wallhaven.cc/full/dg/wallhaven-dgzp2m.jpg&#x27;</span>,</span></span><br><span class="line"><span class="javascript">      <span class="string">&#x27;https://w.wallhaven.cc/full/lq/wallhaven-lqek12.png&#x27;</span>,</span></span><br><span class="line"><span class="javascript">      <span class="string">&#x27;https://w.wallhaven.cc/full/r7/wallhaven-r7mkzq.jpg&#x27;</span>,</span></span><br><span class="line"><span class="javascript">      <span class="string">&#x27;https://w.wallhaven.cc/full/qd/wallhaven-qd12jl.png&#x27;</span>,</span></span><br><span class="line"><span class="javascript">      <span class="string">&#x27;https://w.wallhaven.cc/full/0q/wallhaven-0q23r5.jpg&#x27;</span>,</span></span><br><span class="line"><span class="javascript">      <span class="string">&#x27;https://w.wallhaven.cc/full/76/wallhaven-76wj9o.png&#x27;</span>,</span></span><br><span class="line"><span class="javascript">      <span class="string">&#x27;https://w.wallhaven.cc/full/5d/wallhaven-5d6gd5.jpg&#x27;</span>,</span></span><br><span class="line"><span class="javascript">      <span class="string">&#x27;https://w.wallhaven.cc/full/gj/wallhaven-gjmd9q.png&#x27;</span>,</span></span><br><span class="line"><span class="javascript">      <span class="string">&#x27;https://w.wallhaven.cc/full/pk/wallhaven-pk91m3.png&#x27;</span>,</span></span><br><span class="line"><span class="javascript">      <span class="string">&#x27;https://w.wallhaven.cc/full/pk/wallhaven-pk9zm9.png&#x27;</span>,</span></span><br><span class="line"><span class="javascript">      <span class="string">&#x27;https://w.wallhaven.cc/full/j8/wallhaven-j85wv5.png&#x27;</span>,</span></span><br><span class="line"><span class="javascript">    ]</span></span><br><span class="line"><span class="javascript"></span></span><br><span class="line"><span class="javascript">    <span class="keyword">for</span> (<span class="keyword">let</span> src <span class="keyword">of</span> srcs) &#123;</span></span><br><span class="line"><span class="javascript">      <span class="keyword">let</span> imgNode = <span class="built_in">document</span>.createElement(<span class="string">&#x27;img&#x27;</span>)</span></span><br><span class="line"><span class="javascript">      <span class="built_in">document</span>.body.appendChild(imgNode)</span></span><br><span class="line"><span class="javascript">      imgNode.src = loadingSrc</span></span><br><span class="line"><span class="javascript">      imgNode.className = <span class="string">&#x27;img&#x27;</span></span></span><br><span class="line"><span class="javascript">      imgNode.setAttribute(<span class="string">&#x27;data-src&#x27;</span>, src)</span></span><br><span class="line"><span class="javascript">    &#125;</span></span><br><span class="line"><span class="javascript">    </span></span><br><span class="line"><span class="javascript">    <span class="keyword">let</span> imgList = [...document.querySelectorAll(<span class="string">&#x27;img&#x27;</span>)]</span></span><br><span class="line"><span class="javascript">    <span class="keyword">let</span> length = imgList.length</span></span><br><span class="line"><span class="javascript">  </span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>渲染后的结构如下图所示，<code>src</code>属性指向一张默认加载图片的地址，<code>data-src</code>属性上是目标图片的地址<br><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/6bd626e3b74a40279a466c740a78b742~tplv-k3u1fbpfcp-zoom-1.image" alt="image.png"><br><strong>在此方法中懒加载的核心逻辑为：</strong><code>监听scroll事件，对比容器的高度、滚动高度、和图片距离容器顶部的高度，判断是否滚动到可视区域</code></p>
 <p>主要实现如下：</p>
-<p>```js</p>
-<p>  <em>const</em> imgLazyLoad = (<em>function</em> () {</p>
-<p>   <em>let</em> count = 0</p>
-<p>   return <em>function</em> () {</p>
-<p>​    <em>let</em> deleteIndexList = []</p>
-<p>​    imgList.forEach((<em>img</em>, <em>index</em>) =&gt; {</p>
-<p>​     <em>let</em> rect = img.getBoundingClientRect()</p>
-<p>​     if (rect.top &lt; window.innerHeight) {</p>
-<p>​      console.log(<code>加载第$&#123;index&#125;张图片</code>)</p>
-<p>​      img.src = img.dataset.src</p>
-<p>​      deleteIndexList.push(index)</p>
-<p>​      count++</p>
-<p>​     }</p>
-<p>​     <em>// 说明图片已经全部加载完成了，移除监听事件</em></p>
-<p>​     if (count === length) {</p>
-<p>​      document.removeEventListener(‘scroll’, imgLazyLoad)</p>
-<p>​     }</p>
-<p>​    })</p>
-<p>​    <em>// 剔除已经完成加载的图片的地址</em></p>
-<p>​    imgList = imgList.filter(</p>
-<p>​     (<em>img</em>, <em>index</em>) =&gt; !deleteIndexList.includes(index)</p>
-<p>​    )</p>
-<p>   }</p>
-<p>  })()</p>
-<p>  <em>// 监听鼠标滚动事件</em></p>
-<p>  document.addEventListener(‘scroll’, imgLazyLoad)</p>
-<p>```</p>
-<p><em>&gt;</em> <em><a href="*!https://developer.mozilla.org/zh-CN/docs/Web/API/Element/getBoundingClientRect*"><strong>Element.getBoundingClientRect()</strong></a></em> <em>返回元素的大小以及相对于视口的位置.</em></p>
-<p><em>&gt;</em> <em><a href="*https://developer.mozilla.org/zh-CN/docs/Web/API/Window/innerHeight*"><strong>window.innerheight</strong></a></em> <em>是视口的高度.</em></p>
-<p>当<code>img.top</code> &lt; <code>window.innerHeight</code>时说明该图片元素正处于视口之内，应该进行加载，将<code>img.src</code>的值更换为<code>img.dataset.src</code>的值，加载目标图片。</p>
-<p>让我们来看一下使用效果：</p>
-<p><img src="https://s2.loli.net/2022/03/23/WZq7iPdwF3Nvs95.gif" alt="tutieshi_640x360_8s.gif"></p>
-<p>可以看出，当鼠标滚动时，首先加载在当前视口内的图片，当新的图片进入视口内时，加载新的图片，所有图片并没有同时进行加载，达到了预期效果。</p>
-<p>但是，直接将函数绑定在<code>scroll</code>事件上，当页面滚动时，函数会被高频触发。因此我们再使用节流函数优化一下。</p>
-<p>```js</p>
-<p>  <em>function</em> throttle(<em>func</em>, <em>wait</em>) {</p>
-<p>   <em>let</em> prev = 0,</p>
-<p>​    context,</p>
-<p>​    args</p>
-<p>   return <em>function</em> () {</p>
-<p>​    <em>let</em> now = +new Date()</p>
-<p>​    context = <em>this</em></p>
-<p>​    args = <em>arguments</em></p>
-<p>​    if (now - prev &gt; wait) {</p>
-<p>​     func.apply(context, args)</p>
-<p>​     prev = now</p>
-<p>​    }</p>
-<p>   }</p>
-<p>  }</p>
-<p>  <em>// 监听鼠标滚动事件</em></p>
-<p>  document.addEventListener(‘scroll’, throttle(imgLazyLoad, 500))</p>
-<p>```</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> imgLazyLoad = (<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">let</span> count = <span class="number">0</span></span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">let</span> deleteIndexList = []</span><br><span class="line">    imgList.forEach(<span class="function">(<span class="params">img, index</span>) =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">let</span> rect = img.getBoundingClientRect()</span><br><span class="line">      <span class="keyword">if</span> (rect.top &lt; <span class="built_in">window</span>.innerHeight) &#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">`加载第<span class="subst">$&#123;index&#125;</span>张图片`</span>)</span><br><span class="line">        img.src = img.dataset.src</span><br><span class="line">        deleteIndexList.push(index)</span><br><span class="line">        count++</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="comment">// 说明图片已经全部加载完成了，移除监听事件</span></span><br><span class="line">      <span class="keyword">if</span> (count === length) &#123;</span><br><span class="line">        <span class="built_in">document</span>.removeEventListener(<span class="string">&#x27;scroll&#x27;</span>, imgLazyLoad)</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;)</span><br><span class="line">    <span class="comment">// 剔除已经完成加载的图片的地址</span></span><br><span class="line">    imgList = imgList.filter(</span><br><span class="line">      <span class="function">(<span class="params">img, index</span>) =&gt;</span> !deleteIndexList.includes(index)</span><br><span class="line">    )</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)()</span><br><span class="line"><span class="comment">// 监听鼠标滚动事件</span></span><br><span class="line"><span class="built_in">document</span>.addEventListener(<span class="string">&#x27;scroll&#x27;</span>, imgLazyLoad)</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><a href="!https://developer.mozilla.org/zh-CN/docs/Web/API/Element/getBoundingClientRect">Element.getBoundingClientRect()</a> 返回元素的大小以及相对于视口的位置.<br><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/API/Window/innerHeight">window.innerheight</a> 是视口的高度.<br>当<code>img.top</code> &lt; <code>window.innerHeight</code>时说明该图片元素正处于视口之内，应该进行加载，将<code>img.src</code>的值更换为<code>img.dataset.src</code>的值，加载目标图片。</p>
+</blockquote>
+<p>让我们来看一下使用效果：<br><img src="https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/bcea4659e2aa4fbea320723605eafb77~tplv-k3u1fbpfcp-watermark.image" alt="CPT2204051626-585x381.gif"><br>可以看出，当鼠标滚动时，首先加载在当前视口内的图片，当新的图片进入视口内时，加载新的图片，所有图片并没有同时进行加载，达到了预期效果。<br>但是，直接将函数绑定在<code>scroll</code>事件上，当页面滚动时，函数会被高频触发。因此我们再使用节流函数优化一下。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">throttle</span>(<span class="params">func, wait</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">let</span> prev = <span class="number">0</span>,</span><br><span class="line">    context,</span><br><span class="line">    args</span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">let</span> now = +<span class="keyword">new</span> <span class="built_in">Date</span>()</span><br><span class="line">    context = <span class="built_in">this</span></span><br><span class="line">    args = <span class="built_in">arguments</span></span><br><span class="line">    <span class="keyword">if</span> (now - prev &gt; wait) &#123;</span><br><span class="line">      func.apply(context, args)</span><br><span class="line">      prev = now</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 监听鼠标滚动事件</span></span><br><span class="line"><span class="built_in">document</span>.addEventListener(<span class="string">&#x27;scroll&#x27;</span>, throttle(imgLazyLoad, <span class="number">500</span>))</span><br></pre></td></tr></table></figure>
 <p><a target="_blank" rel="noopener" href="https://jsbin.com/rarukex/1/edit?html,console,output">在线地址</a></p>
-<p><strong><em>*<strong><strong>但是！！！</strong></strong></em>*</strong></p>
-<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/48dd5ee96338406ebf553269ee0774b5~tplv-k3u1fbpfcp-zoom-1.image" alt="imag"></p>
-<p><code>getBoundingClientRect</code>返回最新的位置信息，会触发回流重绘以返回正确值</p>
-<p><em>&gt;</em> <em>与</em>*<code>**getBoundingClientRect**</code>*<em>一样会触发回流重绘的还有：</em></p>
-<p><em>&gt;</em> <em>-</em>  <em>offsetTop、offsetLeft、offsetWidth、offsetHeight</em></p>
-<p><em>&gt;-</em>  <em>scrollTop、scrollLeft、scrollWidth、scrollHeight</em></p>
-<p><em>&gt;-</em>  <em>clientTop、clientLeft、clientWidth、clientHeight</em></p>
-<p><em>&gt;-</em>  <em>getComputedStyle() 具体请看</em><em><a href="*https://gist.github.com/paulirish/5d52fb081b3570c81e3a*"><strong>这里</strong></a></em></p>
+<p><strong>但是！！！</strong><br><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/48dd5ee96338406ebf553269ee0774b5~tplv-k3u1fbpfcp-zoom-1.image" alt="imag"></p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/bcd9e4b45cf64939889ebc77e48ca04e~tplv-k3u1fbpfcp-watermark.image" alt="CPT2204051626-585x381.gif"><br><code>getBoundingClientRect</code>返回最新的位置信息，会触发回流重绘以返回正确值</p>
+<blockquote>
+<p>与<code>getBoundingClientRect</code>一样会触发回流重绘的还有：</p>
+<ul>
+<li>  offsetTop、offsetLeft、offsetWidth、offsetHeight</li>
+<li>  scrollTop、scrollLeft、scrollWidth、scrollHeight</li>
+<li>  clientTop、clientLeft、clientWidth、clientHeight</li>
+<li>  getComputedStyle() 具体请看<a target="_blank" rel="noopener" href="https://gist.github.com/paulirish/5d52fb081b3570c81e3a">这里</a></li>
+</ul>
+</blockquote>
 <p>这里使用了节流减少了回调函数的调用次数，但有没有办法不触发回流重绘也能检测到图片处于当前视口呢？这就是接下来要介绍的<code>intersectionObserver</code> API </p>
-<p># 使用 <code>intersectionObserver</code> API 实现</p>
-<p><code>IntersectionObserver</code> 是浏览器原生提供的构造函数，接受两个参数：callback 是可见性变化时的回调函数，option 是配置对象（该参数可选）。</p>
-<p>callback 函数的参数（entries）是一个数组，每个成员都是一个 IntersectionObserverEntry 对象</p>
-<p>其中：isIntersecting表示目标是否可见，即是否在视口中</p>
-<p>具体可见<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/API/IntersectionObserver/IntersectionObserver">MDN</a></p>
-<p>```js</p>
-<p>  <em>function</em> imgLazyLoad() {</p>
-<p>   <em>const</em> io = new IntersectionObserver((<em>inters</em>) =&gt; {</p>
-<p>​    inters.forEach((<em>item</em>, <em>index</em>) =&gt; {</p>
-<p>​     <em>// 进入可视区域</em></p>
-<p>​     if (item.isIntersecting) {</p>
-<p>​      item.target.src = item.target.dataset.src</p>
-<p>​      <em>//停止监听该元素</em></p>
-<p>​      io.unobserve(item.target)</p>
-<p>​     }</p>
-<p>​    })</p>
-<p>   })</p>
-<p>   <em>// 监听每一个元素</em></p>
-<p>   imgList.forEach((<em>el</em>) =&gt; io.observe(el))</p>
-<p>  }</p>
-<p>```</p>
+<h1 id="使用-intersectionObserver-API-实现"><a href="#使用-intersectionObserver-API-实现" class="headerlink" title="使用 intersectionObserver API 实现"></a>使用 <code>intersectionObserver</code> API 实现</h1><p><code>IntersectionObserver</code> 是浏览器原生提供的构造函数，接受两个参数：callback 是可见性变化时的回调函数，option 是配置对象（该参数可选）。<br>callback 函数的参数（entries）是一个数组，每个成员都是一个 IntersectionObserverEntry 对象<br>其中：isIntersecting表示目标是否可见，即是否在视口中<br>具体可见<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/API/IntersectionObserver/IntersectionObserver">MDN</a></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">imgLazyLoad</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> io = <span class="keyword">new</span> IntersectionObserver(<span class="function">(<span class="params">inters</span>) =&gt;</span> &#123;</span><br><span class="line">    inters.forEach(<span class="function">(<span class="params">item, index</span>) =&gt;</span> &#123;</span><br><span class="line">      <span class="comment">// 进入可视区域</span></span><br><span class="line">      <span class="keyword">if</span> (item.isIntersecting) &#123;</span><br><span class="line">        item.target.src = item.target.dataset.src</span><br><span class="line">        <span class="comment">//停止监听该元素</span></span><br><span class="line">        io.unobserve(item.target)</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;)</span><br><span class="line">  <span class="comment">// 监听每一个元素</span></span><br><span class="line">  imgList.forEach(<span class="function">(<span class="params">el</span>) =&gt;</span> io.observe(el))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>相比于使用<code>getBoundingClientRect</code>，实现了相同的懒加载效果，但避免了不必要的回流重绘。</p>
 <p><a target="_blank" rel="noopener" href="https://jsbin.com/dicuzeq/edit?html,console,output">在线地址</a></p>
-<p># 参考</p>
-<p><a target="_blank" rel="noopener" href="https://juejin.cn/post/6903774214780616718">前端性能优化之图片懒加载</a></p>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p><a target="_blank" rel="noopener" href="https://juejin.cn/post/6903774214780616718">前端性能优化之图片懒加载</a></p>
 <p><a target="_blank" rel="noopener" href="https://juejin.cn/post/6844903455048335368#heading-5">实现图片懒加载(Lazyload)</a></p>
 <p><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/API/IntersectionObserver">MDN - Intersection Observer</a></p>
 
@@ -415,7 +292,10 @@
     <a href="/2022/03/11/%E9%9D%A2%E8%AF%95%E5%AE%98%EF%BC%9AstopImmediatePropagation%E4%B8%8EstopPropagation%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F/" rel="prev" title="面试官：stopImmediatePropagation与stopPropagation有什么区别？">
       <i class="fa fa-chevron-left"></i> 面试官：stopImmediatePropagation与stopPropagation有什么区别？
     </a></div>
-      <div class="post-nav-item"></div>
+      <div class="post-nav-item">
+    <a href="/2022/04/03/StrictMode%E5%BC%95%E5%8F%91%E7%9A%84%E7%BB%84%E4%BB%B6%E9%87%8D%E5%A4%8D%E6%89%A7%E8%A1%8C/" rel="next" title="StrictMode引发的组件重复执行">
+      StrictMode引发的组件重复执行 <i class="fa fa-chevron-right"></i>
+    </a></div>
     </div>
       </footer>
     
@@ -474,6 +354,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E5%9B%BE%E7%89%87%E6%87%92%E5%8A%A0%E8%BD%BD%EF%BC%9F"><span class="nav-number">1.</span> <span class="nav-text">什么是图片懒加载？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%9B%91%E5%90%ACscroll%E4%BA%8B%E4%BB%B6-%E8%8A%82%E6%B5%81-%E5%AE%9E%E7%8E%B0"><span class="nav-number">2.</span> <span class="nav-text">监听scroll事件+节流 实现</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-intersectionObserver-API-%E5%AE%9E%E7%8E%B0"><span class="nav-number">3.</span> <span class="nav-text">使用 intersectionObserver API 实现</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">4.</span> <span class="nav-text">参考</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -489,7 +370,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">11</span>
+          <span class="site-state-item-count">13</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -502,7 +383,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-count">16</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
