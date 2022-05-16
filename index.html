@@ -161,6 +161,301 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/05/06/promise%E8%A7%A3%E5%86%B3%E4%BA%86%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+      <meta itemprop="name" content="martisss">
+      <meta itemprop="description" content="孩子，快逃！！！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Martisss's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/05/06/promise%E8%A7%A3%E5%86%B3%E4%BA%86%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98/" class="post-title-link" itemprop="url">promise解决了什么问题</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-05-06 16:17:18" itemprop="dateCreated datePublished" datetime="2022-05-06T16:17:18+08:00">2022-05-06</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-05-16 14:21:13" itemprop="dateModified" datetime="2022-05-16T14:21:13+08:00">2022-05-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">学习</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h3 id="promise解决了什么问题？"><a href="#promise解决了什么问题？" class="headerlink" title="promise解决了什么问题？"></a>promise解决了什么问题？</h3><p>主要是回调嵌套和控制反转</p>
+<p><strong>回调嵌套</strong></p>
+<p>嵌套和缩进只是格式层面的问题，深层次问题是代码难以复用、堆栈信息断开、引用外层变量</p>
+<ul>
+<li><p>代码难以复用</p>
+<blockquote>
+<p>回调中引用了外层变量，提取出来后需要进行相应修改</p>
+</blockquote>
+</li>
+<li><p>堆栈信息断开</p>
+<blockquote>
+<p>异步回调函数执行时将回调函数放入任务队列中，代码继续执行，直到主线程完成，然后才会从任务队列中选择已经完成的任务放入执行栈中，如果回调报错，无法获取调用该异步操作时的栈中的信息，不容易判定哪里出现了错误。</p>
+</blockquote>
+</li>
+<li><p>借助外层变量</p>
+<blockquote>
+<p>多个异步计算同时进行，由于无法预期完成顺序，必须借助外层作用域的变量，可能被其它同一作用域的函数访问并且修改，容易造成误操作。</p>
+</blockquote>
+</li>
+</ul>
+<p><strong>控制反转</strong></p>
+<p>使用第三方api，回调函数的执行次数、是否执行、执行时机都取决于第三方库的实现</p>
+<ol>
+<li>回调函数执行多次      ===&gt;  promise只能resolve一次</li>
+<li>回调函数没有执行   ===&gt; 使用Promise.race判断</li>
+<li>回调函数有时同步执行有时异步执行  ===&gt; promise总是异步的</li>
+</ol>
+<h4 id="async-await的问题"><a href="#async-await的问题" class="headerlink" title="async  await的问题"></a>async  await的问题</h4><p><strong>场景一：组合多个promsie</strong></p>
+<p>await关键字是串行的，想要同时获取多个promise的结果，需要用promise的api进行处理，比如promise.all</p>
+<p><strong>场景二：存储promsie的值</strong></p>
+<p>async/await 是语法，不是值，因此它不能被存储和传递。而 promise 对象，<strong>可以存储在内存里，可以作为参数在函数中传递。</strong></p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/d2f69064fa2a4c2cba1655b7318515fa~tplv-k3u1fbpfcp-watermark.image" alt="image.png"></p>
+<p>建立url到promise映射，通过async/await语法隐藏了promise对象，顶多建立url到result的缓存，但是当页面上发出get请求，结果未抵达，但是又触发了多个相同请求的话就无法命中result缓存，如果缓存的是promise的对象，就可以将同一个promise返回，利用promise对象可以多次调用then方法的特性，让所有相同的get请求获得同一个异步请求结果。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/05/05/promise%E7%9A%84%E4%B8%80%E4%BA%9Bapi%E7%9A%84%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+      <meta itemprop="name" content="martisss">
+      <meta itemprop="description" content="孩子，快逃！！！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Martisss's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/05/05/promise%E7%9A%84%E4%B8%80%E4%BA%9Bapi%E7%9A%84%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF/" class="post-title-link" itemprop="url">promise的一些api的应用场景</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-05-05 17:20:01" itemprop="dateCreated datePublished" datetime="2022-05-05T17:20:01+08:00">2022-05-05</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-05-16 14:20:51" itemprop="dateModified" datetime="2022-05-16T14:20:51+08:00">2022-05-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">学习</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h4 id="Promise-all"><a href="#Promise-all" class="headerlink" title="Promise.all"></a>Promise.all</h4><p>所有的 promsie 都resolve时， 返回存储结果的数组，如果其中一个promise   reject，那么会忽略剩余promise 的结果，哪怕其他promise都resolved，剩下的最后一个promise  rejected, 其error会变成整个 <code>Promise.all</code>的结果, 已经resolved 的结果会被忽略。</p>
+<p><strong>应用场景：</strong></p>
+<p><strong>合并请求结果</strong></p>
+<blockquote>
+<p>具体描述：一个页面，有多个请求，我们需求所有的请求都返回数据后再一起处理渲染</p>
+</blockquote>
+<p>不需要为每个请求都设置loading状态，从请求开始到请求结束，只需要设置一个loading状态</p>
+<p>可能的场景：点击按钮，跳出一个对话框，对话框中显示两部分数据，来自两个不同的api接口，当这两部分数据都从接口获取到的时候，才让这个 <code>数据加载中</code>状态消失。让用户看到这两部分的数据。</p>
+<p><strong>合并请求结果并处理错误</strong></p>
+<blockquote>
+<p><strong>单独处理一个请求的数据渲染和错误处理逻辑</strong>，有多个请求</p>
+</blockquote>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">initLoad</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="comment">// loading.show()</span></span><br><span class="line">    <span class="built_in">Promise</span>.all([</span><br><span class="line">        getBannerList().catch(<span class="function"><span class="params">err</span>=&gt;</span>err),</span><br><span class="line">        getStoreList().catch(<span class="function"><span class="params">err</span>=&gt;</span>err),</span><br><span class="line">        getCategoryList().catch(<span class="function"><span class="params">err</span>=&gt;</span>err)</span><br><span class="line">    ]).then(<span class="function"><span class="params">res</span>=&gt;</span>&#123;</span><br><span class="line">        <span class="built_in">console</span>.log(res) <span class="comment">// [&quot;获取轮播图数据失败啦&quot;, &quot;店铺数据&quot;, &quot;分类数据&quot;]</span></span><br><span class="line">  </span><br><span class="line">        <span class="keyword">if</span>(res[<span class="number">0</span>] == <span class="string">&#x27;轮播图数据&#x27;</span>)&#123;</span><br><span class="line">            <span class="comment">//渲染</span></span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            <span class="comment">//获取 轮播图数据 失败的逻辑</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(res[<span class="number">1</span>] == <span class="string">&#x27;店铺数据&#x27;</span>)&#123;</span><br><span class="line">            <span class="comment">//渲染</span></span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            <span class="comment">//获取 店铺列表数据 失败的逻辑</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(res[<span class="number">2</span>] == <span class="string">&#x27;分类数据&#x27;</span>)&#123;</span><br><span class="line">            <span class="comment">//渲染</span></span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">             <span class="comment">//获取 分类列表数据 失败的逻辑</span></span><br><span class="line">        &#125;</span><br><span class="line">  </span><br><span class="line">        <span class="comment">// loading.hide()</span></span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>这里考虑使用Promise.allSettled也可以。</p>
+<p><strong>验证多个请求结果是否都满足条件</strong></p>
+<blockquote>
+<p>具体描述：表单的输入内容安全验证，多个字段调用的是同一个内容安全校验接口，只有所有都检验通过够才能够正常提交。</p>
+</blockquote>
+<h4 id="Promise-race"><a href="#Promise-race" class="headerlink" title="Promise.race"></a>Promise.race</h4><p>请求超时提示：<strong>点击按钮发请求，当后端的接口超过一定时间，假设超过三秒，没有返回结果，我们就提示用户请求超时</strong>，例如请求一张图片时超时提示</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/05/04/%E4%BD%BF%E7%94%A8transform%E5%B1%9E%E6%80%A7%E8%A7%A3%E5%86%B31px%E9%97%AE%E9%A2%98/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+      <meta itemprop="name" content="martisss">
+      <meta itemprop="description" content="孩子，快逃！！！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Martisss's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/05/04/%E4%BD%BF%E7%94%A8transform%E5%B1%9E%E6%80%A7%E8%A7%A3%E5%86%B31px%E9%97%AE%E9%A2%98/" class="post-title-link" itemprop="url">使用transform属性解决1px问题</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-05-04 14:14:59" itemprop="dateCreated datePublished" datetime="2022-05-04T14:14:59+08:00">2022-05-04</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-05-16 14:16:04" itemprop="dateModified" datetime="2022-05-16T14:16:04+08:00">2022-05-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">学习</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="问题来源"><a href="#问题来源" class="headerlink" title="问题来源"></a>问题来源</h2><p><code>px</code>是一个相对单位，并不是说<code>1px</code>就一定等于1个物理像素，设备像素比不同，<code>1px</code>对应的物理像素数量不同。也就是说在不同设备、不同分辨率的情况下，<code>1px</code>所代表的物理像素数量不一样，因此<code>1px</code>在屏幕上显示的宽度也不一样。</p>
+<h2 id="设备像素、css像素、设备独立像素、设备像素比"><a href="#设备像素、css像素、设备独立像素、设备像素比" class="headerlink" title="设备像素、css像素、设备独立像素、设备像素比"></a>设备像素、css像素、设备独立像素、设备像素比</h2><p><strong>设备像素</strong>：设备像素又称物理像素，是设备能够控制显示的最小物理单位</p>
+<p><strong>css像素</strong>：px是一个相对单位，相对的是设备像素（device pixel）一般情况，页面缩放比为1，1个CSS像素等于1个设备独立像素</p>
+<p><strong>设备独立像素</strong>：与设备无关的逻辑像素，代表可以通过程序控制使用的虚拟像素，是一个总体概念，包括了CSS像素，而至于1个虚拟像素究竟对应几个物理像素，就设计设备像素比（device pixel ratio）</p>
+<p><strong>设备像素比</strong>：<code>DPR = 设备像素/设备独立像素</code></p>
+<p>当设备像素比为1:1时，使用1（1×1）个设备像素显示1个CSS像素</p>
+<p>当设备像素比为2:1时，使用4（2×2）个设备像素显示1个CSS像素</p>
+<p>当设备像素比为3:1时，使用9（3×3）个设备像素显示1个CSS像素</p>
+<blockquote>
+<p>设备像素比可通过<code>window.devicePixelRatio</code>查询</p>
+</blockquote>
+<h2 id="实现一条1px的线"><a href="#实现一条1px的线" class="headerlink" title="实现一条1px的线"></a>实现一条1px的线</h2><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;A&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">  <span class="selector-class">.A</span> &#123;</span><br><span class="line">    <span class="attribute">height</span>: <span class="number">1px</span>;</span><br><span class="line">    <span class="attribute">width</span>: <span class="number">800px</span>;</span><br><span class="line">    <span class="attribute">background-color</span>: black;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">@media</span> screen <span class="keyword">and</span> (<span class="attribute">-webkit-min-device-ratio</span>: <span class="number">2</span>) &#123;</span><br><span class="line">    <span class="selector-class">.A</span> &#123;</span><br><span class="line">      <span class="attribute">transform</span>: <span class="built_in">scaleY</span>(<span class="number">0.5</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">@media</span> screen <span class="keyword">and</span> (<span class="attribute">-webkit-min-device-ration</span>: <span class="number">3</span>) &#123;</span><br><span class="line">  <span class="selector-class">.A</span> &#123;</span><br><span class="line">      <span class="attribute">transform</span>: <span class="built_in">scaleY</span>(<span class="number">0.333</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>transform</code>中的<code>scale</code>字段能够对元素进行缩放，当<code>dpr=2</code>时，（2 * 2）个物理像素对应1个设备独立像素，因此<code>scale(0.5, 0.5)</code>代表将<code>1px</code>缩放为原本的0.5倍，这样我们就得到了和<code>dpr=1</code>的设备上显示一样宽的<code>1px</code></p>
+<p>通过<code>媒体查询</code>针对不同dpr进行不同的缩放，保持各设备显示的一致性</p>
+<h2 id="实现一像素的边框"><a href="#实现一像素的边框" class="headerlink" title="实现一像素的边框"></a>实现一像素的边框</h2><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;target&quot;</span>&gt;</span>12345<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.target</span> &#123;</span><br><span class="line">  <span class="attribute">position</span>: relative;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-class">.target</span><span class="selector-pseudo">::after</span>&#123;</span><br><span class="line">  <span class="attribute">content</span>: <span class="string">&#x27;&#x27;</span>;</span><br><span class="line">  <span class="attribute">width</span>: <span class="number">200%</span>;</span><br><span class="line">  <span class="attribute">height</span>: <span class="number">200%</span>;</span><br><span class="line">  <span class="attribute">position</span>: absolute;</span><br><span class="line">  <span class="attribute">top</span>: <span class="number">0</span>;</span><br><span class="line">  <span class="attribute">left</span>: <span class="number">0</span>;</span><br><span class="line">  <span class="attribute">border</span>: <span class="number">1px</span> solid <span class="number">#bfbfbf</span>;</span><br><span class="line">  <span class="attribute">border-radius</span>: <span class="number">4px</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">@media</span> screen <span class="keyword">and</span> (<span class="attribute">-webkit-min-device-pixel-ratio</span>: <span class="number">2</span>) &#123;</span><br><span class="line">  <span class="selector-class">.target</span><span class="selector-pseudo">::after</span> &#123;</span><br><span class="line">    -webkit-<span class="attribute">transform</span>: <span class="built_in">scale</span>(<span class="number">0.5</span>,<span class="number">0.5</span>);</span><br><span class="line">    <span class="attribute">transform</span>: <span class="built_in">scale</span>(<span class="number">0.5</span>,<span class="number">0.5</span>);</span><br><span class="line">    -webkit-<span class="attribute">transform-origin</span>: top left;</span><br><span class="line">    <span class="attribute">transform-origin</span>: left top;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">@media</span> screen <span class="keyword">and</span> (<span class="attribute">-webkit-min-device-pixel-ratio</span>: <span class="number">2</span>) &#123;</span><br><span class="line">  <span class="selector-class">.target</span><span class="selector-pseudo">::after</span> &#123;</span><br><span class="line">    -webkit-<span class="attribute">transform</span>: <span class="built_in">scale</span>(<span class="number">0.33</span>,<span class="number">0.333</span>);</span><br><span class="line">    <span class="attribute">transform</span>: <span class="built_in">scale</span>(<span class="number">0.333</span>,<span class="number">0.333</span>);</span><br><span class="line">    -webkit-<span class="attribute">transform-origin</span>: top left;</span><br><span class="line">    <span class="attribute">transform-origin</span>: left top;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><strong><code>transform-origin</code></strong> CSS属性用于更改一个元素变形的原点。默认原点是元素旋转中心。</p>
+</blockquote>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
     <link itemprop="mainEntityOfPage" href="http://example.com/2022/05/02/%E7%90%86%E6%B8%85TypeScript%E4%B8%ADinterface%E4%B8%8Etype%E7%9A%84%E5%8C%BA%E5%88%AB/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -996,338 +1291,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/02/12/%E5%BE%AA%E7%8E%AF%E5%86%97%E4%BD%99%E6%A0%A1%E9%AA%8C/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/avatar.gif">
-      <meta itemprop="name" content="martisss">
-      <meta itemprop="description" content="孩子，快逃！！！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Martisss's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/02/12/%E5%BE%AA%E7%8E%AF%E5%86%97%E4%BD%99%E6%A0%A1%E9%AA%8C/" class="post-title-link" itemprop="url">循环冗余校验</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2022-02-12 14:09:47 / 修改时间：14:49:43" itemprop="dateCreated datePublished" datetime="2022-02-12T14:09:47+08:00">2022-02-12</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">学习</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="校验原理"><a href="#校验原理" class="headerlink" title="校验原理"></a>校验原理</h1><blockquote>
-<p>baidu</p>
-<p>循环冗余校验（Cyclic Redundancy Check， CRC）是一种根据网络数据包或计算机文件等数据产生简短固定位数校验码的一种信道编码技术，主要用来检测或校验数据传输或者保存后可能出现的错误。 它是利用除法及余数的原理来作错误侦测的。</p>
-</blockquote>
-<p>简单的说就是在发送帧后附加一个数（用来校验的校验码），生成新帧，发送给接收端，接收端收到之后除以某个特定的数（接收方和发送方共同选定）如果能够整除，说明传输正确；如果不能整除，说明传输过程中发生了差错。</p>
-<p>​    以上只是一个通俗的解释，有几个问题需要解决，这里的’除‘是通常意义上的除法吗？校验码是如何生成的？发送端如何生成新帧？接下来一个个解决这些问题。</p>
-<p>:sparkler: 这里的’除’指的是’模2除法‘，既不向上位借位，也不比较除数和被除数的相同位数值的大小，只要以相同位数进行相除即可，相当于<strong>异或运算</strong>。</p>
-<p><img src="https://s2.loli.net/2022/02/12/kf2onszQpygPR8O.png" alt="image.png"></p>
-<p>:sparkler:校验码是如何生成的？</p>
-<p>假定所选定的除数二进制位数（假设为k位），然后<strong>在要发送的数据帧（假设为m位）后面加上k-1位“0”，</strong>然后以这个加了k-1个“0“的新帧（一共是m+k-1位）以“模2除法”方式除以上面这个除数，所得到的余数（也是二进制的比特串）就是该帧的<strong>CRC校验码</strong>，也称之为<strong>FCS（帧校验序列）</strong>。</p>
-<blockquote>
-<p>但要注意的是，<strong>余数的位数一定要是比除数位数只能少一位，哪怕前面位是0，甚至是全为0（附带好整除时）也都不能省略。</strong></p>
-</blockquote>
-<p>:sparkler: 如何生成新帧？</p>
-<p>将生成的校验码直接添加在<strong>原数据帧</strong>（注意是原数据帧）后面</p>
-<hr/>
-
-<p>接收端接收之后，接收端会把这个新帧再用上面选定的除数以“模2除法”方式去除，验证余数是否为0，如果为0，则证明该帧数据在传输过程中没有出现差错，否则出现了差错。</p>
-<p>以上就是CRC校验的基本原理，此外上文提到除数是发送端与接收端约定得到的，具体是如何得到的呢？:question: </p>
-<p>实际上是通过crc多项式得到的，假如选取的多项式为 x^5+x^2+1（CRC-5-USB)，那么除数的二级制位数就有6位，即总位数等于最高位的幂次加1，其二进制比特串为 100101。</p>
-<h1 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h1><p>假设多项式为<code>G(X) = X^4 + X^3 + 1</code>，要求出二进制序列10110011的CRC校验码</p>
-<p>按照上文提到的方法，除数有五位：11001，crc校验码有4位，用来求crc校验码的新帧为101100110000（补4个0），使用模2除法相除，得到余数0100。</p>
-<p><img src="https://s2.loli.net/2022/02/12/TJQLKVA4HodNFgk.png" alt="image.png"></p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/12/20/JS%E4%B8%AD%E7%9A%84%E7%BB%A7%E6%89%BF/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/avatar.gif">
-      <meta itemprop="name" content="martisss">
-      <meta itemprop="description" content="孩子，快逃！！！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Martisss's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/12/20/JS%E4%B8%AD%E7%9A%84%E7%BB%A7%E6%89%BF/" class="post-title-link" itemprop="url">JS中的继承</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2021-12-20 12:23:00 / 修改时间：12:28:35" itemprop="dateCreated datePublished" datetime="2021-12-20T12:23:00+08:00">2021-12-20</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">学习</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h3 id="原型链继承"><a href="#原型链继承" class="headerlink" title="原型链继承"></a>原型链继承</h3><blockquote>
-<p>将父类的实例作为子类实例的原型</p>
-</blockquote>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Parent</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">this</span>.names = [<span class="string">&#x27;kevin&#x27;</span>, <span class="string">&#x27;daisy&#x27;</span>];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Child</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Child.prototype = <span class="keyword">new</span> Parent();</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> child1 = <span class="keyword">new</span> Child();</span><br><span class="line"></span><br><span class="line">child1.names.push(<span class="string">&#x27;yayu&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(child1.names); <span class="comment">// [&quot;kevin&quot;, &quot;daisy&quot;, &quot;yayu&quot;]</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> child2 = <span class="keyword">new</span> Child();</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(child2.names); <span class="comment">// [&quot;kevin&quot;, &quot;daisy&quot;, &quot;yayu&quot;]</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p>问题：</p>
-<ol>
-<li><p>父类<strong>引用类型</strong>的属性被所有实例共享</p>
-</li>
-<li><p>创建子类型实例时不能给父类型构造函数传参</p>
-<blockquote>
-<p>可以看到Child其实是 ‘’空’‘ 的，自然无法传参</p>
-</blockquote>
-</li>
-</ol>
-<h3 id="借用构造函数"><a href="#借用构造函数" class="headerlink" title="借用构造函数"></a>借用构造函数</h3><blockquote>
-<p>在子类构造函数中调用父类构造函数，可以在子类构造函数中使用<code>call()</code>和<code>apply()</code>方法</p>
-</blockquote>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Parent</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">this</span>.names = [<span class="string">&#x27;kevin&#x27;</span>, <span class="string">&#x27;daisy&#x27;</span>];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Child</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    Parent.call(<span class="built_in">this</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> child1 = <span class="keyword">new</span> Child();</span><br><span class="line"></span><br><span class="line">child1.names.push(<span class="string">&#x27;yayu&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(child1.names); <span class="comment">// [&quot;kevin&quot;, &quot;daisy&quot;, &quot;yayu&quot;]</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> child2 = <span class="keyword">new</span> Child();</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(child2.names); <span class="comment">// [&quot;kevin&quot;, &quot;daisy&quot;]</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p>优点：</p>
-<ol>
-<li><p>避免了引用类型的属性被所有实例共享</p>
-</li>
-<li><p>可以在 Child 中向 Parent 传参</p>
-</li>
-</ol>
-<p>缺点：</p>
-<ol>
-<li>子类不能访问父类<code>prototype</code>（这里即<code>Parent.prototype</code>）上的方法</li>
-<li>所有方法属性都写在构造函数中，每次创建实例都会初始化</li>
-</ol>
-<h3 id="组合继承"><a href="#组合继承" class="headerlink" title="组合继承 *"></a>组合继承 *</h3><blockquote>
-<p>基本的思路就是使用原型链继承父类prototype上的属性和方法，而通过构造函数继承实例属性，这样既可以实现方法重用，又可以让每个实例都有自己的属性</p>
-</blockquote>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Parent</span> (<span class="params">name</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">this</span>.name = name;</span><br><span class="line">    <span class="built_in">this</span>.colors = [<span class="string">&#x27;red&#x27;</span>, <span class="string">&#x27;blue&#x27;</span>, <span class="string">&#x27;green&#x27;</span>];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Parent.prototype.getName = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="built_in">this</span>.name)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Child</span> (<span class="params">name, age</span>) </span>&#123;</span><br><span class="line"></span><br><span class="line">    Parent.call(<span class="built_in">this</span>, name);</span><br><span class="line">    </span><br><span class="line">    <span class="built_in">this</span>.age = age;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Child.prototype = <span class="keyword">new</span> Parent();</span><br><span class="line">Child.prototype.constructor = Child;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> child1 = <span class="keyword">new</span> Child(<span class="string">&#x27;kevin&#x27;</span>, <span class="string">&#x27;18&#x27;</span>);</span><br><span class="line"></span><br><span class="line">child1.colors.push(<span class="string">&#x27;black&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(child1.name); <span class="comment">// kevin</span></span><br><span class="line"><span class="built_in">console</span>.log(child1.age); <span class="comment">// 18</span></span><br><span class="line"><span class="built_in">console</span>.log(child1.colors); <span class="comment">// [&quot;red&quot;, &quot;blue&quot;, &quot;green&quot;, &quot;black&quot;]</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> child2 = <span class="keyword">new</span> Child(<span class="string">&#x27;daisy&#x27;</span>, <span class="string">&#x27;20&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(child2.name); <span class="comment">// daisy</span></span><br><span class="line"><span class="built_in">console</span>.log(child2.age); <span class="comment">// 20</span></span><br><span class="line"><span class="built_in">console</span>.log(child2.colors); <span class="comment">// [&quot;red&quot;, &quot;blue&quot;, &quot;green&quot;]</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p>组合继承结合了原型链继承和借用构造函数继承的优点，这很棒，但是也存在一个小问题，在上述过程中父类构造函数执行了两次，带来的后果是什么呢？后果是子类实例和其原型上存在同名属性，最后子类属性会屏蔽原型上的属性，这虽然不影响使用，但却不够优雅，后面的寄生式组合继承会解决这个问题。</p>
-<h3 id="原型式继承"><a href="#原型式继承" class="headerlink" title="原型式继承"></a>原型式继承</h3><blockquote>
-<p>就是 ES5 Object.create 的模拟实现，<strong>将传入的对象作为创建的对象的原型</strong></p>
-</blockquote>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">createObj</span>(<span class="params">o</span>) </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">F</span>(<span class="params"></span>)</span>&#123;&#125;</span><br><span class="line">    F.prototype = o;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> F();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>缺点: 与原型链继承一样, 引用类型的属性会被所有实例共享，同时不能</p>
-<h3 id="寄生式继承"><a href="#寄生式继承" class="headerlink" title="寄生式继承"></a>寄生式继承</h3><p>创建一个仅用于封装继承过程的函数，该函数在内部以某种形式来做增强对象，最后返回对象。可以看到内部使用了<code>Object.create()</code>，因此其本质上是在原型式继承返回的新对象上增加了新的属性和方法，实现<strong>增强</strong>效果。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">createObj</span> (<span class="params">o</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> clone = <span class="built_in">Object</span>.create(o);</span><br><span class="line">    clone.sayName = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">&#x27;hi&#x27;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> clone;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>缺点： 同借用构造函数继承，每次都会重新创建方法，且<code>Object.create()</code>执行浅复制，多个实例的引用类型指向相同，造成污染。</p>
-<h3 id="寄生组合式继承"><a href="#寄生组合式继承" class="headerlink" title="寄生组合式继承 *"></a>寄生组合式继承 *</h3><blockquote>
-<p>组合式继承</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Parent</span> (<span class="params">name</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">this</span>.name = name;</span><br><span class="line">    <span class="built_in">this</span>.colors = [<span class="string">&#x27;red&#x27;</span>, <span class="string">&#x27;blue&#x27;</span>, <span class="string">&#x27;green&#x27;</span>];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Parent.prototype.getName = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="built_in">this</span>.name)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Child</span> (<span class="params">name, age</span>) </span>&#123;</span><br><span class="line">    Parent.call(<span class="built_in">this</span>, name);   </span><br><span class="line">    <span class="built_in">this</span>.age = age;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Child.prototype = <span class="keyword">new</span> Parent();</span><br><span class="line">Child.prototype.constructor = Child;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-</blockquote>
-<p>组合式继承中父类构造函数<code>Parent()</code>调用了两次</p>
-<p>一次是设置子类实例的原型，</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Child.prototype = <span class="keyword">new</span> Parent()</span><br></pre></td></tr></table></figure>
-
-<p> 一次是调用子类构造函数，为什么在这里也调用了一次Parent()呢？</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> child1 = <span class="keyword">new</span> Child(<span class="string">&#x27;kevin&#x27;</span>, <span class="string">&#x27;18&#x27;</span>);</span><br></pre></td></tr></table></figure>
-
-<p>因为首先Child是这样的：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Child</span> (<span class="params">name, age</span>) </span>&#123;</span><br><span class="line">    Parent.call(<span class="built_in">this</span>, name); </span><br><span class="line">    <span class="built_in">this</span>.age = age;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>在用<code>new</code>创建<code>Child</code>实例的过程中会经历如下阶段：</p>
-<ul>
-<li>生成一个以<code>Child.prototype</code>为原型的对象</li>
-<li>使用给定的参数调用构造函数<code>Child</code>, 然后将<code>this</code>指向新创建的对象</li>
-<li>返回新创建的对象（<code>Child</code>中并没有return语句指定返回哪个对象，因此默认返回新创建的对象）</li>
-</ul>
-<p>因此在第二步调用构造函数的过程中又调用了一次父类构造函数<code>Parent</code></p>
-<p>而<code>寄生组合式继承 </code>就是为了避免重复调用父类构造函数:</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Child.prototype = <span class="built_in">Object</span>.create(Parent.prototype);</span><br><span class="line"><span class="comment">// Child.prototype = Parent.prototype</span></span><br><span class="line"><span class="comment">// 直接这样的话会存在隐患，如果修改Child.prototype的话会影响Parent.prototype</span></span><br><span class="line">Child.prototype.constructor = Child;</span><br></pre></td></tr></table></figure>
-
-<p>这样就避免了在设置子类实例的原型时调用父类构造函数。</p>
-<blockquote>
-<p>Object.create(o)的作用是返回一个新对象，该对象以给定对象<code>o</code>为原型</p>
-<p>其实现类似：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">createObj</span>(<span class="params">o</span>) </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">F</span>(<span class="params"></span>)</span>&#123;&#125;</span><br><span class="line">    F.prototype = o;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> F();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>可以理解为原型式继承</p>
-</blockquote>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Parent</span> (<span class="params">name</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">this</span>.name = name;</span><br><span class="line">    <span class="built_in">this</span>.colors = [<span class="string">&#x27;red&#x27;</span>, <span class="string">&#x27;blue&#x27;</span>, <span class="string">&#x27;green&#x27;</span>];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Parent.prototype.getName = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="built_in">this</span>.name)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Child</span> (<span class="params">name, age</span>) </span>&#123;</span><br><span class="line">    Parent.call(<span class="built_in">this</span>, name); </span><br><span class="line">    <span class="built_in">this</span>.age = age;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Child.prototype = <span class="built_in">Object</span>.create(Parent.prototype);</span><br><span class="line"><span class="comment">// Child.prototype = Parent.prototype</span></span><br><span class="line"><span class="comment">// 直接这样的话会存在隐患，如果修改Child.prototype的话会影响Parent.prototype</span></span><br><span class="line">Child.prototype.constructor = Child;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">// 可以封装一下</span></span><br><span class="line"><span class="comment">// function prototype(child, parent) &#123;</span></span><br><span class="line"><span class="comment">//   var prototype = Object.create(parent.prototype);</span></span><br><span class="line"><span class="comment">//   prototype.constructor = child;</span></span><br><span class="line"><span class="comment">//   child.prototype = prototype;</span></span><br><span class="line"><span class="comment">// &#125;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// // 当我们使用的时候：</span></span><br><span class="line"><span class="comment">// prototype(Child, Parent);</span></span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>《JavaScript高级程序设计》</p>
-<p><a target="_blank" rel="noopener" href="https://github.com/mqyqingfeng/Blog/issues/16">JavaScript深入之继承</a></p>
-<p><a target="_blank" rel="noopener" href="https://juejin.cn/post/6844903475021627400">JS原型链与继承别再被问倒了</a></p>
-</blockquote>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/12/15/clash%E8%87%AA%E5%AE%9A%E4%B9%89%E8%A7%84%E5%88%99%E9%85%8D%E7%BD%AE/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/avatar.gif">
-      <meta itemprop="name" content="martisss">
-      <meta itemprop="description" content="孩子，快逃！！！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Martisss's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/12/15/clash%E8%87%AA%E5%AE%9A%E4%B9%89%E8%A7%84%E5%88%99%E9%85%8D%E7%BD%AE/" class="post-title-link" itemprop="url">clash自定义规则配置</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2021-12-15 16:29:47 / 修改时间：22:38:30" itemprop="dateCreated datePublished" datetime="2021-12-15T16:29:47+08:00">2021-12-15</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%B7%A5%E5%85%B7/" itemprop="url" rel="index"><span itemprop="name">工具</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="目的"><a href="#目的" class="headerlink" title="目的"></a>目的</h1><p>​    最终希望达到的一个效果就是通过clash自定义规则配置，使得在clash处于工作状态时访问国内网站可以直接使用国内网络连接。</p>
-<h1 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h1><h2 id="1-配置Profiles下的Parsers"><a href="#1-配置Profiles下的Parsers" class="headerlink" title="1.配置Profiles下的Parsers"></a>1.配置Profiles下的Parsers</h2><p>点击Settings，点击Profiles下的Parsers那一栏右侧对应的edit，打开配置页面</p>
-<p><img src="https://s2.loli.net/2021/12/15/sbpcIFEmxz7jOWB.png" alt="image.png"></p>
-<p>打开后使用下方代码覆盖原有代码，然后退出</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">parsers: # array</span><br><span class="line">  - url: xxxxxxxxx</span><br><span class="line">    <span class="attr">yaml</span>:</span><br><span class="line">      prepend-rules:</span><br><span class="line">        - DOMAIN-SUFFIX,hdbits.org,🎯 国内网络</span><br><span class="line">        - DOMAIN-SUFFIX,xthor.tk,🎯 国内网络</span><br><span class="line">        - DOMAIN-SUFFIX,filelist.io,🎯 国内网络</span><br></pre></td></tr></table></figure>
-
-<h2 id="2-复制订阅地址"><a href="#2-复制订阅地址" class="headerlink" title="2 .复制订阅地址"></a>2 .复制订阅地址</h2><p>点击小齿轮</p>
-<p><img src="https://s2.loli.net/2021/12/15/F7p9fJPqAgdbSCt.png" alt="image.png"></p>
-<p>复制订阅地址</p>
-<p><img src="https://s2.loli.net/2021/12/15/NBn5CVJvmAMWGOz.png" alt="image.png"></p>
-<h2 id="3-更换url字段"><a href="#3-更换url字段" class="headerlink" title="3. 更换url字段"></a>3. 更换url字段</h2><p>按照步骤1打开对应页面，将其中的url字段替换为刚才复制的订阅地址</p>
-<p><img src="https://s2.loli.net/2021/12/15/ripHyVKk3swUuYv.png" alt="image.png"></p>
-<h2 id="4-检测"><a href="#4-检测" class="headerlink" title="4.检测"></a>4.检测</h2><p>点击对应图标</p>
-<p><img src="https://s2.loli.net/2021/12/15/obxWZ4H85VpPafq.png" alt="image.png"></p>
-<p>可以看到新的规则已经添加，像taobao, baidu, zhihu等网站等都采用的是国内网站直连的方式进行连接:sparkler:</p>
-<p><img src="https://s2.loli.net/2021/12/15/2VgsQAWbdOuCByj.png" alt="image.png"></p>
-<h1 id="更多"><a href="#更多" class="headerlink" title="更多"></a>更多</h1><p>还有其他的自定义选项</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">DOMAIN-SUFFIX：域名后缀匹配</span><br><span class="line">DOMAIN：域名匹配</span><br><span class="line">DOMAIN-KEYWORD：域名关键字匹配</span><br><span class="line">IP-CIDR：IP段匹配</span><br><span class="line">SRC-IP-CIDR：源IP段匹配</span><br><span class="line">GEOIP：GEOIP数据库（国家代码）匹配</span><br><span class="line">DST-PORT：目标端口匹配</span><br><span class="line">SRC-PORT：源端口匹配</span><br><span class="line">PROCESS-NAME：源进程名匹配</span><br><span class="line">RULE-SET：Rule Provider规则匹配</span><br><span class="line">MATCH：全匹配</span><br></pre></td></tr></table></figure>
-
-<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p><a target="_blank" rel="noopener" href="https://docs.cfw.lbyczf.com/contents/quickstart.html#url-%E5%AF%BC%E5%85%A5">clash文档</a></p>
-<p><a target="_blank" rel="noopener" href="https://yattazen.com/tutorial/clash-custom-config.html">简易教程 | Clash | 自定义在线分流规则策略组</a></p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1399,7 +1362,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">16</span>
+          <span class="site-state-item-count">19</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1412,7 +1375,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">17</span>
+        <span class="site-state-item-count">21</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
