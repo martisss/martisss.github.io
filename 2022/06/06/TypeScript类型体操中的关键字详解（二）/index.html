@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="使用在各种类型操作中，少不了extends关键字的身影，它主要有以下几个作用： 接口继承 类型约束以及条件类型 接口继承1234567891011121314interface Person &amp;#123;    name: string;    age: number;&amp;#125;interface Player extends Person &amp;#123;    item: &amp;#x27;ball&amp;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="TypeScript类型体操中的关键字详解（二）">
+<meta property="og:url" content="http://example.com/2022/06/06/TypeScript%E7%B1%BB%E5%9E%8B%E4%BD%93%E6%93%8D%E4%B8%AD%E7%9A%84%E5%85%B3%E9%94%AE%E5%AD%97%E8%AF%A6%E8%A7%A3%EF%BC%88%E4%BA%8C%EF%BC%89/index.html">
+<meta property="og:site_name" content="Martisss&#39;s blog">
+<meta property="og:description" content="使用在各种类型操作中，少不了extends关键字的身影，它主要有以下几个作用： 接口继承 类型约束以及条件类型 接口继承1234567891011121314interface Person &amp;#123;    name: string;    age: number;&amp;#125;interface Player extends Person &amp;#123;    item: &amp;#x27;ball&amp;">
+<meta property="og:locale">
+<meta property="og:image" content="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/4cba3fa3d6e64707afa456a1f792efc7~tplv-k3u1fbpfcp-watermark.image">
+<meta property="og:image" content="https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/bbb69201dbdb47c5b42c4cd6518aa888~tplv-k3u1fbpfcp-watermark.image">
+<meta property="og:image" content="https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/e339f4ecf7f1482fada83c125f347d03~tplv-k3u1fbpfcp-watermark.image">
+<meta property="article:published_time" content="2022-06-06T07:32:46.000Z">
+<meta property="article:modified_time" content="2022-06-07T07:39:16.394Z">
+<meta property="article:author" content="martisss">
+<meta property="article:tag" content="TypeScript">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/4cba3fa3d6e64707afa456a1f792efc7~tplv-k3u1fbpfcp-watermark.image">
+
+<link rel="canonical" href="http://example.com/2022/06/06/TypeScript%E7%B1%BB%E5%9E%8B%E4%BD%93%E6%93%8D%E4%B8%AD%E7%9A%84%E5%85%B3%E9%94%AE%E5%AD%97%E8%AF%A6%E8%A7%A3%EF%BC%88%E4%BA%8C%EF%BC%89/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title>TypeScript类型体操中的关键字详解（二） | Martisss's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Martisss's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">hello, world</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/06/06/TypeScript%E7%B1%BB%E5%9E%8B%E4%BD%93%E6%93%8D%E4%B8%AD%E7%9A%84%E5%85%B3%E9%94%AE%E5%AD%97%E8%AF%A6%E8%A7%A3%EF%BC%88%E4%BA%8C%EF%BC%89/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+      <meta itemprop="name" content="martisss">
+      <meta itemprop="description" content="孩子，快逃！！！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Martisss's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          TypeScript类型体操中的关键字详解（二）
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-06-06 15:32:46" itemprop="dateCreated datePublished" datetime="2022-06-06T15:32:46+08:00">2022-06-06</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-06-07 15:39:16" itemprop="dateModified" datetime="2022-06-07T15:39:16+08:00">2022-06-07</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">学习</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h1><p>在各种类型操作中，少不了<code>extends</code>关键字的身影，它主要有以下几个作用： 接口继承 类型约束以及条件类型</p>
+<h2 id="接口继承"><a href="#接口继承" class="headerlink" title="接口继承"></a>接口继承</h2><figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">interface</span> Person &#123;</span><br><span class="line">    <span class="attr">name</span>: <span class="built_in">string</span>;</span><br><span class="line">    age: <span class="built_in">number</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">interface</span> Player <span class="keyword">extends</span> Person &#123;</span><br><span class="line">    <span class="attr">item</span>: <span class="string">&#x27;ball&#x27;</span> | <span class="string">&#x27;swing&#x27;</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//接口继承后</span></span><br><span class="line"><span class="comment">// interface Person &#123;</span></span><br><span class="line"><span class="comment">//     name: string;</span></span><br><span class="line"><span class="comment">//     age: number;</span></span><br><span class="line"><span class="comment">//     item: &#x27;ball&#x27; | &#x27;swing&#x27;;</span></span><br><span class="line"><span class="comment">// &#125;</span></span><br></pre></td></tr></table></figure>
+<h2 id="类型约束"><a href="#类型约束" class="headerlink" title="类型约束"></a>类型约束</h2><p>   通常和泛型一起使用，那么具体应该如何使用呢？</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">interface</span> Dog &#123;</span><br><span class="line">  <span class="attr">bark</span>: <span class="function">() =&gt;</span> <span class="built_in">void</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">dogBark</span>&lt;<span class="title">T</span> <span class="title">extends</span> <span class="title">Dog</span>&gt;(<span class="params">arg: T</span>) </span>&#123;</span><br><span class="line">  arg.bark()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>   我们定义类型<code>Dog</code>,它 有一个不返回任何值的<code>bark</code>方法，使用<code>extends</code>关键字进行泛型约束，传入<code>dogBark</code>方法的值必须有<code>bark</code>方法，简单的说<code>extends</code>关键字在这里的作用：作为一个守门员，只让会狗叫的进，管你是不是🐕，只要会狗叫，就可以进；如果不会，请出门右转。</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/4cba3fa3d6e64707afa456a1f792efc7~tplv-k3u1fbpfcp-watermark.image" alt="image.png"><br> <figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> dogA = &#123;</span><br><span class="line">  <span class="attr">weight</span>: <span class="number">12</span>,</span><br><span class="line">  <span class="attr">age</span>: <span class="number">4</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> dogB  =&#123;</span><br><span class="line">  <span class="attr">weight</span>: <span class="number">12</span>,</span><br><span class="line">  <span class="attr">age</span>: <span class="number">4</span>,</span><br><span class="line">  <span class="attr">bark</span>: <span class="function">() =&gt;</span> <span class="built_in">console</span>.log(<span class="string">&#x27;dogB is barking&#x27;</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">dogBark(dogA)       </span><br><span class="line"><span class="comment">// error !!!</span></span><br><span class="line"><span class="comment">// Argument of type &#x27;&#123; weight: number; age: number; &#125;&#x27; is not assignable to parameter of type &#x27;Dog&#x27;.</span></span><br><span class="line"><span class="comment">// Property &#x27;bark&#x27; is missing in type &#x27;&#123; weight: number; age: number; &#125;&#x27; but required in type &#x27;Dog&#x27;.</span></span><br><span class="line"></span><br><span class="line">dogBark(dogB)      <span class="comment">// success: &quot;dogB is barking&quot; </span></span><br></pre></td></tr></table></figure></p>
+<p>在使用<code>extends</code>关键字实现一些类型时，可能会用到如下代码：</p>
+  <figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">P <span class="keyword">extends</span> keyof T</span><br></pre></td></tr></table></figure>
+
+<p>   表示<code>P</code>的类型是<code>keyof T</code>返回的字面量联合类型，也就是说<code>P</code>原本没限制，是<code>any</code>，限制之后类型变成了<code>keyof T</code>返回的字面量联合类型。</p>
+<p>   类似的有使用<code>T extends keyof any</code>对对象类型的属性进行约束,<code>keyof any</code>返回的是<code>string | number | symbol</code>，即这也是属性字段的取值范围。</p>
+<p>   再来看这样一个<a target="_blank" rel="noopener" href="https://www.typescriptlang.org/play#code/JYOwLgpgTgZghgYwgAgArQM4HsTIN4CwAUMqciHALYQBcyGYUoA5gNzFnJzO3kCulAEbR2RAL7FiYAJ4AHFADkqEAPIwAPABUAfMgC8yTQG0A5BWomAusgD0N5NChYodQ3JQmAROYieTyBDgQECwwZGFkPgwIABNkMCxkUBiIAA9492QTTRNiOwz5ZCVqNS0HVMgQGIx8M2UTOj4QAGsQgHcQMV0DYzqLa3yMPgQkDAwAQjz7GUL5KGwQYpQDJdL0eZxdWxsGJhBmIA">例子</a></p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">interface</span> Person &#123;</span><br><span class="line">    <span class="attr">name</span>: <span class="built_in">string</span>;</span><br><span class="line">    age: <span class="built_in">number</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> NameOf&lt;T&gt; = T[<span class="string">&#x27;name&#x27;</span>] <span class="comment">// error:  Type &#x27;&quot;name&quot;&#x27; cannot be used to index type &#x27;T&#x27;</span></span><br></pre></td></tr></table></figure>
+<p><code>NameOf</code>类型的作用是取得传入类型<code>T</code>中<code>name</code>属性的值的类型，但这里却报错了。因为传入的泛型<code>T</code>不一定有属性<code>name</code>, 传入的可能是一个没有<code>name</code>属性的对象，也可能是一个字面量类型，访问<code>T</code>可能没有的属性是不安全的，因此会报错，要解决这个问题就需要对泛型<code>T</code>进行约束，确保其一定具有<code>name</code>这个属性。</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">interface</span> Person &#123;</span><br><span class="line">    <span class="attr">name</span>: <span class="built_in">string</span>;</span><br><span class="line">    age: <span class="built_in">number</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> NameOf&lt;T <span class="keyword">extends</span> &#123;<span class="string">&#x27;name&#x27;</span>: unknown&#125;&gt; = T[<span class="string">&#x27;name&#x27;</span>] <span class="comment">// success!</span></span><br><span class="line"><span class="keyword">type</span> personName = NameOf&lt;Person&gt;  <span class="comment">//string</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="条件类型-Conditional-Types"><a href="#条件类型-Conditional-Types" class="headerlink" title="条件类型 (Conditional Types )"></a>条件类型 (Conditional Types )</h2><p>  常见表现形式为：</p>
+   <figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">T <span class="keyword">extends</span> U ? <span class="string">&#x27;Y&#x27;</span> : <span class="string">&#x27;N&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p>可以这样理解：<code>T</code>是<code>U</code>的子类型，那么返回结果是<code>&#39;Y&#39;</code>, 否则是<code>&#39;N&#39;</code>.   类似<code>JS</code>中的三元表达式，其工作原理是类似的，例如：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> res1 = <span class="literal">true</span> <span class="keyword">extends</span> <span class="built_in">boolean</span> ? <span class="literal">true</span> : <span class="literal">false</span>                  <span class="comment">// true</span></span><br><span class="line"><span class="keyword">type</span> res2 = <span class="string">&#x27;name&#x27;</span> <span class="keyword">extends</span> <span class="string">&#x27;name&#x27;</span>|<span class="string">&#x27;age&#x27;</span> ? <span class="literal">true</span> : <span class="literal">false</span>           <span class="comment">// true</span></span><br><span class="line"><span class="keyword">type</span> res3 = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>] <span class="keyword">extends</span> &#123; <span class="attr">length</span>: <span class="built_in">number</span>; &#125; ? <span class="literal">true</span> : <span class="literal">false</span> <span class="comment">// true</span></span><br><span class="line"><span class="keyword">type</span> res4 = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>] <span class="keyword">extends</span> <span class="built_in">Array</span>&lt;<span class="built_in">number</span>&gt; ? <span class="literal">true</span> : <span class="literal">false</span>       <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
+
+<p>   要注意：</p>
+<ul>
+<li>  <code>extends</code>在条件类型中的作用和类型约束中的作用不一样</li>
+<li>  条件类型只支持在<code>type</code>中使用</li>
+</ul>
+<p>此外，**<code>extends</code>作为条件类型时也是可以嵌套的**，就像<code>if</code>语句一样。<br>   <figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> TypeName&lt;T&gt; =</span><br><span class="line"> T <span class="keyword">extends</span> <span class="built_in">string</span>    ? <span class="string">&quot;string&quot;</span> :</span><br><span class="line"> T <span class="keyword">extends</span> <span class="built_in">number</span>    ? <span class="string">&quot;number&quot;</span> :</span><br><span class="line"> T <span class="keyword">extends</span> <span class="built_in">boolean</span>   ? <span class="string">&quot;boolean&quot;</span> :</span><br><span class="line"> T <span class="keyword">extends</span> <span class="literal">undefined</span> ? <span class="string">&quot;undefined&quot;</span> :</span><br><span class="line"> T <span class="keyword">extends</span> <span class="built_in">Function</span>  ? <span class="string">&quot;function&quot;</span> :</span><br><span class="line"> <span class="string">&quot;object&quot;</span>;</span><br><span class="line"></span><br><span class="line"> <span class="keyword">type</span> T0 = TypeName&lt;<span class="built_in">string</span>&gt;;  <span class="comment">// &quot;string&quot;</span></span><br><span class="line"> <span class="keyword">type</span> T1 = TypeName&lt;<span class="string">&quot;a&quot;</span>&gt;;     <span class="comment">// &quot;string&quot;</span></span><br><span class="line"> <span class="keyword">type</span> T2 = TypeName&lt;<span class="literal">true</span>&gt;;    <span class="comment">// &quot;boolean&quot;</span></span><br><span class="line"> <span class="keyword">type</span> T3 = TypeName&lt;<span class="function">() =&gt;</span> <span class="built_in">void</span>&gt;;  <span class="comment">// &quot;function&quot;</span></span><br><span class="line"> <span class="keyword">type</span> T4 = TypeName&lt;<span class="built_in">string</span>[]&gt;;    <span class="comment">// &quot;object&quot;</span></span><br><span class="line"></span><br></pre></td></tr></table></figure><br>   <hr/></p>
+<p>   再来看如下代码：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> A1 = P&lt;<span class="string">&#x27;x&#x27;</span> | <span class="string">&#x27;y&#x27;</span>&gt; <span class="keyword">extends</span> <span class="string">&#x27;x&#x27;</span> ? <span class="built_in">string</span> : <span class="built_in">number</span>; <span class="comment">//  type A1 = number</span></span><br><span class="line"><span class="keyword">type</span> P&lt;T&gt; = T <span class="keyword">extends</span> <span class="string">&#x27;x&#x27;</span> ? <span class="built_in">string</span> : <span class="built_in">number</span>;</span><br><span class="line"><span class="keyword">type</span> A2 = P&lt;<span class="string">&#x27;x&#x27;</span> | <span class="string">&#x27;y&#x27;</span>&gt; <span class="comment">// ?   type A2 = string | number </span></span><br></pre></td></tr></table></figure>
+
+<p>   <code>A2</code>结果为什么不是<code>number</code>呢？实际发生的操作类似如下：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> A2 = P&lt;<span class="string">&#x27;x&#x27;</span> | <span class="string">&#x27;y&#x27;</span>&gt; </span><br><span class="line"><span class="keyword">type</span> A2 = P&lt;<span class="string">&#x27;x&#x27;</span>&gt;  | P&lt;<span class="string">&#x27;y&#x27;</span>&gt;</span><br><span class="line"><span class="keyword">type</span> A2 = (<span class="string">&#x27;x&#x27;</span> <span class="keyword">extends</span> <span class="string">&#x27;x&#x27;</span> ? <span class="built_in">string</span> : <span class="built_in">number</span>) | (<span class="string">&#x27;y&#x27;</span> <span class="keyword">extends</span> <span class="string">&#x27;x&#x27;</span> ? <span class="built_in">string</span> : <span class="built_in">number</span>)</span><br><span class="line"><span class="keyword">type</span> A2 = <span class="built_in">string</span> | <span class="built_in">number</span></span><br></pre></td></tr></table></figure>
+
+<p>这叫<strong>分配条件类型（<a target="_blank" rel="noopener" href="https://www.typescriptlang.org/docs/handbook/release-notes/typescript-2-8.html#distributive-conditional-types="><code>Distributive Conditional Types</code></a>）</strong></p>
+<p>当<code>T</code>为泛型时，且传入该泛型的是一个联合类型，那么该联合类型中的每一个类型都要进行上述操作，最终返回上述操作结果组成的新联合类型。换句话说，这里的<code>分配</code>是指将上述提到的”三元表达式”操作应用于联合类型中的每个成员。</p>
+<p><strong>要注意的是：</strong></p>
+<p><strong>1. <code>extends</code>关键字左侧的是一个泛型，且传入泛型的必须是联合类型，其他类型如交叉类型是没有<code>分配</code>效果的。</strong></p>
+<p>如果左侧不是泛型，直接传入一个联合类型，是没有<code>分配</code>效果的，只是一个简单的条件判断。</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">  <span class="keyword">type</span> A1 = <span class="string">&#x27;x&#x27;</span> <span class="keyword">extends</span> <span class="string">&#x27;x&#x27;</span> ? <span class="built_in">string</span> : <span class="built_in">number</span>; <span class="comment">// string</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">type</span> A2 = <span class="string">&#x27;x&#x27;</span> | <span class="string">&#x27;y&#x27;</span> <span class="keyword">extends</span> <span class="string">&#x27;x&#x27;</span> ? <span class="built_in">string</span> : <span class="built_in">number</span>; <span class="comment">// number</span></span><br><span class="line"><span class="comment">// 如果分配生效的话，结果应该是 string | number</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>2. <code>分配</code>操作只有在检查的类型是<code>naked type parameter</code>时才生效。</strong></p>
+<p>那么是什么是<code>naked type parameter</code>呢？直接翻译过来怪怪的，参数是<code>裸</code>的？<br>我的理解是没有对传进来的泛型参数进行一些额外操作，那么就符合<code>naked type parameter</code>的要求。</p>
+<p>看一下以下的例子，更容易理解。这也是<code>stackoverflow</code>上一个高赞回答的<a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/51651499/typescript-what-is-a-naked-type-parameter">例子</a>：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> NakedUsage&lt;T&gt; = T <span class="keyword">extends</span> <span class="built_in">boolean</span> ? <span class="string">&quot;YES&quot;</span> : <span class="string">&quot;NO&quot;</span></span><br><span class="line"><span class="keyword">type</span> WrappedUsage&lt;T&gt; = [T] <span class="keyword">extends</span> [<span class="built_in">boolean</span>] ? <span class="string">&quot;YES&quot;</span> : <span class="string">&quot;NO&quot;</span>; <span class="comment">// wrapped in a tuple,</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Distributed = NakedUsage&lt;<span class="built_in">number</span> | <span class="built_in">boolean</span> &gt; <span class="comment">// = NakedUsage&lt;number&gt; | NakedUsage&lt;boolean&gt; =  &quot;NO&quot; | &quot;YES&quot; </span></span><br><span class="line"><span class="keyword">type</span> NotDistributed = WrappedUsage&lt;<span class="built_in">number</span> | <span class="built_in">boolean</span> &gt; <span class="comment">// &quot;NO&quot;    </span></span><br><span class="line"><span class="keyword">type</span> NotDistributed2 = WrappedUsage&lt;<span class="built_in">boolean</span> &gt; <span class="comment">// &quot;YES&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p> 其中，<code>WrappedUsage</code>对传入的泛型参数进行了操作，不属于<code>naked type parameter</code>，因此不会进行<code>分配</code>操作。</p>
+<h1 id="类型操作实战"><a href="#类型操作实战" class="headerlink" title="类型操作实战"></a>类型操作实战</h1><h2 id="Pick-amp-Record"><a href="#Pick-amp-Record" class="headerlink" title="Pick &amp; Record"></a>Pick &amp; Record</h2><p>与<code>extends</code>类型约束特性相关的工具类型有<code>Pick</code>和<code>Record</code></p>
+<p><strong>Pick</strong></p>
+<p><code>Pick</code>表示从一个类型中选取指定的几个字段组合成一个新的类型，用法如下：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> Person = &#123;</span><br><span class="line">  <span class="attr">name</span>: <span class="built_in">string</span>;</span><br><span class="line">  age: <span class="built_in">number</span>;</span><br><span class="line">  address: <span class="built_in">string</span>;</span><br><span class="line">  sex: <span class="built_in">number</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> PickResult = Pick&lt;Person, <span class="string">&#x27;name&#x27;</span> | <span class="string">&#x27;address&#x27;</span>&gt;</span><br><span class="line"><span class="comment">// &#123; name: string; address: string; &#125;</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>实现方式</strong></p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> Pick&lt;T, K <span class="keyword">extends</span> keyof T&gt; = &#123;</span><br><span class="line">    [P <span class="keyword">in</span> K]: T[P];</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>首先进行了类型限定，<code>K</code>一定是<code>T</code>的子集，然后用<code>in</code>遍历<code>K</code>中的每个属性, T[P]是属性对应的值。</p>
+<p><strong>Record</strong></p>
+<p><code>Record&lt;K, T&gt;</code>用来将<code>K</code>的每一个键(<code>k</code>)指定为<code>T</code>类型，这样由多个<code>k/T</code>组合成了一个新的类型，用法如下：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> keys = <span class="string">&#x27;Cat&#x27;</span>|<span class="string">&#x27;Dot&#x27;</span></span><br><span class="line"><span class="keyword">type</span> Animal = &#123;</span><br><span class="line">  <span class="attr">name</span>: <span class="built_in">string</span>;</span><br><span class="line">  age: <span class="built_in">number</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> RecordResult = Record&lt;keys, Animal&gt;</span><br><span class="line"><span class="comment">// result: </span></span><br><span class="line"><span class="comment">// type RecordResult = &#123;</span></span><br><span class="line"><span class="comment">//     Cat: Animal;</span></span><br><span class="line"><span class="comment">//     Dot: Animal;</span></span><br><span class="line"><span class="comment">// &#125;</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>实现方式</strong></p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> Record&lt;K <span class="keyword">extends</span> keyof <span class="built_in">any</span>, T&gt; = &#123;</span><br><span class="line">    [P <span class="keyword">in</span> K]: T</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>keyof any</code>是什么鬼？鼠标放上去看看就知道了</p>
+<p>因此，<code>keyof any</code>即<code>string | number | symbol</code>，先对键的取值范围进行了限定，只能是这三者中的一个。</p>
+<h2 id="Exclude-amp-Extract-amp-NonNullable"><a href="#Exclude-amp-Extract-amp-NonNullable" class="headerlink" title="Exclude &amp; Extract &amp; NonNullable"></a>Exclude &amp; Extract &amp; NonNullable</h2><p>与<code>extends</code>条件类型特性相关的工具类型又有哪些呢？</p>
+<p>先看着两个：<code>Exclude</code>和<code>Extract</code></p>
+<p><code>Exclude&lt;T, U&gt;</code>: 排除<code>T</code>中属于<code>U</code>的部分</p>
+<p><img src="https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/bbb69201dbdb47c5b42c4cd6518aa888~tplv-k3u1fbpfcp-watermark.image" alt="image.png"><br><code>Extract&lt;T, U&gt;</code>： 提取<code>T</code>中属于<code>U</code>的部分，即二者交集</p>
+<p><img src="https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/e339f4ecf7f1482fada83c125f347d03~tplv-k3u1fbpfcp-watermark.image" alt="image.png"></p>
+<p><strong>使用方法</strong></p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> ExcludeResult = Exclude&lt;<span class="string">&#x27;name&#x27;</span>|<span class="string">&#x27;age&#x27;</span>|<span class="string">&#x27;sex&#x27;</span>, <span class="string">&#x27;sex&#x27;</span>|<span class="string">&#x27;address&#x27;</span>&gt;</span><br><span class="line"><span class="comment">//type ExcludeResult = &quot;name&quot; | &quot;age&quot;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> ExcludeResult = Extract&lt;<span class="string">&#x27;name&#x27;</span>|<span class="string">&#x27;age&#x27;</span>|<span class="string">&#x27;sex&#x27;</span>, <span class="string">&#x27;sex&#x27;</span>|<span class="string">&#x27;address&#x27;</span>&gt;</span><br><span class="line"><span class="comment">//type ExcludeResult = &quot;sex&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>实现方式</strong></p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> Exclude&lt;T, U&gt; = T <span class="keyword">extends</span> U ? <span class="built_in">never</span> : T</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> extract&lt;T, U&gt; = T <span class="keyword">extends</span> U ? T : <span class="built_in">never</span></span><br></pre></td></tr></table></figure>
+
+<p>实现思路不再赘述，见前文<code>extends</code>分配条件类型的原理</p>
+<p><code>NonNullable</code>工具类型可以从目标类型中排除<code>null</code>和<code>undefined</code>，和<code>Exclude</code>相比，它将<code>U</code>限定的更具体。</p>
+<p>实现也很简单：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> A = <span class="literal">null</span> | <span class="literal">undefined</span> | <span class="string">&#x27;dog&#x27;</span> | <span class="built_in">Function</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// type nonNullable&lt;T&gt; = Exclude&lt;T , undefined | null&gt;</span></span><br><span class="line"><span class="keyword">type</span> nonNullable&lt;T&gt; = T <span class="keyword">extends</span> <span class="literal">null</span> | <span class="literal">undefined</span> ? <span class="built_in">never</span> : T</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> res = nonNullable&lt;A&gt;   <span class="comment">// type res = Function | &quot;dog&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="Omit"><a href="#Omit" class="headerlink" title="Omit"></a>Omit</h2><p>根据已经实现的<code>Exclude</code>类型，可以实现<code>Omit</code>类型，<code>Omit&lt;T, K&gt;</code>:删除<code>T</code>中指定的字段，用法如下：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> Person = &#123;</span><br><span class="line">  name?: <span class="built_in">string</span>;</span><br><span class="line">  age: <span class="built_in">number</span>;</span><br><span class="line">  address: <span class="built_in">string</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> OmitResult = Omit&lt;Person, <span class="string">&#x27;address&#x27;</span>&gt;</span><br><span class="line"><span class="comment">// 结果：&#123; name？: string; age: number; &#125;</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>实现方式</strong></p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> Omit&lt;T, K <span class="keyword">extends</span> keyof <span class="built_in">any</span>&gt; = Pick&lt;T, Exclude&lt;keyof T, K&gt;&gt;</span><br></pre></td></tr></table></figure>
+<p>首先，删除指定字段，字段类型限定在 <code>string | symbol number</code>中，然后用<code>Exclude</code>从<code>T</code>的属性所组成的字面量联合类型中移除指定字段，形成新的联合类型；最后利用<code>Pick</code>选取指定字段生成新的类型</p>
+<h2 id="AppendToObject"><a href="#AppendToObject" class="headerlink" title="AppendToObject"></a>AppendToObject</h2><p><code>AppendToObject</code>的作用是向指定对象中添加一个属性, 同时指定属性值的类型。如果该属性字段之前就存在，新增的字段会被忽略。</p>
+<p>注：该类型并不是内置工具类型</p>
+<p><strong>使用方式</strong></p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> Test = &#123; <span class="attr">id</span>: <span class="string">&#x27;1&#x27;</span> &#125;</span><br><span class="line"><span class="comment">// expected to be &#123; id: &#x27;1&#x27;, value: 4 &#125;</span></span><br><span class="line"><span class="keyword">type</span> Result = AppendToObject&lt;Test, <span class="string">&#x27;value&#x27;</span>, <span class="number">4</span>&gt; </span><br><span class="line"><span class="comment">// 结果：&#123; id: number; name: string; &#125;</span></span><br><span class="line"><span class="keyword">type</span> result = AppendToObject&lt;&#123; <span class="attr">id</span>: <span class="built_in">number</span>; &#125;, <span class="string">&#x27;name&#x27;</span>, <span class="built_in">string</span>&gt;</span><br></pre></td></tr></table></figure>
+<p><strong>实现方式</strong></p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> AppendToObject&lt;T, K <span class="keyword">extends</span> keyof <span class="built_in">any</span>, V&gt; = &#123;</span><br><span class="line">  [P <span class="keyword">in</span> keyof T | K]: P <span class="keyword">extends</span> keyof T ? T[P] : V</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>首先, 需要遍历的所有属性包含<code>T</code>中的属性字段和新增的字段<code>K</code>,即<code>keyof T | K</code>,然后使用<code>in</code>关键字进行遍历操作，对遍历到的每个属性字段使用<code>extends</code>进行判断，如果遍历到的字段<code>P</code>是原本<code>T</code>中就存在的属性字段，判断为<code>true</code>,返回<code>T[p]</code>;否则为<code>false</code>,说明该属性字段之前并不存在，返回新增字段对应的类型<code>V</code>。</p>
+<h2 id="Merge"><a href="#Merge" class="headerlink" title="Merge"></a><a target="_blank" rel="noopener" href="https://github.com/type-challenges/type-challenges/blob/main/questions/00599-medium-merge/README.md">Merge</a></h2><p><code>Merge</code>将两个类型合并成一个类型，第二个类型的键会覆盖第一个类型的键。</p>
+<p><strong>使用方式</strong></p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> foo = &#123;</span><br><span class="line">  <span class="attr">name</span>: <span class="built_in">string</span>;</span><br><span class="line">  age: <span class="built_in">string</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> coo = &#123;</span><br><span class="line">  <span class="attr">age</span>: <span class="built_in">number</span>;</span><br><span class="line">  sex: <span class="built_in">string</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Result = Merge&lt;foo,coo&gt;; <span class="comment">// expected to be &#123;name: string, age: number, sex: string&#125;</span></span><br></pre></td></tr></table></figure>
+<p><strong>实现方式</strong></p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> Merge&lt;F, S&gt; = &#123;</span><br><span class="line">  [P <span class="keyword">in</span>  keyof F | keyof S]: P <span class="keyword">extends</span> keyof S ? S[P] : P <span class="keyword">extends</span> keyof F ? F[P] : <span class="built_in">never</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里使用了两次<code>extends</code>, 写成下方这种形式可能更清楚一些：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> Merge&lt;F, S&gt; = &#123;</span><br><span class="line">  [P <span class="keyword">in</span>  keyof F | keyof S]: </span><br><span class="line">    P <span class="keyword">extends</span> keyof S </span><br><span class="line">      ? S[P] </span><br><span class="line">      : (P <span class="keyword">extends</span> keyof F ? F[P] : <span class="built_in">never</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>和<code>AppendToObject</code>一样，首先用<code>in</code>关键字遍历所有的属性字段（<code>keyof F | keyof S</code>）, 在此过程中对每一字段进行相应判断，因为<code>S</code>中的对应的字段会对<code>F</code>中相同字段进行覆盖，因此先判断该字段是否属于<code>S</code>，然后再判断该字段是否属于<code>P</code>。</p>
+<p><strong>参考</strong></p>
+<p><a target="_blank" rel="noopener" href="https://www.typescriptlang.org/docs/handbook/intro.html">ts handbook</a></p>
+<p><a target="_blank" rel="noopener" href="https://juejin.cn/post/6844904066485583885">TypeScript 的 extends 条件类型</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/type-challenges/type-challenges">type challenges</a></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/TypeScript/" rel="tag"># TypeScript</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/06/05/TypeScript%E7%B1%BB%E5%9E%8B%E4%BD%93%E6%93%8D%E4%B8%AD%E7%9A%84%E5%85%B3%E9%94%AE%E5%AD%97%E8%AF%A6%E8%A7%A3%EF%BC%88%E4%B8%80%EF%BC%89/" rel="prev" title="TypeScript类型体操中的关键字详解（一）">
+      <i class="fa fa-chevron-left"></i> TypeScript类型体操中的关键字详解（一）
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/06/07/TypeScript%E7%B1%BB%E5%9E%8B%E4%BD%93%E6%93%8D%E4%B8%AD%E7%9A%84%E5%85%B3%E9%94%AE%E5%AD%97%E8%AF%A6%E8%A7%A3%EF%BC%88%E4%B8%89%EF%BC%89/" rel="next" title="TypeScript类型体操中的关键字详解（三）">
+      TypeScript类型体操中的关键字详解（三） <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8"><span class="nav-number">1.</span> <span class="nav-text">使用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8E%A5%E5%8F%A3%E7%BB%A7%E6%89%BF"><span class="nav-number">1.1.</span> <span class="nav-text">接口继承</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B1%BB%E5%9E%8B%E7%BA%A6%E6%9D%9F"><span class="nav-number">1.2.</span> <span class="nav-text">类型约束</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9D%A1%E4%BB%B6%E7%B1%BB%E5%9E%8B-Conditional-Types"><span class="nav-number">1.3.</span> <span class="nav-text">条件类型 (Conditional Types )</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B1%BB%E5%9E%8B%E6%93%8D%E4%BD%9C%E5%AE%9E%E6%88%98"><span class="nav-number">2.</span> <span class="nav-text">类型操作实战</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Pick-amp-Record"><span class="nav-number">2.1.</span> <span class="nav-text">Pick &amp; Record</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Exclude-amp-Extract-amp-NonNullable"><span class="nav-number">2.2.</span> <span class="nav-text">Exclude &amp; Extract &amp; NonNullable</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Omit"><span class="nav-number">2.3.</span> <span class="nav-text">Omit</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#AppendToObject"><span class="nav-number">2.4.</span> <span class="nav-text">AppendToObject</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Merge"><span class="nav-number">2.5.</span> <span class="nav-text">Merge</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="martisss"
+      src="/uploads/avatar.gif">
+  <p class="site-author-name" itemprop="name">martisss</p>
+  <div class="site-description" itemprop="description">孩子，快逃！！！</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">22</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">21</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/martisss" title="Martisss → https:&#x2F;&#x2F;github.com&#x2F;martisss" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>Martisss</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+      <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=441491828&auto=1&height=66"></iframe>
+      
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">martisss</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+  <script src="/js/wobblewindow.js"></script>
+  <script>
+    //只在桌面版网页启用特效
+    if( window.innerWidth > 768  ){
+      $(document).ready(function () {
+        
+          $('#header').wobbleWindow({
+            radius: 50,
+            movementTop: false,
+            movementLeft: false,
+            movementRight: false,
+            debug: false,
+          });
+        
+
+        
+          $('#sidebar').wobbleWindow({
+            radius: 50,
+            movementLeft: false,
+            movementTop: false,
+            movementBottom: false,
+            position: 'fixed',
+            debug: false,
+          });
+        
+
+        
+          $('#footer').wobbleWindow({
+            radius: 50,
+            movementBottom: false,
+            movementLeft: false,
+            movementRight: false,
+            offsetX: ,
+            position: 'absolute',
+            debug: false,
+          });
+        
+      });
+    }
+  </script>
+
+</body>
+<!--动态线条背景-->
+<script type="text/javascript"
+color="220,220,220" opacity='0.7' zIndex="-2" count="800" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js">
+</script>
+</html>

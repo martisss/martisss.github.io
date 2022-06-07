@@ -161,6 +161,393 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/04/03/StrictMode%E5%BC%95%E5%8F%91%E7%9A%84%E7%BB%84%E4%BB%B6%E9%87%8D%E5%A4%8D%E6%89%A7%E8%A1%8C/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+      <meta itemprop="name" content="martisss">
+      <meta itemprop="description" content="孩子，快逃！！！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Martisss's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/04/03/StrictMode%E5%BC%95%E5%8F%91%E7%9A%84%E7%BB%84%E4%BB%B6%E9%87%8D%E5%A4%8D%E6%89%A7%E8%A1%8C/" class="post-title-link" itemprop="url">StrictMode引发的组件重复执行</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-04-03 11:35:25" itemprop="dateCreated datePublished" datetime="2022-04-03T11:35:25+08:00">2022-04-03</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-04-09 11:37:14" itemprop="dateModified" datetime="2022-04-09T11:37:14+08:00">2022-04-09</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">学习</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0/JS/" itemprop="url" rel="index"><span itemprop="name">JS</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>2022年3月29号，<code>React 18</code>正式版发布，小明也兴冲冲地开始<code>hooks</code>学习之旅。某天他使用<code>codesandbox</code>写了一个小<code>demo</code>时，他发现组件诡异地渲染了多次，函数组件代码如下：</p>
+<p><strong>count.jsx</strong></p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="function"><span class="keyword">function</span> <span class="title">Count</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> [counter, setCounter] = useState(<span class="number">0</span>);</span><br><span class="line">  useEffect(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&quot;effect&quot;</span>);</span><br><span class="line">    <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">      setCounter(counter + <span class="number">1</span>);</span><br><span class="line">    &#125;, <span class="number">3000</span>);</span><br><span class="line">  &#125;);</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&quot;before render&quot;</span>);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> (</span><br><span class="line">    <span class="xml"><span class="tag">&lt;<span class="name">div</span> <span class="attr">className</span>=<span class="string">&quot;container&quot;</span>&gt;</span></span></span><br><span class="line"><span class="xml">      <span class="tag">&lt;<span class="name">div</span> <span class="attr">className</span>=<span class="string">&quot;el&quot;</span>&gt;</span>&#123;counter&#125;<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line"><span class="xml">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line">  );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>实现的效果很简单，每隔三秒将<code>count</code>加1，很简单对不对？</p>
+<p>打开这个 <a target="_blank" rel="noopener" href="https://codesandbox.io/s/hooks-hxbc7x?file=/src/count2.js:227-228">demo</a>，同时打开控制台，你就可以看到如下输入：</p>
+<p><img src="https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/2066baafb6e54b85aad7258eee6cb095~tplv-k3u1fbpfcp-watermark.image" alt="CPT2204012224-580x267.gif"></p>
+<p><code>before render</code>与<code>effect</code>一开始都打印了两次，之后<code>before render</code>每次都诡异地打印了两次</p>
+<h2 id="React-StrictMode"><a href="#React-StrictMode" class="headerlink" title="React.StrictMode"></a>React.StrictMode</h2><p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/bb0b22840a1445a6a03581f597456da3~tplv-k3u1fbpfcp-zoom-1.image"></p>
+<p>这是为什么呢？经过一番查找，发现是<code>React.StrictMode</code>的锅。<code>React 17</code>文档中是这样描述 <a target="_blank" rel="noopener" href="https://zh-hans.reactjs.org/docs/strict-mode.html">React.StrictMode</a>:</p>
+<blockquote>
+<p><code>StrictMode</code> 是一个用来突出显示应用程序中潜在问题的工具。与 <code>Fragment</code> 一样，<code>StrictMode</code> 不会渲染任何可见的 UI。它为其后代元素触发额外的检查和警告。</p>
+</blockquote>
+<p><code>React 17</code>文档中关于它的作用大概可以归为两类：</p>
+<ul>
+<li>  检测副作用</li>
+<li>  对于在应用中使用已经废弃、过时的方法会发出警告</li>
+</ul>
+<p>对于第二点，相信大家都可以理解，毕竟<code>React</code>现在都发布<code>18</code>版了，不少以前的方法已经过时或者废弃了，在较新版本的<code>React</code>中再使用这些方法肯定时不安全的。</p>
+<p>那么对于第一点呢？</p>
+<p>这不得不提<code>React 18</code>文档对于<code>StrictMode</code>的描述：</p>
+<blockquote>
+<p>React offers a “Strict Mode” in which it calls each component’s function twice during development.</p>
+</blockquote>
+<p>大意就是在开发者模式中，<code>StrictMode</code>会将相应组件执行两次，这下重复执行的疑惑解决了。</p>
+<p>但新的疑问产生了，文档中一直提的副作用又是啥？<code>副作用</code>这个词在<code>React 17</code>文档中提到的次数很多，如何理解它呢？</p>
+<blockquote>
+<p>在计算机科学中，<strong>函数副作用</strong>指当调用函数时，除了<strong>返回函数值</strong>之外，还<strong>对主调用函数产生附加的影响</strong> – 维基百科</p>
+</blockquote>
+<p>举个通俗易懂的例子：张三不小心感冒了，鼻塞流涕，医生给他开了感冒药，感冒药的作用就是让我们的身体恢复健康，但是服用的过程中，张三感冒的症状的确是减轻了，但同时他感到浑身乏力、嗜睡，这就<code>副作用</code>，即意料之外的结果。</p>
+<p>事实上，<code>React 18</code>的文档提到的更多的是<code>purity</code>，即纯度，这其实是函数式编程的理念，这与React 17文档中提到的无副作用是一个意思，<code>react hooks</code>函数式组件实际上就是函数式编程理念的体现。编写纯函数带来了一定的心智负担，但随着开发者对其接受度的提高，新文档中大量使用了<code>purity</code>进行相关描述。文档中提到，纯函数带来了以下优势：</p>
+<blockquote>
+<ul>
+<li>  多环境运行。例如可以运行在服务端，因为同样的输入，总是对应同样的输出，因此组件可以被其他人复用；</li>
+<li>  减少重复渲染。如果函数组件的输入没有改变，直接复用就好啦，不需要重复渲染。</li>
+<li>  随时中断渲染。在渲染层级较深的组件树时，数据发生了改变，那么<code>React</code>可以马上重新开始渲染，而不用等待过时的渲染完成。</li>
+</ul>
+</blockquote>
+<p>因此<code>StrictMode</code>就是在开发中帮助我们进行检测，保证我们编写的函数组件都是 <strong><code>&#39;纯&#39;</code></strong> 的，这也就解释了为什么开头提到的为什么组件会执行两次，<code>StrictMode</code>会多执行一次，两次执行的结果相同，证明我们编写的的确是纯函数。</p>
+<h2 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h2><p>以下列举了一些引发<code>StrictMode</code>的其他例子</p>
+<ol>
+<li> 在函数内部修改一个已经存在的变量</li>
+</ol>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> guest = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Cup</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="comment">// Bad: changing a preexisting variable!</span></span><br><span class="line">  guest = guest + <span class="number">1</span>;</span><br><span class="line">  <span class="keyword">return</span> <span class="xml"><span class="tag">&lt;<span class="name">h2</span>&gt;</span>Tea cup for guest #&#123;guest&#125;<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="function"><span class="keyword">function</span> <span class="title">TeaSet</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> (</span><br><span class="line">    <span class="xml"><span class="tag">&lt;&gt;</span></span></span><br><span class="line"><span class="xml">      <span class="tag">&lt;<span class="name">Cup</span> /&gt;</span></span></span><br><span class="line"><span class="xml">      <span class="tag">&lt;<span class="name">Cup</span> /&gt;</span></span></span><br><span class="line"><span class="xml">      <span class="tag">&lt;<span class="name">Cup</span> /&gt;</span></span></span><br><span class="line"><span class="xml">    <span class="tag">&lt;/&gt;</span></span></span><br><span class="line">  )</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>很明显，当这个组件执行多次，guest的值是逐渐增长的，回想一下纯函数的定义，上述函数组件不是纯函数，因此<code>StrictMode</code>会进行警告。</p>
+<ol start="2">
+<li> useState</li>
+</ol>
+<p>下面的组件定义了<code>counter</code>变量，我们给<code>useState</code>传入了初始化函数，组件首次运行时会执行一次这个函数，返回的值作为<code>counter</code>的初始值，在之后的执行中这个初始化函数会被忽略。</p>
+<p>此外，在使用<code>setState</code>改变<code>counter</code>的值时，我们为其提供了一个<code>updater</code>函数，当点击按钮时会更新<code>counter</code>的值。</p>
+<p>因此，理论上首先会打印一次<code>initializer</code>，然后每按一次按钮，都会打印一次<code>updater</code></p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> React, &#123; useState &#125; <span class="keyword">from</span> <span class="string">&quot;react&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="function"><span class="keyword">function</span> <span class="title">Count2</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> [counter, setCounter] = useState(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;initializer&#x27;</span>)</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">  &#125;);</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">const</span> handleClick = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    setCounter(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">      <span class="built_in">console</span>.log(<span class="string">&#x27;updater&#x27;</span>)</span><br><span class="line">      <span class="keyword">return</span> counter+<span class="number">1</span></span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> (</span><br><span class="line">    <span class="xml"><span class="tag">&lt;<span class="name">div</span> <span class="attr">className</span>=<span class="string">&quot;container&quot;</span>&gt;</span></span></span><br><span class="line"><span class="xml">      <span class="tag">&lt;<span class="name">div</span> <span class="attr">className</span>=<span class="string">&quot;el&quot;</span>&gt;</span>&#123;counter&#125;<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line"><span class="xml">      <span class="tag">&lt;<span class="name">button</span> <span class="attr">onClick</span>=<span class="string">&#123;handleClick&#125;</span>&gt;</span>增加<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span></span><br><span class="line"><span class="xml">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line">  );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><a target="_blank" rel="noopener" href="https://codesandbox.io/s/hooks-hxbc7x?file=/src/count2.js">demo</a></p>
+<p>而事实上，<code>StrictMode</code>会帮我们把这两个函数都调用两次，保证其为纯函数。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p><code>React.StrictMode</code>在开发模式下会重复调用组件，保证我们编写的组件</p>
+<ul>
+<li>  检测意外的副作用，确保函数组件时纯函数</li>
+<li>  对于在应用中使用已经废弃、过时的方法会发出警告</li>
+<li>仅在开发者模式下运行，不影响生产构建<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><a target="_blank" rel="noopener" href="https://beta.reactjs.org/learn/keeping-components-pure#side-effects-unintended-consequences=">Side Effects: (un)intended consequences</a></li>
+</ul>
+<p><a target="_blank" rel="noopener" href="https://juejin.cn/post/7009189602506309640"># 略微探究React StrictMode两次渲染的问题</a></p>
+<p><a target="_blank" rel="noopener" href="https://zh-hans.reactjs.org/docs/strict-mode.html#gatsby-focus-wrapper">严格模式</a></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/23/%E6%89%8B%E6%8A%8A%E6%89%8B%E6%95%99%E4%BD%A0%E5%AE%9E%E7%8E%B0%E5%9B%BE%E7%89%87%E6%87%92%E5%8A%A0%E8%BD%BD/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+      <meta itemprop="name" content="martisss">
+      <meta itemprop="description" content="孩子，快逃！！！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Martisss's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/03/23/%E6%89%8B%E6%8A%8A%E6%89%8B%E6%95%99%E4%BD%A0%E5%AE%9E%E7%8E%B0%E5%9B%BE%E7%89%87%E6%87%92%E5%8A%A0%E8%BD%BD/" class="post-title-link" itemprop="url">手把手教你实现图片懒加载</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-03-23 23:03:04" itemprop="dateCreated datePublished" datetime="2022-03-23T23:03:04+08:00">2022-03-23</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-04-09 11:20:49" itemprop="dateModified" datetime="2022-04-09T11:20:49+08:00">2022-04-09</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%89%8D%E7%AB%AF/" itemprop="url" rel="index"><span itemprop="name">前端</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <hr>
+<h1 id="什么是图片懒加载？"><a href="#什么是图片懒加载？" class="headerlink" title="什么是图片懒加载？"></a>什么是图片懒加载？</h1><p>如今一张图片的大小可以轻松达到几<code>M</code>的大小，如果一个页面中同时有比较多这样的图片，同时加载的话会造成页面加载缓慢，当目标图片未加载成功时，通常会使用一个小图片占位，例如一个转圈圈的gif来表示图片正处于<code>loading</code>状态，但这改变不了很多图片同时加载带来的加载缓慢的问题。</p>
+<p><strong>因此很多时候我们需要将页面内未出现在可视区域内的图片先不做加载， 等到滚动到可视区域后再去加载，这样对页面的加载性能有较大提升，同时也改善了用户体验。</strong></p>
+<hr/>
+主要实现思路如下：
+
+<p>1、<code>img</code>元素的自定义属性上<code>data-xxx</code>上挂载目标图片<code>url</code>, <code>src</code>属性指向默认图片地址。</p>
+<p>2、监听图片是否出现在用户的可视区域内。</p>
+<p>3、出现在可视区域内后更新<code>src</code>属性为目标图片<code>url</code>。</p>
+<p>以下两种实现方式的区别主要体现在第二步。</p>
+<h1 id="监听scroll事件-节流-实现"><a href="#监听scroll事件-节流-实现" class="headerlink" title="监听scroll事件+节流 实现"></a>监听scroll事件+节流 实现</h1><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">&quot;en&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">&quot;UTF-8&quot;</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">&quot;X-UA-Compatible&quot;</span> <span class="attr">content</span>=<span class="string">&quot;IE=edge&quot;</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">&quot;viewport&quot;</span> <span class="attr">content</span>=<span class="string">&quot;width=device-width, initial-scale=1.0&quot;</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>Document<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">style</span>&gt;</span><span class="css"></span></span><br><span class="line"><span class="css">    <span class="selector-tag">div</span> &#123;</span></span><br><span class="line"><span class="css">      <span class="attribute">display</span>: flex;</span></span><br><span class="line"><span class="css">      <span class="attribute">justify-content</span>: center;</span></span><br><span class="line"><span class="css">      <span class="attribute">flex-direction</span>: column;</span></span><br><span class="line"><span class="css">    &#125;</span></span><br><span class="line"><span class="css">    <span class="selector-class">.img</span> &#123;</span></span><br><span class="line"><span class="css">      <span class="attribute">width</span>: <span class="number">50%</span>;</span></span><br><span class="line"><span class="css">      <span class="attribute">height</span>: <span class="number">50%</span>;</span></span><br><span class="line"><span class="css">    &#125;</span></span><br><span class="line"><span class="css">  </span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="javascript"></span></span><br><span class="line"><span class="javascript">    <span class="keyword">const</span> loadingSrc = <span class="string">&#x27;https://c.tenor.com/j-sGh5ZtdaEAAAAi/hongfei-fei.gif&#x27;</span></span></span><br><span class="line"><span class="javascript">    <span class="keyword">const</span> srcs = [</span></span><br><span class="line"><span class="javascript">      <span class="string">&#x27;https://w.wallhaven.cc/full/wq/wallhaven-wq855r.png&#x27;</span>,</span></span><br><span class="line"><span class="javascript">      <span class="string">&#x27;https://w.wallhaven.cc/full/6o/wallhaven-6ooo66.png&#x27;</span>,</span></span><br><span class="line"><span class="javascript">      <span class="string">&#x27;https://w.wallhaven.cc/full/eo/wallhaven-eoqk88.png&#x27;</span>,</span></span><br><span class="line"><span class="javascript">      <span class="string">&#x27;https://w.wallhaven.cc/full/8x/wallhaven-8xlx2o.png&#x27;</span>,</span></span><br><span class="line"><span class="javascript">      <span class="string">&#x27;https://w.wallhaven.cc/full/q2/wallhaven-q2drrl.jpg&#x27;</span>,</span></span><br><span class="line"><span class="javascript">      <span class="string">&#x27;https://w.wallhaven.cc/full/ym/wallhaven-ymrrex.png&#x27;</span>,</span></span><br><span class="line"><span class="javascript">      <span class="string">&#x27;https://w.wallhaven.cc/full/mp/wallhaven-mp8wkm.png&#x27;</span>,</span></span><br><span class="line"><span class="javascript">      <span class="string">&#x27;https://w.wallhaven.cc/full/dg/wallhaven-dgzp2m.jpg&#x27;</span>,</span></span><br><span class="line"><span class="javascript">      <span class="string">&#x27;https://w.wallhaven.cc/full/lq/wallhaven-lqek12.png&#x27;</span>,</span></span><br><span class="line"><span class="javascript">      <span class="string">&#x27;https://w.wallhaven.cc/full/r7/wallhaven-r7mkzq.jpg&#x27;</span>,</span></span><br><span class="line"><span class="javascript">      <span class="string">&#x27;https://w.wallhaven.cc/full/qd/wallhaven-qd12jl.png&#x27;</span>,</span></span><br><span class="line"><span class="javascript">      <span class="string">&#x27;https://w.wallhaven.cc/full/0q/wallhaven-0q23r5.jpg&#x27;</span>,</span></span><br><span class="line"><span class="javascript">      <span class="string">&#x27;https://w.wallhaven.cc/full/76/wallhaven-76wj9o.png&#x27;</span>,</span></span><br><span class="line"><span class="javascript">      <span class="string">&#x27;https://w.wallhaven.cc/full/5d/wallhaven-5d6gd5.jpg&#x27;</span>,</span></span><br><span class="line"><span class="javascript">      <span class="string">&#x27;https://w.wallhaven.cc/full/gj/wallhaven-gjmd9q.png&#x27;</span>,</span></span><br><span class="line"><span class="javascript">      <span class="string">&#x27;https://w.wallhaven.cc/full/pk/wallhaven-pk91m3.png&#x27;</span>,</span></span><br><span class="line"><span class="javascript">      <span class="string">&#x27;https://w.wallhaven.cc/full/pk/wallhaven-pk9zm9.png&#x27;</span>,</span></span><br><span class="line"><span class="javascript">      <span class="string">&#x27;https://w.wallhaven.cc/full/j8/wallhaven-j85wv5.png&#x27;</span>,</span></span><br><span class="line"><span class="javascript">    ]</span></span><br><span class="line"><span class="javascript"></span></span><br><span class="line"><span class="javascript">    <span class="keyword">for</span> (<span class="keyword">let</span> src <span class="keyword">of</span> srcs) &#123;</span></span><br><span class="line"><span class="javascript">      <span class="keyword">let</span> imgNode = <span class="built_in">document</span>.createElement(<span class="string">&#x27;img&#x27;</span>)</span></span><br><span class="line"><span class="javascript">      <span class="built_in">document</span>.body.appendChild(imgNode)</span></span><br><span class="line"><span class="javascript">      imgNode.src = loadingSrc</span></span><br><span class="line"><span class="javascript">      imgNode.className = <span class="string">&#x27;img&#x27;</span></span></span><br><span class="line"><span class="javascript">      imgNode.setAttribute(<span class="string">&#x27;data-src&#x27;</span>, src)</span></span><br><span class="line"><span class="javascript">    &#125;</span></span><br><span class="line"><span class="javascript">    </span></span><br><span class="line"><span class="javascript">    <span class="keyword">let</span> imgList = [...document.querySelectorAll(<span class="string">&#x27;img&#x27;</span>)]</span></span><br><span class="line"><span class="javascript">    <span class="keyword">let</span> length = imgList.length</span></span><br><span class="line"><span class="javascript">  </span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>渲染后的结构如下图所示，<code>src</code>属性指向一张默认加载图片的地址，<code>data-src</code>属性上是目标图片的地址<br><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/6bd626e3b74a40279a466c740a78b742~tplv-k3u1fbpfcp-zoom-1.image" alt="image.png"><br><strong>在此方法中懒加载的核心逻辑为：</strong><code>监听scroll事件，对比容器的高度、滚动高度、和图片距离容器顶部的高度，判断是否滚动到可视区域</code></p>
+<p>主要实现如下：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> imgLazyLoad = (<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">let</span> count = <span class="number">0</span></span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">let</span> deleteIndexList = []</span><br><span class="line">    imgList.forEach(<span class="function">(<span class="params">img, index</span>) =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">let</span> rect = img.getBoundingClientRect()</span><br><span class="line">      <span class="keyword">if</span> (rect.top &lt; <span class="built_in">window</span>.innerHeight) &#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">`加载第<span class="subst">$&#123;index&#125;</span>张图片`</span>)</span><br><span class="line">        img.src = img.dataset.src</span><br><span class="line">        deleteIndexList.push(index)</span><br><span class="line">        count++</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="comment">// 说明图片已经全部加载完成了，移除监听事件</span></span><br><span class="line">      <span class="keyword">if</span> (count === length) &#123;</span><br><span class="line">        <span class="built_in">document</span>.removeEventListener(<span class="string">&#x27;scroll&#x27;</span>, imgLazyLoad)</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;)</span><br><span class="line">    <span class="comment">// 剔除已经完成加载的图片的地址</span></span><br><span class="line">    imgList = imgList.filter(</span><br><span class="line">      <span class="function">(<span class="params">img, index</span>) =&gt;</span> !deleteIndexList.includes(index)</span><br><span class="line">    )</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)()</span><br><span class="line"><span class="comment">// 监听鼠标滚动事件</span></span><br><span class="line"><span class="built_in">document</span>.addEventListener(<span class="string">&#x27;scroll&#x27;</span>, imgLazyLoad)</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><a href="!https://developer.mozilla.org/zh-CN/docs/Web/API/Element/getBoundingClientRect">Element.getBoundingClientRect()</a> 返回元素的大小以及相对于视口的位置.<br><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/API/Window/innerHeight">window.innerheight</a> 是视口的高度.<br>当<code>img.top</code> &lt; <code>window.innerHeight</code>时说明该图片元素正处于视口之内，应该进行加载，将<code>img.src</code>的值更换为<code>img.dataset.src</code>的值，加载目标图片。</p>
+</blockquote>
+<p>让我们来看一下使用效果：<br><img src="https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/bcea4659e2aa4fbea320723605eafb77~tplv-k3u1fbpfcp-watermark.image" alt="CPT2204051626-585x381.gif"><br>可以看出，当鼠标滚动时，首先加载在当前视口内的图片，当新的图片进入视口内时，加载新的图片，所有图片并没有同时进行加载，达到了预期效果。<br>但是，直接将函数绑定在<code>scroll</code>事件上，当页面滚动时，函数会被高频触发。因此我们再使用节流函数优化一下。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">throttle</span>(<span class="params">func, wait</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">let</span> prev = <span class="number">0</span>,</span><br><span class="line">    context,</span><br><span class="line">    args</span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">let</span> now = +<span class="keyword">new</span> <span class="built_in">Date</span>()</span><br><span class="line">    context = <span class="built_in">this</span></span><br><span class="line">    args = <span class="built_in">arguments</span></span><br><span class="line">    <span class="keyword">if</span> (now - prev &gt; wait) &#123;</span><br><span class="line">      func.apply(context, args)</span><br><span class="line">      prev = now</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 监听鼠标滚动事件</span></span><br><span class="line"><span class="built_in">document</span>.addEventListener(<span class="string">&#x27;scroll&#x27;</span>, throttle(imgLazyLoad, <span class="number">500</span>))</span><br></pre></td></tr></table></figure>
+<p><a target="_blank" rel="noopener" href="https://jsbin.com/rarukex/1/edit?html,console,output">在线地址</a></p>
+<p><strong>但是！！！</strong><br><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/48dd5ee96338406ebf553269ee0774b5~tplv-k3u1fbpfcp-zoom-1.image" alt="imag"></p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/bcd9e4b45cf64939889ebc77e48ca04e~tplv-k3u1fbpfcp-watermark.image" alt="CPT2204051626-585x381.gif"><br><code>getBoundingClientRect</code>返回最新的位置信息，会触发回流重绘以返回正确值</p>
+<blockquote>
+<p>与<code>getBoundingClientRect</code>一样会触发回流重绘的还有：</p>
+<ul>
+<li>  offsetTop、offsetLeft、offsetWidth、offsetHeight</li>
+<li>  scrollTop、scrollLeft、scrollWidth、scrollHeight</li>
+<li>  clientTop、clientLeft、clientWidth、clientHeight</li>
+<li>  getComputedStyle() 具体请看<a target="_blank" rel="noopener" href="https://gist.github.com/paulirish/5d52fb081b3570c81e3a">这里</a></li>
+</ul>
+</blockquote>
+<p>这里使用了节流减少了回调函数的调用次数，但有没有办法不触发回流重绘也能检测到图片处于当前视口呢？这就是接下来要介绍的<code>intersectionObserver</code> API </p>
+<h1 id="使用-intersectionObserver-API-实现"><a href="#使用-intersectionObserver-API-实现" class="headerlink" title="使用 intersectionObserver API 实现"></a>使用 <code>intersectionObserver</code> API 实现</h1><p><code>IntersectionObserver</code> 是浏览器原生提供的构造函数，接受两个参数：callback 是可见性变化时的回调函数，option 是配置对象（该参数可选）。<br>callback 函数的参数（entries）是一个数组，每个成员都是一个 IntersectionObserverEntry 对象<br>其中：isIntersecting表示目标是否可见，即是否在视口中<br>具体可见<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/API/IntersectionObserver/IntersectionObserver">MDN</a></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">imgLazyLoad</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> io = <span class="keyword">new</span> IntersectionObserver(<span class="function">(<span class="params">inters</span>) =&gt;</span> &#123;</span><br><span class="line">    inters.forEach(<span class="function">(<span class="params">item, index</span>) =&gt;</span> &#123;</span><br><span class="line">      <span class="comment">// 进入可视区域</span></span><br><span class="line">      <span class="keyword">if</span> (item.isIntersecting) &#123;</span><br><span class="line">        item.target.src = item.target.dataset.src</span><br><span class="line">        <span class="comment">//停止监听该元素</span></span><br><span class="line">        io.unobserve(item.target)</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;)</span><br><span class="line">  <span class="comment">// 监听每一个元素</span></span><br><span class="line">  imgList.forEach(<span class="function">(<span class="params">el</span>) =&gt;</span> io.observe(el))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>相比于使用<code>getBoundingClientRect</code>，实现了相同的懒加载效果，但避免了不必要的回流重绘。</p>
+<p><a target="_blank" rel="noopener" href="https://jsbin.com/dicuzeq/edit?html,console,output">在线地址</a></p>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p><a target="_blank" rel="noopener" href="https://juejin.cn/post/6903774214780616718">前端性能优化之图片懒加载</a></p>
+<p><a target="_blank" rel="noopener" href="https://juejin.cn/post/6844903455048335368#heading-5">实现图片懒加载(Lazyload)</a></p>
+<p><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/API/IntersectionObserver">MDN - Intersection Observer</a></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/11/%E9%9D%A2%E8%AF%95%E5%AE%98%EF%BC%9AstopImmediatePropagation%E4%B8%8EstopPropagation%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+      <meta itemprop="name" content="martisss">
+      <meta itemprop="description" content="孩子，快逃！！！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Martisss's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/03/11/%E9%9D%A2%E8%AF%95%E5%AE%98%EF%BC%9AstopImmediatePropagation%E4%B8%8EstopPropagation%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F/" class="post-title-link" itemprop="url">面试官：stopImmediatePropagation与stopPropagation有什么区别？</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-03-11 15:04:49" itemprop="dateCreated datePublished" datetime="2022-03-11T15:04:49+08:00">2022-03-11</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-03-15 15:42:25" itemprop="dateModified" datetime="2022-03-15T15:42:25+08:00">2022-03-15</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">学习</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="开篇"><a href="#开篇" class="headerlink" title="开篇"></a>开篇</h1><p><img src="https://s2.loli.net/2022/03/11/AEI93P2UnDzl1a7.png" alt="image.png"></p>
+<p><code>stopImmediatePropagation</code>与<code>stopPropagation</code>是一对亲兄弟，他们两实现的功能是相似的，那么这两个函数的区别在哪里呢？如果你对于事件传播已经很了解，那么可以直接跳到总结部分，反之可以按照顺序阅读。</p>
+<h1 id="什么是DOM事件流？"><a href="#什么是DOM事件流？" class="headerlink" title="什么是DOM事件流？"></a>什么是DOM事件流？</h1><p>早上起床你都会做些什么呢？闹钟响了，你摸索着掐掉闹钟，再眯一会，然后起床，刷牙，吃早餐……..，这一系列事件连接起来就构成了你起床的事件流。而DOM事件也是有一个流程的，<a target="_blank" rel="noopener" href="http://www.w3.org/TR/DOM-Level-3-Events/">DOM 事件</a>标准描述了<strong>事件传播</strong>的 3 个阶段：</p>
+<ol>
+<li> 捕获阶段（Capturing phase）—— 事件（从 Window）向下走近元素。</li>
+<li> 目标阶段（Target phase）—— 事件到达目标元素。</li>
+<li> 冒泡阶段（Bubbling phase）—— 事件从元素上开始冒泡。<h2 id="事件捕获"><a href="#事件捕获" class="headerlink" title="事件捕获"></a>事件捕获</h2>DOM事件触发时（被触发DOM事件的这个元素被叫作事件源），浏览器会从根节点开始 <strong>由外到内</strong> 进行事件传播。即事件从文档的根节点流向目标对象节点，途中经过各个层次的DOM节点，最终到目标节点，完成事件捕获，<h2 id="事件冒泡"><a href="#事件冒泡" class="headerlink" title="事件冒泡"></a>事件冒泡</h2>事件冒泡与事件捕获顺序相反。事件捕获的顺序是从外到内，事件冒泡是从内到外。<br>当事件传播到了目标阶段后，处于目标阶段的元素就会将接收到的时间向上传播，就是顺着事件捕获的路径，反着传播一次，逐级的向上传播到该元素的祖先元素，直到window对象。<blockquote>
+<p>引发事件的那个嵌套层级最深的元素被称为目标元素,可以通过 <code>event.target</code> 访问。注意与 <code>this</code>（=<code>event.currentTarget</code>）之间的区别：</p>
+<ul>
+<li>  <code>event.target</code> —— 是引发事件的“目标”元素，它在冒泡过程中不会发生变化。</li>
+<li>  <code>this</code> —— 是“当前”元素，其中有一个当前正在运行的处理程序。</li>
+</ul>
+</blockquote>
+<h2 id="使用addEventListener监听事件"><a href="#使用addEventListener监听事件" class="headerlink" title="使用addEventListener监听事件"></a>使用addEventListener监听事件</h2>使用<code>EventTarget.addEventListeners</code>可以指定的侦听器注册到EventTarget上，我们可以监听页面上发生的诸多事件（<code>mousedown</code>,<code>click</code>, <code>scroll</code>等），当事件发生时就可以调用相应的函数进行事件处理。</li>
+</ol>
+<p>它接收三个参数：分别是<code>type</code>, <code>listener</code>, <code>options</code>, 其中<code>type</code>表示监听<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/Events">事件类型</a>的字符串，<code>listener</code>通常传入的是一个函数，在相应事件发生时调用它进行事件处理，<code>options</code>是一个与<code>listener</code>有关的可选参数对象，可用的参数有<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/API/EventTarget/addEventListener"><code>capture</code>,<code>once</code>,<code>passive</code>, <code>signal</code></a>,<br>在本文中比较关注的是<code>capture</code>, 默认为<code>false</code>, 代表该侦听器在时间冒泡阶段触发，反之在事件捕获阶段触发。</p>
+<h1 id="如何阻止事件传播？"><a href="#如何阻止事件传播？" class="headerlink" title="如何阻止事件传播？"></a>如何阻止事件传播？</h1><p>很经典的一个问题是如何阻止事件冒泡，很多人应该马上就能想到使用<code>event.cancleBuble = true</code>或者使用<code>event.stopPropagation()</code>, 这的确能够阻止事件冒泡。其实更准确的说，应该是阻止了事件传播, 因为这两者不仅仅可以在冒泡阶段使用，也可以在捕获阶段使用。看下面这一个例子。</p>
+<blockquote>
+<p><code>Event.cancelBubble</code> 属性是 <a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/API/Event/stopPropagation"><code>Event.stopPropagation()</code></a>的一个曾用名。在从事件处理程序返回之前将其值设置为true可阻止事件的传播。</p>
+</blockquote>
+<p>dom结构如下：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;A&quot;</span> <span class="attr">style</span>=<span class="string">&quot;font-size:30px&quot;</span>&gt;</span></span><br><span class="line">  A</span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;B&quot;</span> <span class="attr">style</span>=<span class="string">&quot;font-size:30px&quot;</span>&gt;</span></span><br><span class="line">    B</span><br><span class="line">    <span class="tag">&lt;<span class="name">p</span> <span class="attr">style</span>=<span class="string">&quot;font-size:30px&quot;</span>&gt;</span></span><br><span class="line">      <span class="symbol">&amp;#128513;</span>P</span><br><span class="line">    <span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/5b2ae93adef543259379636ba1bcdcc6~tplv-k3u1fbpfcp-zoom-1.image" alt="image.png"></p>
+<p>script部分：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> p = <span class="built_in">document</span>.querySelector(<span class="string">&#x27;p&#x27;</span>)</span><br><span class="line">p.addEventListener(<span class="string">&quot;mousedown&quot;</span>, <span class="function">(<span class="params">event</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="comment">// event.cancelBubble = true</span></span><br><span class="line">  event.stopPropagation()</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&quot;我是p元素上被绑定的第一个监听函数: mousedown&quot;</span>);</span><br><span class="line">&#125;, <span class="literal">false</span>);</span><br><span class="line"></span><br><span class="line">p.addEventListener(<span class="string">&quot;mousedown&quot;</span>, <span class="function">(<span class="params">event</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&quot;我是p元素上被绑定的第二个监听函数: mousedown&quot;</span>);</span><br><span class="line">&#125;, <span class="literal">false</span>);</span><br><span class="line"><span class="built_in">document</span>.querySelector(<span class="string">&quot;.A&quot;</span>).addEventListener(<span class="string">&quot;mousedown&quot;</span>, <span class="function">(<span class="params">event</span>) =&gt;</span> &#123;</span><br><span class="line">  event.cancelBubble = <span class="literal">true</span></span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&quot;我是div &amp; class A元素&quot;</span>);</span><br><span class="line">&#125;, <span class="literal">false</span>);</span><br><span class="line"><span class="built_in">document</span>.querySelector(<span class="string">&quot;.B&quot;</span>).addEventListener(<span class="string">&quot;mousedown&quot;</span>, <span class="function">(<span class="params">event</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&quot;我是div &amp; class B元素&quot;</span>);</span><br><span class="line">&#125;, <span class="literal">false</span>);</span><br></pre></td></tr></table></figure>
+<p>上述事件传播的路径是：A -&gt; B -&gt; P -&gt; B -&gt; A, 选定<code>&lt;p&gt;&lt;/p&gt;</code>作为目标元素，每次试验时点击图中的笑脸所在的绿色区域。<br><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/3cabe55d46ac474ca954152e7d9e971b~tplv-k3u1fbpfcp-zoom-1.image" alt="image.png"><br>我们在P元素上绑定了两个事件侦听器，并使用了<code>event.cancleBuble = true</code>(<code>event.stopPropagation()</code>)成功阻止了事件冒泡。如果我在事件捕获阶段使用会怎么样呢？</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> p = <span class="built_in">document</span>.querySelector(<span class="string">&#x27;p&#x27;</span>)</span><br><span class="line">p.addEventListener(<span class="string">&quot;mousedown&quot;</span>, <span class="function">(<span class="params">event</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="comment">// event.cancelBubble = true</span></span><br><span class="line">  event.stopPropagation()</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&quot;我是p元素上被绑定的第一个监听函数: mousedown&quot;</span>);</span><br><span class="line">&#125;, <span class="literal">false</span>);</span><br><span class="line"></span><br><span class="line">p.addEventListener(<span class="string">&quot;mousedown&quot;</span>, <span class="function">(<span class="params">event</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&quot;我是p元素上被绑定的第二个监听函数: mousedown&quot;</span>);</span><br><span class="line">&#125;, <span class="literal">false</span>);</span><br><span class="line"><span class="built_in">document</span>.querySelector(<span class="string">&quot;.A&quot;</span>).addEventListener(<span class="string">&quot;mousedown&quot;</span>, <span class="function">(<span class="params">event</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="comment">// event.cancelBubble = true</span></span><br><span class="line">    event.stopPropagation()</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&quot;我是div &amp; class A元素&quot;</span>);</span><br><span class="line">&#125;, <span class="literal">true</span>);</span><br><span class="line"><span class="built_in">document</span>.querySelector(<span class="string">&quot;.B&quot;</span>).addEventListener(<span class="string">&quot;mousedown&quot;</span>, <span class="function">(<span class="params">event</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&quot;我是div &amp; class B元素&quot;</span>);</span><br><span class="line">&#125;, <span class="literal">true</span>);</span><br></pre></td></tr></table></figure>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/898ac07e82994ce8aa39d573f4bbc76e~tplv-k3u1fbpfcp-zoom-1.image" alt="image.png"><br>从结果可以清楚地看到成功地阻止了事件传播。</p>
+<p>那么现在让我们回到最初的问题：<strong>stopImmediatePropagation与stopPropagation有什么区别？</strong><br>可以这样简单第理解：<code>stopImmediatePropagation</code>是<code>stopPropagation</code>的加强版，前者不仅仅可以阻止事件传播，它还可以在<strong>多个事件监听器</strong>被附加到<strong>相同元素</strong>的<strong>相同事件</strong>类型上时保证只有一个事件侦听器被调用。换句话说，当同一个元素上有多个事件侦听器侦听同一事件时，这些事件侦听器都会被按照初始添加顺序被调用，如上文中p元素就绑定了两个监听<code>mousedown</code>事件的侦听器；但如果在其中一个事件侦听器中使用了<code>event.stopImmediatePropagation()</code>的话，在该侦听器之后的侦听器就不会被调用了。<br>将代码改造成如下：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> p = <span class="built_in">document</span>.querySelector(<span class="string">&#x27;p&#x27;</span>)</span><br><span class="line">p.addEventListener(<span class="string">&quot;mousedown&quot;</span>, <span class="function">(<span class="params">event</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&quot;我是p元素上被绑定的第一个监听函数: mousedown&quot;</span>);</span><br><span class="line">&#125;, <span class="literal">false</span>);</span><br><span class="line"></span><br><span class="line">p.addEventListener(<span class="string">&quot;mousedown&quot;</span>, <span class="function">(<span class="params">event</span>) =&gt;</span> &#123;</span><br><span class="line">  event.stopImmediatePropagation()</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&quot;我是p元素上被绑定的第二个监听函数: mousedown&quot;</span>);</span><br><span class="line">&#125;, <span class="literal">false</span>);</span><br><span class="line"></span><br><span class="line">p.addEventListener(<span class="string">&quot;mousedown&quot;</span>,<span class="function">(<span class="params">event</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&quot;我是p元素上被绑定的第三个监听函数: mousedown&quot;</span>);</span><br><span class="line">  <span class="comment">// 该监听函数排在上个函数后面，该函数不会被执行</span></span><br><span class="line">&#125;, <span class="literal">false</span>);</span><br><span class="line"></span><br><span class="line">p.addEventListener(<span class="string">&#x27;click&#x27;</span>, <span class="function">(<span class="params">event</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="comment">// 嘿嘿嘿，虽然监听的是同一元素，但却是不同事件！</span></span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;我是p元素上被绑定的第四个监听函数: click&#x27;</span>)</span><br><span class="line">&#125;, <span class="literal">false</span>)</span><br><span class="line"></span><br><span class="line"><span class="built_in">document</span>.querySelector(<span class="string">&quot;.A&quot;</span>).addEventListener(<span class="string">&quot;mousedown&quot;</span>, <span class="function">(<span class="params">event</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&quot;我是div &amp; class A元素&quot;</span>);</span><br><span class="line">&#125;, <span class="literal">false</span>);</span><br><span class="line"></span><br><span class="line"><span class="built_in">document</span>.querySelector(<span class="string">&quot;.B&quot;</span>).addEventListener(<span class="string">&quot;mousedown&quot;</span>, <span class="function">(<span class="params">event</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&quot;我是div &amp; class B元素&quot;</span>);</span><br><span class="line">&#125;, <span class="literal">false</span>);</span><br></pre></td></tr></table></figure>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/4c6c4f5ca980487d8c994025ccbea21f~tplv-k3u1fbpfcp-zoom-1.image" alt="image.png"><br>可以看到<code>stopImmediatePropagation</code>成功阻止了事件冒泡，A元素，B元素的侦听器都没有被调用，此外元素p上绑定了四个侦听器，其中三个侦听<code>mousedown</code>事件，剩下一个侦听<code>click</code>事件，我们在第二个侦听器中调用<code>stopImmediatePropagation</code>，前两个侦听器顺利调用，此外，由于最后一个侦听器侦听<code>click</code>事件，不受影响。</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><ul>
+<li>事件传播： 捕获 -&gt; 目标元素 -&gt; 冒泡</li>
+<li><code>event</code><blockquote>
+<ul>
+<li><code>event.target</code> —— 引发事件的层级最深的元素。</li>
+<li><code>event.currentTarget</code>（=<code>this</code>）—— 处理事件的当前元素（具有处理程序的元素）</li>
+<li><code>event.eventPhase</code> —— 当前阶段（capturing=1，target=2，bubbling=3）。</li>
+</ul>
+</blockquote>
+</li>
+<li>阻止事件传播的方法：<blockquote>
+<ul>
+<li>event.stopPropagation()</li>
+<li>event.cancelBubble = true</li>
+<li>event.stopImmediatePropagation()</li>
+</ul>
+</blockquote>
+</li>
+<li><code>event.stopImmediatePropagation()</code><blockquote>
+<ul>
+<li>可以阻止事件传播</li>
+<li><strong>多个</strong>事件侦听器侦听<strong>同一元素</strong>的<strong>同一事件</strong>时，执行<code>event.stopImmediatePropagation()</code>的侦听器之后的侦听器被忽略</li>
+<li>侦听同一元素的<strong>不同事件</strong>的侦听器不受影响<br>最好自己动手试一试，加深理解。<br><a target="_blank" rel="noopener" href="https://codepen.io/martisss/pen/WNdepoN?editors=1111">源代码在此处</a></li>
+</ul>
+</blockquote>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/API/Event">Event - MDN</a></li>
+</ul>
+<p><a target="_blank" rel="noopener" href="https://zh.javascript.info/bubbling-and-capturing">冒泡和捕获</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.debugger.wiki/article/html/1636445881135788">JavaScript事件捕获冒泡与捕获</a></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
     <link itemprop="mainEntityOfPage" href="http://example.com/2022/02/12/%E5%BE%AA%E7%8E%AF%E5%86%97%E4%BD%99%E6%A0%A1%E9%AA%8C/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -879,390 +1266,10 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/11/20/cmder-config/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/avatar.gif">
-      <meta itemprop="name" content="martisss">
-      <meta itemprop="description" content="孩子，快逃！！！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Martisss's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/11/20/cmder-config/" class="post-title-link" itemprop="url">cmder-config</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2021-11-20 14:12:26 / 修改时间：14:16:29" itemprop="dateCreated datePublished" datetime="2021-11-20T14:12:26+08:00">2021-11-20</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">学习</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="配置环境变量"><a href="#配置环境变量" class="headerlink" title="配置环境变量"></a><strong>配置环境变量</strong></h2><ol>
-<li><p>在控制面板中的如下路径找到高级系统设置&gt;环境变量，点击</p>
-<p>用户变量</p>
-<p>系统变量</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">CMDER_ROOT  = C:\Program Files\cmder  </span><br><span class="line">PATH       += %CMDER_ROOT%</span><br></pre></td></tr></table></figure></li>
-<li><p>管理员运行cmd（注意是<code>cmd</code>，不是Cmder）运行一下命令：<br><code>Cmder.exe /REGISTER ALL</code></p>
-</li>
-<li><p>右键菜单</p>
-</li>
-</ol>
-<p><img src="https://i.loli.net/2021/11/20/kqSEn8IuLXAHhWr.png" alt="image.png"></p>
-<h2 id="高亮插件"><a href="#高亮插件" class="headerlink" title="高亮插件"></a>高亮插件</h2><p>下载 <a href="https://link.zhihu.com/?target=https://github.com/AmrEldib/cmder-powerline-prompt">Cmder-powerline-prompt</a> 项目中的所有 <code>.lua</code> 文件，放置在 <code>%CMDER_ROOT%/config</code> 目录中，然后重启 Cmder</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/10/29/WTFJS-%E8%81%8A%E4%B8%80%E8%81%8AJS%E4%B8%AD%E7%9A%84%E9%9A%90%E5%BC%8F%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/avatar.gif">
-      <meta itemprop="name" content="martisss">
-      <meta itemprop="description" content="孩子，快逃！！！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Martisss's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/10/29/WTFJS-%E8%81%8A%E4%B8%80%E8%81%8AJS%E4%B8%AD%E7%9A%84%E9%9A%90%E5%BC%8F%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2/" class="post-title-link" itemprop="url">WTFJS | 聊一聊JS中的隐式类型转换</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-10-29 17:03:08" itemprop="dateCreated datePublished" datetime="2021-10-29T17:03:08+08:00">2021-10-29</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-11-16 17:34:16" itemprop="dateModified" datetime="2021-11-16T17:34:16+08:00">2021-11-16</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">学习</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%AD%A6%E4%B9%A0/JS/" itemprop="url" rel="index"><span itemprop="name">JS</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <hr>
-<hr>
-<p><img src="https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/451445859cea4777920b573f252a3bcf~tplv-k3u1fbpfcp-watermark.image" alt="xxx.png"></p>
-<h2 id="有趣的例子"><a href="#有趣的例子" class="headerlink" title="有趣的例子"></a>有趣的例子</h2><p>先来看几个有趣的例子</p>
-<p>❓ <code>[]</code>等于 <code>![]</code></p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[] == ![]; <span class="comment">// -&gt; true</span></span><br></pre></td></tr></table></figure>
-
-<p>❓ <code>true</code>不等于<code>[]</code>, 也不等于 <code>![]</code></p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="literal">true</span> == []; <span class="comment">// -&gt; false</span></span><br><span class="line"><span class="literal">true</span> == ![]; <span class="comment">// -&gt; false   ???</span></span><br></pre></td></tr></table></figure>
-
-<p>❓ null &amp; false</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">!!<span class="literal">null</span>; <span class="comment">// -&gt; false</span></span><br><span class="line"><span class="literal">null</span> == <span class="literal">false</span>; <span class="comment">// -&gt; false  ???</span></span><br></pre></td></tr></table></figure>
-
-<p>❓ <code>[]</code> &amp; <code>&#123;&#125;</code></p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log([] + &#123;&#125;);   ???</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>上述问题截取自 <a target="_blank" rel="noopener" href="https://github.com/denysdovhan/wtfjs">wtfjs</a> ( 即What the f*ck JavaScript? ) ，以下是其对于JavaScript的部分描述。</p>
-<p>JavaScript is quite a funny language with tricky parts. Some of them can quickly turn our everyday job into hell, and some of them can make us laugh out loud.</p>
-<p>尤其是对于js中的类型转换相关问题，可以说是非常贴切了。该仓库中列出的大部分<code>tricky parts</code>均是与类型转换相关的，更具体地说应该是<strong>隐式类型转换</strong>，这也是我为什么想写这篇文章的原因。</p>
-<p>网上有很多关于类型转换的文章，文末也列出了一些参考文章。</p>
-</blockquote>
-<p>如果你能熟练的得出上述问题的答案，说明你对于JavaScript中的隐式类型转换已经挺熟悉了，如果对此不是很熟悉，那么也没关系，接下来我们一起来梳理一下JavaScript中的隐式类型转换。</p>
-<h2 id="前置知识"><a href="#前置知识" class="headerlink" title="前置知识"></a>前置知识</h2><p><strong>什么是ToPrimitive？</strong></p>
-<p>规范中的解释在这里：<a target="_blank" rel="noopener" href="http://es5.github.io/#x9.1">9.1 ToPrimitive</a></p>
-<p>以下文字出自冴羽大佬的<a target="_blank" rel="noopener" href="https://github.com/mqyqingfeng/Blog/issues/164#">JavaScript深入之头疼的类型转换(下)</a></p>
-<blockquote>
-<p>函数语法表示如下：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ToPrimitive(input[, PreferredType])</span><br></pre></td></tr></table></figure>
-
-<p>第一个参数是 input，表示要处理的输入值。</p>
-<p>第二个参数是 PreferredType，非必填，表示希望转换成的类型，有两个值可以选，Number 或者 String。</p>
-<p>当不传入 PreferredType 时，如果 input 是日期类型，相当于传入 String，否则，都相当于传入 Number。</p>
-<p>如果传入的 input 是 Undefined、Null、Boolean、Number、String 类型，直接返回该值。</p>
-<p>如果是 ToPrimitive(obj, Number)，处理步骤如下：</p>
-<ol>
-<li> 如果 obj 为 基本类型，直接返回</li>
-<li> 否则，调用 valueOf 方法，如果返回一个原始值，则 JavaScript 将其返回。</li>
-<li> 否则，调用 toString 方法，如果返回一个原始值，则 JavaScript 将其返回。</li>
-<li> 否则，JavaScript 抛出一个类型错误异常。</li>
-</ol>
-</blockquote>
-<h2 id="规范怎么说？"><a href="#规范怎么说？" class="headerlink" title="规范怎么说？"></a>规范怎么说？</h2><p>以下是涉及隐式类型转换的一些常见类型</p>
-<h3 id="1-一元操作符"><a href="#1-一元操作符" class="headerlink" title="1. 一元操作符 +"></a>1. 一元操作符 +</h3><p><a target="_blank" rel="noopener" href="http://es5.github.io/#x11.4.6">ES5规范1.4.6</a> 简单的说就是会调用toNumber方法去处理，具体结果如下</p>
-<table>
-<thead>
-<tr>
-<th>类型</th>
-<th><em><strong>结果</strong></em></th>
-</tr>
-</thead>
-<tbody><tr>
-<td>Undefined</td>
-<td><strong>NaN</strong></td>
-</tr>
-<tr>
-<td>Null</td>
-<td><strong>+0</strong></td>
-</tr>
-<tr>
-<td>Boolean</td>
-<td>true &gt;&gt;&gt; 1; false &gt;&gt;&gt; 0</td>
-</tr>
-<tr>
-<td>Number</td>
-<td>直接返回</td>
-</tr>
-<tr>
-<td>String</td>
-<td>具体见下方具体实例</td>
-</tr>
-<tr>
-<td>Object</td>
-<td>先调用<a target="_blank" rel="noopener" href="http://es5.github.io/#x9.1">ToPrimitive</a>得到primValue，然后返回<code>ToNumber(primValue)</code></td>
-</tr>
-</tbody></table>
-<blockquote>
-<p>string 转数字</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(<span class="built_in">Number</span>()) <span class="comment">// +0</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(<span class="built_in">Number</span>(<span class="literal">undefined</span>)) <span class="comment">// NaN</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="built_in">Number</span>(<span class="literal">null</span>)) <span class="comment">// +0</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(<span class="built_in">Number</span>(<span class="literal">false</span>)) <span class="comment">// +0</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="built_in">Number</span>(<span class="literal">true</span>)) <span class="comment">// 1</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(<span class="built_in">Number</span>(<span class="string">&quot;123&quot;</span>)) <span class="comment">// 123</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="built_in">Number</span>(<span class="string">&quot;-123&quot;</span>)) <span class="comment">// -123</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="built_in">Number</span>(<span class="string">&quot;1.2&quot;</span>)) <span class="comment">// 1.2</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="built_in">Number</span>(<span class="string">&quot;0x11&quot;</span>)) <span class="comment">// 17</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="built_in">Number</span>(<span class="string">&quot;&quot;</span>)) <span class="comment">// 0</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="built_in">Number</span>(<span class="string">&quot; &quot;</span>)) <span class="comment">// 0</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="built_in">Number</span>(<span class="string">&quot;123 123&quot;</span>)) <span class="comment">// NaN</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="built_in">Number</span>(<span class="string">&quot;foo&quot;</span>)) <span class="comment">// NaN</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="built_in">Number</span>(<span class="string">&quot;100a&quot;</span>)) <span class="comment">// NaN</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(<span class="built_in">Number</span>(<span class="string">&quot;1.2.2&quot;</span>)) <span class="comment">// NaN</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="built_in">Number</span>(<span class="string">&quot;.2&quot;</span>)) <span class="comment">// 0.2</span></span><br></pre></td></tr></table></figure>
-</blockquote>
-<p>可以看到<code>toNumber(string）</code>有如下特点：</p>
-<ul>
-<li>  尝试将传输值转换为整数或浮点数</li>
-<li>  忽略前导0</li>
-<li>  出现不是数字的字符，返回NaN (遇到的第一个<code>.</code>会被当做小数点处理)<h3 id="2-二元操作符"><a href="#2-二元操作符" class="headerlink" title="2. 二元操作符 +"></a>2. 二元操作符 +</h3></li>
-</ul>
-<p>以 x + y 为例</p>
-<ol>
-<li> <code>prim_x = ToPrimitive(x)</code></li>
-<li> <code>prim_y= ToPrimitive(y)</code></li>
-<li> <code>prim_x</code>或者<code>prim_y</code>其中一个为字符串，返回 <code>ToString(prim_x)</code>和 <code>ToString(prim_y)</code>的拼接结果</li>
-<li> 返回 <code>ToNumber(prim_x)</code> 和 <code>ToNumber(prim_y)</code>的运算结果</li>
-</ol>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">console.log(null + 1);</span><br><span class="line">console.log([] + []);  //相当于两个空字符串拼接</span><br><span class="line">console.log([] + &#123;&#125;);  // 相当于 &quot;&quot; + &quot;[object Object]&quot;</span><br><span class="line">console.log(&#123;&#125; + []);  // 相当于 &quot;[object Object]&quot; + &quot;&quot;</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>PS: {} + [] 直接在chromes控制台运行结果是0，因为第一个{}被当作一个空代码块，所以这段代码在这种情况下相当于<code>+[]</code>, 也就是<code>toNumber([])</code>，故返回 0。</p>
-<p>如果<code>(&#123;&#125; + [])</code>这样直接运行的话就会和console的方式得到相同的结果。</p>
-<p>那这样的话在控制台中直接运行<code>&#123;&#125; +&#123;&#125;</code>，是不是得0呢?</p>
-<p>并不会。会得到<code>&#39;[object Object][object Object]&#39;</code></p>
-</blockquote>
-<p>一些在**<code>WTFJS</code>**中出现的一些例子：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// baNaNa</span></span><br><span class="line"><span class="string">&quot;b&quot;</span> + <span class="string">&quot;a&quot;</span> + +<span class="string">&quot;a&quot;</span> + <span class="string">&quot;a&quot;</span>; <span class="comment">// -&gt; &#x27;baNaNa&#x27;</span></span><br><span class="line"><span class="string">&quot;foo&quot;</span> + +<span class="string">&quot;bar&quot;</span>; <span class="comment">// -&gt; &#x27;fooNaN&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Adding arrays</span></span><br><span class="line">[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>] + [<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>]; <span class="comment">// -&gt; &#x27;1,2,34,5,6&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Math with true and false</span></span><br><span class="line"><span class="literal">true</span> + <span class="literal">true</span>; <span class="comment">// -&gt; 2</span></span><br><span class="line">(<span class="literal">true</span> + <span class="literal">true</span>) * (<span class="literal">true</span> + <span class="literal">true</span>) - <span class="literal">true</span>; <span class="comment">// -&gt; 3</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Funny math</span></span><br><span class="line"> <span class="number">3</span>  - <span class="number">1</span>  <span class="comment">// -&gt; 2</span></span><br><span class="line"> <span class="number">3</span>  + <span class="number">1</span>  <span class="comment">// -&gt; 4</span></span><br><span class="line"><span class="string">&#x27;3&#x27;</span> - <span class="number">1</span>  <span class="comment">// -&gt; 2</span></span><br><span class="line"><span class="string">&#x27;3&#x27;</span> + <span class="number">1</span>  <span class="comment">// -&gt; &#x27;31&#x27;</span></span><br><span class="line"><span class="string">&#x27;&#x27;</span> + <span class="string">&#x27;&#x27;</span> <span class="comment">// -&gt; &#x27;&#x27;</span></span><br><span class="line">[] + [] <span class="comment">// -&gt; &#x27;&#x27;</span></span><br><span class="line">&#123;&#125; + [] <span class="comment">// -&gt; 0</span></span><br><span class="line">[] + &#123;&#125; <span class="comment">// -&gt; &#x27;[object Object]&#x27;</span></span><br><span class="line">&#123;&#125; + &#123;&#125; <span class="comment">// -&gt; &#x27;[object Object][object Object]&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="string">&#x27;222&#x27;</span> - -<span class="string">&#x27;111&#x27;</span> <span class="comment">// -&gt; 333</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 这种形式，用猜的方式也能直到需要toNumber</span></span><br><span class="line">[<span class="number">4</span>] * [<span class="number">4</span>]       <span class="comment">// -&gt; 16</span></span><br><span class="line">[] * []         <span class="comment">// -&gt; 0</span></span><br><span class="line">[<span class="number">4</span>, <span class="number">4</span>] * [<span class="number">4</span>, <span class="number">4</span>] <span class="comment">// NaN</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="3"><a href="#3" class="headerlink" title="3. =="></a>3. ==</h3><p><strong><a target="_blank" rel="noopener" href="http://es5.github.io/#x11.9.3">11.9.3 The Abstract Equality Comparison Algorithm</a></strong></p>
-<p>以下截取了规范中关于 <code>The Abstract Equality Comparison Algorithm</code> 的相关描述，嫌太长可以跳过，看总结部分。</p>
-<blockquote>
-<ol>
-<li><p>If <a target="_blank" rel="noopener" href="http://es5.github.io/#Type">Type</a>(<em>x</em>) is the same as <a target="_blank" rel="noopener" href="http://es5.github.io/#Type">Type</a>(<em>y</em>), then</p>
-<ol>
-<li><p> If <a target="_blank" rel="noopener" href="http://es5.github.io/#Type">Type</a>(<em>x</em>) is Undefined, return <strong>true</strong>.</p>
-</li>
-<li><p> If <a target="_blank" rel="noopener" href="http://es5.github.io/#Type">Type</a>(<em>x</em>) is Null, return <strong>true</strong>.</p>
-</li>
-<li><p>If <a target="_blank" rel="noopener" href="http://es5.github.io/#Type">Type</a>(<em>x</em>) is Number, then</p>
-<ol>
-<li> If <em>x</em> is <strong>NaN</strong>, return <strong>false</strong>.</li>
-<li> If <em>y</em> is <strong>NaN</strong>, return <strong>false</strong>.</li>
-<li> If <em>x</em> is the same Number value as <em>y</em>, return <strong>true</strong>.</li>
-<li> If <em>x</em> is <strong>+0</strong> and <em>y</em> is <strong>−</strong>0 <strong>, return</strong> true.</li>
-<li> If <em>x</em> is <strong>−</strong>0 and <em>y</em> is <strong>+0</strong>, return <strong>true</strong>.</li>
-<li> Return <strong>false</strong>.</li>
-</ol>
-</li>
-<li><p> If <a target="_blank" rel="noopener" href="http://es5.github.io/#Type">Type</a>(<em>x</em>) is String, then return <strong>true</strong> if <em>x</em> and <em>y</em> are exactly the same sequence of characters (same length and same characters in corresponding positions). Otherwise, return <strong>false</strong>.</p>
-</li>
-<li><p> If <a target="_blank" rel="noopener" href="http://es5.github.io/#Type">Type</a>(<em>x</em>) is Boolean, return <strong>true</strong> if <em>x</em> and <em>y</em> are both <strong>true</strong> or both <strong>false</strong>. Otherwise, return <strong>false</strong>.</p>
-</li>
-<li><p> Return <strong>true</strong> if <em>x</em> and <em>y</em> refer to the same object. Otherwise, return <strong>false</strong>.</p>
-</li>
-</ol>
-</li>
-<li><p> If <em>x</em> is <strong>null</strong> and <em>y</em> is <strong>undefined</strong>, return <strong>true</strong>.</p>
-</li>
-<li><p> If <em>x</em> is <strong>undefined</strong> and <em>y</em> is <strong>null</strong>, return <strong>true</strong>.</p>
-</li>
-<li><p> If <a target="_blank" rel="noopener" href="http://es5.github.io/#Type">Type</a>(<em>x</em>) is Number and <a target="_blank" rel="noopener" href="http://es5.github.io/#Type">Type</a>(<em>y</em>) is String, return the result of the comparison <em>x</em> == <a target="_blank" rel="noopener" href="http://es5.github.io/#x9.3">ToNumber</a>(<em>y</em>).</p>
-</li>
-<li><p> If <a target="_blank" rel="noopener" href="http://es5.github.io/#Type">Type</a>(<em>x</em>) is String and <a target="_blank" rel="noopener" href="http://es5.github.io/#Type">Type</a>(<em>y</em>) is Number, return the result of the comparison <a target="_blank" rel="noopener" href="http://es5.github.io/#x9.3">ToNumber</a>(<em>x</em>) == <em>y</em>.</p>
-</li>
-<li><p> If <a target="_blank" rel="noopener" href="http://es5.github.io/#Type">Type</a>(<em>x</em>) is Boolean, return the result of the comparison <a target="_blank" rel="noopener" href="http://es5.github.io/#x9.3">ToNumber</a>(<em>x</em>) == <em>y</em>.</p>
-</li>
-<li><p> If <a target="_blank" rel="noopener" href="http://es5.github.io/#Type">Type</a>(<em>y</em>) is Boolean, return the result of the comparison <em>x</em> == <a target="_blank" rel="noopener" href="http://es5.github.io/#x9.3">ToNumber</a>(<em>y</em>).</p>
-</li>
-<li><p> If <a target="_blank" rel="noopener" href="http://es5.github.io/#Type">Type</a>(<em>x</em>) is either String or Number and <a target="_blank" rel="noopener" href="http://es5.github.io/#Type">Type</a>(<em>y</em>) is Object, return the result of the comparison <em>x</em> == <a target="_blank" rel="noopener" href="http://es5.github.io/#x9.1">ToPrimitive</a>(<em>y</em>).</p>
-</li>
-<li><p> If <a target="_blank" rel="noopener" href="http://es5.github.io/#Type">Type</a>(<em>x</em>) is Object and <a target="_blank" rel="noopener" href="http://es5.github.io/#Type">Type</a>(<em>y</em>) is either String or Number, return the result of the comparison <a target="_blank" rel="noopener" href="http://es5.github.io/#x9.1">ToPrimitive</a>(<em>x</em>) == <em>y</em>.</p>
-</li>
-<li><p> Return <strong>false</strong>.</p>
-</li>
-</ol>
-</blockquote>
-<p><strong>总结</strong>（ x == y）</p>
-<ul>
-<li><p>如果<code>x</code>与<code>y</code>类型相同的话，分为以下几种情况：</p>
-<ul>
-<li><p>  都是<code>undefined</code>或者都是<code>null</code>，返回<code>true</code></p>
-</li>
-<li><p>都是Number</p>
-<ul>
-<li>  其中一方是<code>NaN</code>，返回<code>false</code></li>
-<li>  数值相同，返回<code>true</code></li>
-<li>  +0 和 -0 比较， 返回<code>true</code></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<!---->
-
-<ul>
-<li><p>如果x与y类型不同的话</p>
-<ul>
-<li><p>null 和 undefined ，对应2、3</p>
-  <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(<span class="literal">null</span> == <span class="literal">undefined</span>); <span class="comment">//true</span></span><br></pre></td></tr></table></figure></li>
-</ul>
-  <!---->
-
-<ul>
-<li><p>字符串与数字比较， 对应4、5</p>
-<p>  都转换为数字进行比较</p>
-</li>
-<li><p>x或者y其中一方为布尔量, 对应6、7</p>
-  <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(<span class="literal">true</span> == <span class="string">&#x27;2&#x27;</span>)</span><br></pre></td></tr></table></figure></li>
-</ul>
-  <!---->
-
-<ul>
-<li><p>x或者y一方为对象，另一方为字符串或者数字</p>
-<p>  若x为对象，<a target="_blank" rel="noopener" href="http://es5.github.io/#x9.1">ToPrimitive</a>(<em>x</em>) == <em>y</em>，</p>
-<p>  若y为对象，<em>x</em> == <a target="_blank" rel="noopener" href="http://es5.github.io/#x9.1">ToPrimitive</a>(<em>y</em>)</p>
-</li>
-</ul>
-<p>  一些在**<code>WTFJS</code>**中出现的一些例子：</p>
-</li>
-</ul>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// NaN is not a NaN</span></span><br><span class="line"><span class="literal">NaN</span> === <span class="literal">NaN</span>; <span class="comment">// -&gt; false</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">// [] is equal ![]</span></span><br><span class="line">[] == ![]; <span class="comment">// -&gt; true</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// true is not equal ![], but not equal [] too</span></span><br><span class="line"><span class="literal">true</span> == []; <span class="comment">// -&gt; false</span></span><br><span class="line"><span class="literal">true</span> == ![]; <span class="comment">// -&gt; false</span></span><br><span class="line"><span class="literal">false</span> == []; <span class="comment">// -&gt; true</span></span><br><span class="line"><span class="literal">false</span> == ![]; <span class="comment">// -&gt; true</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// null is falsy, but not false</span></span><br><span class="line">!!<span class="literal">null</span>; <span class="comment">// -&gt; false</span></span><br><span class="line"><span class="literal">null</span> == <span class="literal">false</span>; <span class="comment">// -&gt; false</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">// true is false</span></span><br><span class="line">!!<span class="string">&quot;false&quot;</span> == !!<span class="string">&quot;true&quot;</span>; <span class="comment">// -&gt; true</span></span><br><span class="line">!!<span class="string">&quot;false&quot;</span> === !!<span class="string">&quot;true&quot;</span>; <span class="comment">// -&gt; true</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// [] is truthy, but not true</span></span><br><span class="line">!![]       <span class="comment">// -&gt; true</span></span><br><span class="line">[] == <span class="literal">true</span> <span class="comment">// -&gt; false</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Array equality is a monster</span></span><br><span class="line">[] == <span class="string">&#x27;&#x27;</span>   <span class="comment">// -&gt; true</span></span><br><span class="line">[] == <span class="number">0</span>    <span class="comment">// -&gt; true</span></span><br><span class="line">[<span class="string">&#x27;&#x27;</span>] == <span class="string">&#x27;&#x27;</span> <span class="comment">// -&gt; true</span></span><br><span class="line">[<span class="number">0</span>] == <span class="number">0</span>   <span class="comment">// -&gt; true</span></span><br><span class="line">[<span class="number">0</span>] == <span class="string">&#x27;&#x27;</span>  <span class="comment">// -&gt; false</span></span><br><span class="line">[<span class="string">&#x27;&#x27;</span>] == <span class="number">0</span>  <span class="comment">// -&gt; true</span></span><br><span class="line"></span><br><span class="line">[<span class="literal">null</span>] == <span class="string">&#x27;&#x27;</span>      <span class="comment">// true</span></span><br><span class="line">[<span class="literal">null</span>] == <span class="number">0</span>       <span class="comment">// true</span></span><br><span class="line">[<span class="literal">undefined</span>] == <span class="string">&#x27;&#x27;</span> <span class="comment">// true</span></span><br><span class="line">[<span class="literal">undefined</span>] == <span class="number">0</span>  <span class="comment">// true</span></span><br><span class="line"></span><br><span class="line">[[]] == <span class="number">0</span>  <span class="comment">// true</span></span><br><span class="line">[[]] == <span class="string">&#x27;&#x27;</span> <span class="comment">// true</span></span><br><span class="line"></span><br><span class="line">[[[[[[]]]]]] == <span class="string">&#x27;&#x27;</span> <span class="comment">// true</span></span><br><span class="line">[[[[[[]]]]]] == <span class="number">0</span>  <span class="comment">// true</span></span><br><span class="line"></span><br><span class="line">[[[[[[ <span class="literal">null</span> ]]]]]] == <span class="number">0</span>  <span class="comment">// true</span></span><br><span class="line">[[[[[[ <span class="literal">null</span> ]]]]]] == <span class="string">&#x27;&#x27;</span> <span class="comment">// true</span></span><br><span class="line"></span><br><span class="line">[[[[[[ <span class="literal">undefined</span> ]]]]]] == <span class="number">0</span>  <span class="comment">// true</span></span><br><span class="line">[[[[[[ <span class="literal">undefined</span> ]]]]]] == <span class="string">&#x27;&#x27;</span> <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
-<h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><p>这一部分列举了其他<code>WTFJS</code>中一些其他的案例，有兴趣的可以看看</p>
-<ul>
-<li>  It’s a fail</li>
-</ul>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// It&#x27;s a fail</span></span><br><span class="line">(![] + [])[+[]] +</span><br><span class="line">  (![] + [])[+!+[]] +</span><br><span class="line">  ([![]] + [][[]])[+!+[] + [+[]]] +</span><br><span class="line">  (![] + [])[!+[] + !+[]];</span><br><span class="line"><span class="comment">// -&gt; &#x27;fail&#x27;</span></span><br></pre></td></tr></table></figure>
-
-<p>第一眼看到这一长串式子，心里：💢 MD这都啥跟啥呀!!!💢 , 但是如果认真看过上面提到的知识，耐心一点是能够得到这个<code>fail</code>结果的。</p>
-<p>具体过程这里就不在赘述，<a target="_blank" rel="noopener" href="https://github.com/denysdovhan/wtfjs#its-a-fail">It’s a fail</a> 中有详细的过程解释。</p>
-<ul>
-<li>  null 与 0</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">null == 0; // false  //1</span><br><span class="line">null &gt; 0; // false   //2</span><br><span class="line">null &gt;= 0; // true   //3</span><br></pre></td></tr></table></figure>
-
-<p>首先看第一个，不要先入为主的将null 转换为0 再进行比较，仔细回想一下，会发现之前规范中并没有这样的规则说要在这里把null转换为0， 刚刚与预想的情形根本不会出现。</p>
-<p>如果在 == 两边出现了一个null, 那么只有另一边也是null 或者是 undefined的情况下，返回值财位 true, 对应**<a target="_blank" rel="noopener" href="http://es5.github.io/#x11.9.3">11.9.3 The Abstract Equality Comparison Algorithm</a>**中2、3.</p>
-<p>接下来将2 和 3 放在一起看，null 不大于0 ， 同时null 又大于等于0 ❓❓❓</p>
-<p>对于2, 判断的流程应该如下：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="literal">null</span> &gt; <span class="number">0</span></span><br><span class="line">+<span class="literal">null</span> = +<span class="number">0</span></span><br><span class="line"><span class="number">0</span> &gt; <span class="number">0</span></span><br><span class="line"><span class="literal">false</span></span><br></pre></td></tr></table></figure>
-
-<p>而对于<code>null &gt;= 0</code>, 可能会猜想出现这种情况：<code>null &gt; 0 || null == 0</code>, 但这样会返回<code>false</code>，所以很明显不是。原因在于 <code>&gt;=</code>以一种不同的方式运作，详见<a target="_blank" rel="noopener" href="http://es5.github.io/#x11.8.4">11.8.4 The Greater-than-or-equal Operator ( &gt;= ) </a>。简单地说就是 当 <code>null &gt;= 0</code>进行比较时，依据是 <code>null &lt; 0</code>的结果，如果 <code>null &lt; 0</code>为true, 那么返回 <code>false</code>; 反之返回<code>true</code></p>
-<p>除开上述提到的一些部分，<a target="_blank" rel="noopener" href="https://github.com/denysdovhan/wtfjs#readme">WTFJS</a>中还有一些其他实例，有兴趣可以去查看，另外其中的中文翻译文档貌似有些错误，直接看英文版就好。</p>
-<p>参考：</p>
-<p><a target="_blank" rel="noopener" href="https://github.com/denysdovhan/wtfjs">WTFJS</a></p>
-<p><a target="_blank" rel="noopener" href="https://github.com/mqyqingfeng/Blog/issues/159">JavaScript 深入之头疼的类型转换(上)</a></p>
-<p><a target="_blank" rel="noopener" href="https://github.com/mqyqingfeng/Blog/issues/164">JavaScript深入之头疼的类型转换(下)</a></p>
-<p><a target="_blank" rel="noopener" href="https://blog.campvanilla.com/javascript-the-curious-case-of-null-0-7b131644e274">Javascript : The Curious Case of Null &gt;= 0</a></p>
-<p><a target="_blank" rel="noopener" href="http://es5.github.io/">ECMAScript 5.1</a></p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span>
+    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/3/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -1330,7 +1337,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">19</span>
+          <span class="site-state-item-count">22</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

@@ -22,24 +22,17 @@
     var CONFIG = {"hostname":"example.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="promise解决了什么问题？主要是回调嵌套和控制反转 回调嵌套 嵌套和缩进只是格式层面的问题，深层次问题是代码难以复用、堆栈信息断开、引用外层变量  代码难以复用  回调中引用了外层变量，提取出来后需要进行相应修改   堆栈信息断开  异步回调函数执行时将回调函数放入任务队列中，代码继续执行，直到主线程完成，然后才会从任务队列中选择已经完成的任务放入执行栈中，如果回调报错，无法获取调用该异步操作">
-<meta property="og:type" content="article">
-<meta property="og:title" content="promise解决了什么问题">
-<meta property="og:url" content="http://example.com/2022/05/06/promise%E8%A7%A3%E5%86%B3%E4%BA%86%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98/index.html">
+  <meta name="description" content="孩子，快逃！！！">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Martisss&#39;s blog">
+<meta property="og:url" content="http://example.com/archives/2022/06/index.html">
 <meta property="og:site_name" content="Martisss&#39;s blog">
-<meta property="og:description" content="promise解决了什么问题？主要是回调嵌套和控制反转 回调嵌套 嵌套和缩进只是格式层面的问题，深层次问题是代码难以复用、堆栈信息断开、引用外层变量  代码难以复用  回调中引用了外层变量，提取出来后需要进行相应修改   堆栈信息断开  异步回调函数执行时将回调函数放入任务队列中，代码继续执行，直到主线程完成，然后才会从任务队列中选择已经完成的任务放入执行栈中，如果回调报错，无法获取调用该异步操作">
+<meta property="og:description" content="孩子，快逃！！！">
 <meta property="og:locale">
-<meta property="og:image" content="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/d2f69064fa2a4c2cba1655b7318515fa~tplv-k3u1fbpfcp-watermark.image">
-<meta property="article:published_time" content="2022-05-06T08:17:18.000Z">
-<meta property="article:modified_time" content="2022-05-16T06:21:13.718Z">
 <meta property="article:author" content="martisss">
-<meta property="article:tag" content="promise">
-<meta property="article:tag" content="JavaScript">
-<meta property="article:tag" content="ES6">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/d2f69064fa2a4c2cba1655b7318515fa~tplv-k3u1fbpfcp-watermark.image">
 
-<link rel="canonical" href="http://example.com/2022/05/06/promise%E8%A7%A3%E5%86%B3%E4%BA%86%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98/">
+<link rel="canonical" href="http://example.com/archives/2022/06/">
 
 
 <script id="page-configurations">
@@ -47,12 +40,12 @@
   CONFIG.page = {
     sidebar: "",
     isHome : false,
-    isPost : true,
+    isPost : false,
     lang   : 'zh-Hans'
   };
 </script>
 
-  <title>promise解决了什么问题 | Martisss's blog</title>
+  <title>归档 | Martisss's blog</title>
   
 
 
@@ -162,139 +155,90 @@
         <div class="content-wrap">
           
 
-          <div class="content post posts-expand">
+          <div class="content archive">
             
 
-    
   
   
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/05/06/promise%E8%A7%A3%E5%86%B3%E4%BA%86%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/avatar.gif">
-      <meta itemprop="name" content="martisss">
-      <meta itemprop="description" content="孩子，快逃！！！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Martisss's blog">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          promise解决了什么问题
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2022-05-06 16:17:18" itemprop="dateCreated datePublished" datetime="2022-05-06T16:17:18+08:00">2022-05-06</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-05-16 14:21:13" itemprop="dateModified" datetime="2022-05-16T14:21:13+08:00">2022-05-16</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">学习</span></a>
-                </span>
-            </span>
-
-          
-            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              <span class="post-meta-item-text">阅读次数：</span>
-              <span id="busuanzi_value_page_pv"></span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
+  
+  <div class="post-block">
+    <div class="posts-collapse">
+      <div class="collection-title">
+        <span class="collection-header">嗯..! 目前共计 22 篇日志。 继续努力。</span>
+      </div>
 
       
-        <h3 id="promise解决了什么问题？"><a href="#promise解决了什么问题？" class="headerlink" title="promise解决了什么问题？"></a>promise解决了什么问题？</h3><p>主要是回调嵌套和控制反转</p>
-<p><strong>回调嵌套</strong></p>
-<p>嵌套和缩进只是格式层面的问题，深层次问题是代码难以复用、堆栈信息断开、引用外层变量</p>
-<ul>
-<li><p>代码难以复用</p>
-<blockquote>
-<p>回调中引用了外层变量，提取出来后需要进行相应修改</p>
-</blockquote>
-</li>
-<li><p>堆栈信息断开</p>
-<blockquote>
-<p>异步回调函数执行时将回调函数放入任务队列中，代码继续执行，直到主线程完成，然后才会从任务队列中选择已经完成的任务放入执行栈中，如果回调报错，无法获取调用该异步操作时的栈中的信息，不容易判定哪里出现了错误。</p>
-</blockquote>
-</li>
-<li><p>借助外层变量</p>
-<blockquote>
-<p>多个异步计算同时进行，由于无法预期完成顺序，必须借助外层作用域的变量，可能被其它同一作用域的函数访问并且修改，容易造成误操作。</p>
-</blockquote>
-</li>
-</ul>
-<p><strong>控制反转</strong></p>
-<p>使用第三方api，回调函数的执行次数、是否执行、执行时机都取决于第三方库的实现</p>
-<ol>
-<li>回调函数执行多次      ===&gt;  promise只能resolve一次</li>
-<li>回调函数没有执行   ===&gt; 使用Promise.race判断</li>
-<li>回调函数有时同步执行有时异步执行  ===&gt; promise总是异步的</li>
-</ol>
-<h4 id="async-await的问题"><a href="#async-await的问题" class="headerlink" title="async  await的问题"></a>async  await的问题</h4><p><strong>场景一：组合多个promsie</strong></p>
-<p>await关键字是串行的，想要同时获取多个promise的结果，需要用promise的api进行处理，比如promise.all</p>
-<p><strong>场景二：存储promsie的值</strong></p>
-<p>async/await 是语法，不是值，因此它不能被存储和传递。而 promise 对象，<strong>可以存储在内存里，可以作为参数在函数中传递。</strong></p>
-<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/d2f69064fa2a4c2cba1655b7318515fa~tplv-k3u1fbpfcp-watermark.image" alt="image.png"></p>
-<p>建立url到promise映射，通过async/await语法隐藏了promise对象，顶多建立url到result的缓存，但是当页面上发出get请求，结果未抵达，但是又触发了多个相同请求的话就无法命中result缓存，如果缓存的是promise的对象，就可以将同一个promise返回，利用promise对象可以多次调用then方法的特性，让所有相同的get请求获得同一个异步请求结果。</p>
-
+    <div class="collection-year">
+      <span class="collection-header">2022</span>
     </div>
 
-    
-    
-    
+  <article itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
 
-      <footer class="post-footer">
-          <div class="post-tags">
-              <a href="/tags/promise/" rel="tag"># promise</a>
-              <a href="/tags/JavaScript/" rel="tag"># JavaScript</a>
-              <a href="/tags/ES6/" rel="tag"># ES6</a>
-          </div>
+      <div class="post-meta">
+        <time itemprop="dateCreated"
+              datetime="2022-06-07T15:33:15+08:00"
+              content="2022-06-07">
+          06-07
+        </time>
+      </div>
 
-        
+      <div class="post-title">
+          <a class="post-title-link" href="/2022/06/07/TypeScript%E7%B1%BB%E5%9E%8B%E4%BD%93%E6%93%8D%E4%B8%AD%E7%9A%84%E5%85%B3%E9%94%AE%E5%AD%97%E8%AF%A6%E8%A7%A3%EF%BC%88%E4%B8%89%EF%BC%89/" itemprop="url">
+            <span itemprop="name">TypeScript类型体操中的关键字详解（三）</span>
+          </a>
+      </div>
 
-
-        
-    <div class="post-nav">
-      <div class="post-nav-item">
-    <a href="/2022/05/05/promise%E7%9A%84%E4%B8%80%E4%BA%9Bapi%E7%9A%84%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF/" rel="prev" title="promise的一些api的应用场景">
-      <i class="fa fa-chevron-left"></i> promise的一些api的应用场景
-    </a></div>
-      <div class="post-nav-item">
-    <a href="/2022/06/05/TypeScript%E7%B1%BB%E5%9E%8B%E4%BD%93%E6%93%8D%E4%B8%AD%E7%9A%84%E5%85%B3%E9%94%AE%E5%AD%97%E8%AF%A6%E8%A7%A3%EF%BC%88%E4%B8%80%EF%BC%89/" rel="next" title="TypeScript类型体操中的关键字详解（一）">
-      TypeScript类型体操中的关键字详解（一） <i class="fa fa-chevron-right"></i>
-    </a></div>
-    </div>
-      </footer>
-    
+    </header>
   </article>
+
+  <article itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      <div class="post-meta">
+        <time itemprop="dateCreated"
+              datetime="2022-06-06T15:32:46+08:00"
+              content="2022-06-06">
+          06-06
+        </time>
+      </div>
+
+      <div class="post-title">
+          <a class="post-title-link" href="/2022/06/06/TypeScript%E7%B1%BB%E5%9E%8B%E4%BD%93%E6%93%8D%E4%B8%AD%E7%9A%84%E5%85%B3%E9%94%AE%E5%AD%97%E8%AF%A6%E8%A7%A3%EF%BC%88%E4%BA%8C%EF%BC%89/" itemprop="url">
+            <span itemprop="name">TypeScript类型体操中的关键字详解（二）</span>
+          </a>
+      </div>
+
+    </header>
+  </article>
+
+  <article itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      <div class="post-meta">
+        <time itemprop="dateCreated"
+              datetime="2022-06-05T15:31:54+08:00"
+              content="2022-06-05">
+          06-05
+        </time>
+      </div>
+
+      <div class="post-title">
+          <a class="post-title-link" href="/2022/06/05/TypeScript%E7%B1%BB%E5%9E%8B%E4%BD%93%E6%93%8D%E4%B8%AD%E7%9A%84%E5%85%B3%E9%94%AE%E5%AD%97%E8%AF%A6%E8%A7%A3%EF%BC%88%E4%B8%80%EF%BC%89/" itemprop="url">
+            <span itemprop="name">TypeScript类型体操中的关键字详解（一）</span>
+          </a>
+      </div>
+
+    </header>
+  </article>
+
+
+    </div>
+  </div>
   
   
+  
+
   
 
 
@@ -347,7 +291,6 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#promise%E8%A7%A3%E5%86%B3%E4%BA%86%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98%EF%BC%9F"><span class="nav-number">1.</span> <span class="nav-text">promise解决了什么问题？</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#async-await%E7%9A%84%E9%97%AE%E9%A2%98"><span class="nav-number">1.1.</span> <span class="nav-text">async  await的问题</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 

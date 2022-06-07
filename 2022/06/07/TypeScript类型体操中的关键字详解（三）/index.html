@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="作用infer这个词的含义即 推断，实际作用可以用四个字概括：类型推导。它会在类型未推导时进行占位，等到真正推导成功后，它能准确地返回正确的类型。 在这个条件语句 T extends (...args: infer P) &#x3D;&gt; any ? P : T 中，infer P 表示待推断的函数参数。 整句含义为：如果 T 能赋值给 (...args: infer P) &#x3D;&gt; any，则结果是">
+<meta property="og:type" content="article">
+<meta property="og:title" content="TypeScript类型体操中的关键字详解（三）">
+<meta property="og:url" content="http://example.com/2022/06/07/TypeScript%E7%B1%BB%E5%9E%8B%E4%BD%93%E6%93%8D%E4%B8%AD%E7%9A%84%E5%85%B3%E9%94%AE%E5%AD%97%E8%AF%A6%E8%A7%A3%EF%BC%88%E4%B8%89%EF%BC%89/index.html">
+<meta property="og:site_name" content="Martisss&#39;s blog">
+<meta property="og:description" content="作用infer这个词的含义即 推断，实际作用可以用四个字概括：类型推导。它会在类型未推导时进行占位，等到真正推导成功后，它能准确地返回正确的类型。 在这个条件语句 T extends (...args: infer P) &#x3D;&gt; any ? P : T 中，infer P 表示待推断的函数参数。 整句含义为：如果 T 能赋值给 (...args: infer P) &#x3D;&gt; any，则结果是">
+<meta property="og:locale">
+<meta property="article:published_time" content="2022-06-07T07:33:15.000Z">
+<meta property="article:modified_time" content="2022-06-07T07:38:19.299Z">
+<meta property="article:author" content="martisss">
+<meta property="article:tag" content="TypeScript">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://example.com/2022/06/07/TypeScript%E7%B1%BB%E5%9E%8B%E4%BD%93%E6%93%8D%E4%B8%AD%E7%9A%84%E5%85%B3%E9%94%AE%E5%AD%97%E8%AF%A6%E8%A7%A3%EF%BC%88%E4%B8%89%EF%BC%89/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title>TypeScript类型体操中的关键字详解（三） | Martisss's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Martisss's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">hello, world</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/06/07/TypeScript%E7%B1%BB%E5%9E%8B%E4%BD%93%E6%93%8D%E4%B8%AD%E7%9A%84%E5%85%B3%E9%94%AE%E5%AD%97%E8%AF%A6%E8%A7%A3%EF%BC%88%E4%B8%89%EF%BC%89/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+      <meta itemprop="name" content="martisss">
+      <meta itemprop="description" content="孩子，快逃！！！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Martisss's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          TypeScript类型体操中的关键字详解（三）
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-06-07 15:33:15 / 修改时间：15:38:19" itemprop="dateCreated datePublished" datetime="2022-06-07T15:33:15+08:00">2022-06-07</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">学习</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="作用"><a href="#作用" class="headerlink" title="作用"></a>作用</h1><p><code>infer</code>这个词的含义即 推断，实际作用可以用四个字概括：<strong>类型推导</strong>。它会在类型未推导时进行占位，等到真正推导成功后，它能准确地返回正确的类型。</p>
+<p>在这个条件语句 <code>T extends (...args: infer P) =&gt; any ? P : T</code> 中，<code>infer P</code> 表示待推断的函数参数。</p>
+<p>整句含义为：如果 <code>T</code> 能赋值给 <code>(...args: infer P) =&gt; any</code>，则结果是 <code>(...args: infer P) =&gt; any</code> 类型中的参数 <code>P</code>，否则返回为 <code>T</code>。</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">interface</span> User &#123;</span><br><span class="line">  <span class="attr">name</span>: <span class="built_in">string</span>;</span><br><span class="line">  age: <span class="built_in">number</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Func = <span class="function">(<span class="params">user: User</span>) =&gt;</span> <span class="built_in">void</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Param = ParamType&lt;Func&gt;; <span class="comment">// Param = User</span></span><br><span class="line"><span class="keyword">type</span> AA = ParamType&lt;<span class="built_in">string</span>&gt;; <span class="comment">// string</span></span><br></pre></td></tr></table></figure>
+
+<p><code>infer</code>这个关键字在各种高级类型实现中出现频率很高，大部分情况下会与<code>extends</code>、<code>keyof</code>等关键字一起使用。</p>
+<h1 id="注意点"><a href="#注意点" class="headerlink" title="注意点"></a>注意点</h1><h2 id="infer只能在-extends-条件语句中使用，声明变量只能在true分支中使用"><a href="#infer只能在-extends-条件语句中使用，声明变量只能在true分支中使用" class="headerlink" title="infer只能在 extends 条件语句中使用，声明变量只能在true分支中使用"></a><strong><code>infer</code>只能在 extends 条件语句中使用，声明变量只能在true分支中使用</strong></h2><p>比如我想实现上文中<code>ParamType</code>类型，他接受一个函数类型，然后返回函数参数的类型。</p>
+<p>用如下方式实现：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> ParameType&lt;T <span class="keyword">extends</span> (...args: infer R) =&gt; <span class="built_in">any</span>&gt; = R</span><br><span class="line"><span class="comment">// error: &#x27;infer&#x27; declarations are only permitted in the &#x27;extends&#x27; clause of a conditional type.</span></span><br></pre></td></tr></table></figure>
+<p>  大意就是<code>infer</code>只能在<code>extends</code>条件语句中使用，在<a target="_blank" rel="noopener" href="https://juejin.cn/post/7106038466139389959">extends详解</a>中我们提到<code>extends</code>关键字的使用场景大概有以下几种：<strong>接口继承、类型约束以及条件类型</strong>。在上述<code>ParameType</code>类型实现中，很明显这是属于类型约束的用法，想要实现该类型需要使用条件类型。</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> Parameters&lt;T <span class="keyword">extends</span> (...args: <span class="built_in">any</span>) =&gt; <span class="built_in">any</span>&gt; = T <span class="keyword">extends</span> (...args: infer P) =&gt; <span class="built_in">any</span> ? P : <span class="built_in">never</span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>  <code>T extends (...args: any) =&gt; infer P</code>：如果不看<code>infer R</code>，这段代码实际表示： <code>T</code>是不是一个函数类型。</li>
+<li>  <code>(...args: any) =&gt; infer P</code>：这段代码实际表示一个函数类型，把它的参数使用<code>args</code>来表示，把它的返回类型用<code>P</code>来进行占位。</li>
+<li>  如果<code>T</code>满足是一个函数类型，那么我们返回其函数的返回类型，也就是<code>P</code>；如果不是一个函数类型，就返回<code>never</code></li>
+</ul>
+<p>此外，<strong>要注意<code>infer</code>声明的变量只能在<code>true</code>分支中使用</strong>。</p>
+<h2 id="对使用了函数重载的函数进行类型推断"><a href="#对使用了函数重载的函数进行类型推断" class="headerlink" title="对使用了函数重载的函数进行类型推断"></a><strong>对使用了函数重载的函数进行类型推断</strong></h2><p>函数重载或⽅法重载是使⽤相同名称和不同参数数量或类型创建多个⽅法的⼀种能⼒。一些 <code>JavaScript</code> 函数在调用的时候可以传入不同数量和类型的参数。举个例子。你可以写一个函数，返回一个日期类型 <code>Date</code>，这个函数接收一个时间戳（一个参数）或者一个 月/日/年 的格式 (三个参数)。在 <code>TypeScript</code>中，我们可以通过写重载签名 (<code>overlaod signatures</code>) 说明一个函数的不同调用方法。 我们需要写一些函数签名 (通常两个或者更多)，然后再写函数体的内容：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">makeDate</span>(<span class="params">timestamp: <span class="built_in">number</span></span>): <span class="title">Date</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">makeDate</span>(<span class="params">m: <span class="built_in">number</span>, d: <span class="built_in">number</span>, y: <span class="built_in">number</span></span>): <span class="title">Date</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">makeDate</span>(<span class="params">mOrTimestamp: <span class="built_in">number</span>, d?: <span class="built_in">number</span>, y?: <span class="built_in">number</span></span>): <span class="title">Date</span> </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (d !== <span class="literal">undefined</span> &amp;&amp; y !== <span class="literal">undefined</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Date</span>(y, mOrTimestamp, d);</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Date</span>(mOrTimestamp);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">const</span> d1 = makeDate(<span class="number">12345678</span>);</span><br><span class="line"><span class="keyword">const</span> d2 = makeDate(<span class="number">5</span>, <span class="number">5</span>, <span class="number">5</span>);</span><br><span class="line"><span class="keyword">const</span> d3 = makeDate(<span class="number">1</span>, <span class="number">3</span>);</span><br></pre></td></tr></table></figure>
+
+<p>对使用了函数重载的函数进行类型推断时，以最后一个签名为准，因为一般这个签名是用来处理所有情况的签名。</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> a = Parameters&lt;<span class="keyword">typeof</span> makeDate&gt;  <span class="comment">//type a = [m: number, d: number, y: number]</span></span><br></pre></td></tr></table></figure>
+<h2 id="infer的位置会影响到推断的结果"><a href="#infer的位置会影响到推断的结果" class="headerlink" title="infer的位置会影响到推断的结果"></a><strong>infer的位置会影响到推断的结果</strong></h2><p>这涉及到协变与逆变，具体的区别将在之后的文章中进行讲解，这里只需要知道：协变或逆变与 <code>infer</code> 参数位置有关。在 TypeScript 中，<strong>对象、类、数组和函数的返回值类型</strong>都是协变关系，而<strong>函数的参数类型</strong>是逆变关系，所以 <code>infer</code> 位置如果在函数参数上，就会遵循逆变原则。</p>
+<ul>
+<li>  <strong>当<code>infer</code>在协变的位置上时，同一类型变量的多个候选类型将会被推断为联合类型，</strong></li>
+</ul>
+<!---->
+
+<ul>
+<li>  <strong>当<code>infer</code>在逆变的位置上时，同一类型变量的多个候选类型将会被推断为交叉类型。</strong></li>
+</ul>
+<p>看例子：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> Foo&lt;T&gt; = T <span class="keyword">extends</span> &#123; <span class="attr">a</span>: infer U, <span class="attr">b</span>: infer U &#125; ? U : <span class="built_in">never</span>;</span><br><span class="line"><span class="keyword">type</span> T10 = Foo&lt;&#123; <span class="attr">a</span>: <span class="built_in">string</span>, <span class="attr">b</span>: <span class="built_in">string</span> &#125;&gt;;  <span class="comment">// string</span></span><br><span class="line"><span class="keyword">type</span> T11 = Foo&lt;&#123; <span class="attr">a</span>: <span class="built_in">string</span>, <span class="attr">b</span>: <span class="built_in">number</span> &#125;&gt;;  <span class="comment">// string | number</span></span><br></pre></td></tr></table></figure>
+
+<p>按照上文的规则，这应该是属于协变，因此<code>T11</code>结果是<code>string | number</code></p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> Bar&lt;T&gt; = T <span class="keyword">extends</span> &#123; <span class="attr">a</span>: <span class="function">(<span class="params">x: infer U</span>) =&gt;</span> <span class="built_in">void</span>, <span class="attr">b</span>: <span class="function">(<span class="params">x: infer U</span>) =&gt;</span> <span class="built_in">void</span> &#125; ? U : <span class="built_in">never</span>;</span><br><span class="line"><span class="keyword">type</span> T20 = Bar&lt;&#123; <span class="attr">a</span>: <span class="function">(<span class="params">x: <span class="built_in">string</span></span>) =&gt;</span> <span class="built_in">void</span>, <span class="attr">b</span>: <span class="function">(<span class="params">x: <span class="built_in">string</span></span>) =&gt;</span> <span class="built_in">void</span> &#125;&gt;;  <span class="comment">// string</span></span><br><span class="line"><span class="keyword">type</span> T21 = Bar&lt;&#123; <span class="attr">a</span>: <span class="function">(<span class="params">x: <span class="built_in">string</span></span>) =&gt;</span> <span class="built_in">void</span>, <span class="attr">b</span>: <span class="function">(<span class="params">x: <span class="built_in">number</span></span>) =&gt;</span> <span class="built_in">void</span> &#125;&gt;;  <span class="comment">// string &amp; number</span></span><br></pre></td></tr></table></figure>
+
+<p>同样地，<code>x</code>这里既有可能是<code>string</code>,也可能是<code>number</code>,但最终却被推断为交叉类型。这就是因为<code>infer</code>所处的是逆变的位置，即这里是在推断函数的参数类型，导致最终推导为交叉类型。</p>
+<h1 id="类型体操实战"><a href="#类型体操实战" class="headerlink" title="类型体操实战"></a>类型体操实战</h1><blockquote>
+<p>高质量的类型可以提高项目的可维护性并避免一些潜在的漏洞。【<a target="_blank" rel="noopener" href="https://github.com/type-challenges/type-challenges">type-challenges</a>】旨在让你更好的了解 TS 的类型系统，编写你自己的类型工具，或者只是单纯的享受挑战的乐趣！</p>
+</blockquote>
+<p>【<a target="_blank" rel="noopener" href="https://github.com/type-challenges/type-challenges">type-challenges</a>】中有各种有关类型操作的小挑战，接下来我将挑选其中与<code>infer</code>有关的一些挑战。</p>
+<h3 id="First-of-Array"><a href="#First-of-Array" class="headerlink" title="First of Array"></a><a target="_blank" rel="noopener" href="https://github.com/type-challenges/type-challenges/blob/main/questions/00014-easy-first/README.md">First of Array</a></h3><p>要求：实现一个通用<code>First&lt;T&gt;</code>，它接受一个数组<code>T</code>并返回它的第一个元素的类型。</p>
+<p>实现：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> First&lt;T <span class="keyword">extends</span> <span class="built_in">any</span>[]&gt; = T <span class="keyword">extends</span> [infer L, ...infer R] ? L : <span class="built_in">never</span></span><br></pre></td></tr></table></figure>
+
+<p>利用了<code>infer</code>声明了<code>L</code>和<code>R</code>进行占位，其中：</p>
+<ul>
+<li>  <code>infer R</code>： 表示数组第一个元素的占位。</li>
+<li>  <code>...infer L</code>: 表示数组剩余元素的占位。</li>
+<li>  通过<code>extends</code>判断进入<code>true</code>分支时，返回类型<code>L</code>，否则返回<code>never</code></li>
+</ul>
+<p>当然，上述实现方式是通过占位实现的，也可以通过索引的方式实现。</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> First&lt;T <span class="keyword">extends</span> <span class="built_in">any</span>[]&gt; = T <span class="keyword">extends</span> [] ? <span class="built_in">never</span> : T[<span class="number">0</span>]</span><br></pre></td></tr></table></figure>
+
+<h3 id="Capitalize"><a href="#Capitalize" class="headerlink" title="Capitalize"></a><a target="_blank" rel="noopener" href="https://github.com/type-challenges/type-challenges/blob/main/questions/00110-medium-capitalize/README.md">Capitalize</a></h3><p>要求：实现 <code>Capitalize&lt;T&gt;</code> 它将字符串的第一个字母转换为大写，其余字母保持原样。</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> capitalized = Capitalize&lt;<span class="string">&#x27;hello world&#x27;</span>&gt; <span class="comment">// expected to be &#x27;Hello world&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p>实现：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> Capitalize&lt;S <span class="keyword">extends</span> <span class="built_in">string</span>&gt; = S <span class="keyword">extends</span> <span class="string">`<span class="subst">$&#123;infer L&#125;</span><span class="subst">$&#123;infer R&#125;</span>`</span> ? <span class="string">`<span class="subst">$&#123;Uppercase&lt;L&gt;&#125;</span><span class="subst">$&#123;R&#125;</span>`</span>: S</span><br></pre></td></tr></table></figure>
+
+<p>既然有首字母大写，那么相应的首字母小写<code>Uncapatilize</code>的实现也类似：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> UnCapitalize&lt;S <span class="keyword">extends</span> <span class="built_in">string</span>&gt; = S <span class="keyword">extends</span> <span class="string">`<span class="subst">$&#123;infer L&#125;</span><span class="subst">$&#123;infer R&#125;</span>`</span> ? <span class="string">`<span class="subst">$&#123;Lowercase&lt;L&gt;&#125;</span><span class="subst">$&#123;R&#125;</span>`</span>: S</span><br></pre></td></tr></table></figure>
+
+<p>无论首字母大写还是首字母小写，核心实现还是用<code>infer L</code>去占位，然后对其调用<code>Uppercase</code>或者<code>Lowercase</code></p>
+<h3 id="Tuple-to-Union"><a href="#Tuple-to-Union" class="headerlink" title="Tuple to Union"></a><a target="_blank" rel="noopener" href="https://github.com/type-challenges/type-challenges/blob/main/questions/00010-medium-tuple-to-union/README.md">Tuple to Union</a></h3><p>要求：</p>
+<p>实现泛型<code>TupleToUnion&lt;T&gt;</code>，返回元组所有值的类型组成的联合类型</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> Arr = [<span class="string">&#x27;1&#x27;</span>, <span class="string">&#x27;2&#x27;</span>, <span class="string">&#x27;3&#x27;</span>]</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Test = TupleToUnion&lt;Arr&gt; <span class="comment">// expected to be &#x27;1&#x27; | &#x27;2&#x27; | &#x27;3&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p>实现：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> TupleToUnion&lt;T <span class="keyword">extends</span> <span class="built_in">any</span>[]&gt; = T[<span class="built_in">number</span>]</span><br></pre></td></tr></table></figure>
+
+<p>  <code>T[number]</code>：<strong>它会自动迭代元组的数字型索引，然后将所以元素组合成一个联合类型</strong>。</p>
+<p>这种解法应该是比较简单直接的，<code>T[number]</code>的使用比较巧妙，但如果是第一次动手实现这样的类型，比较难想到这种解法。</p>
+<p>如果想要用<code>infer</code>实现的话，应该如何操作呢？</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> TupleToUnion&lt;T <span class="keyword">extends</span> <span class="built_in">any</span>[]&gt; = T <span class="keyword">extends</span> [infer L, ...infer R] ? L | TupleToUnion&lt;R&gt; : <span class="built_in">never</span></span><br></pre></td></tr></table></figure>
+
+<p><code>L | TupleToUnion&lt;args&gt;</code>：L表示每一次迭代中的第一个元素，它的迭代过程可以用下面伪代码表示：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 第一次迭代</span></span><br><span class="line"><span class="keyword">const</span> L = <span class="string">&#x27;1&#x27;</span></span><br><span class="line"><span class="keyword">const</span> R = [<span class="string">&#x27;2&#x27;</span>, <span class="string">&#x27;3&#x27;</span>]</span><br><span class="line"><span class="keyword">const</span> result = <span class="string">&#x27;1&#x27;</span> | TupleToUnion&lt;args&gt;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 第二次迭代</span></span><br><span class="line"><span class="keyword">const</span> L = <span class="string">&#x27;2&#x27;</span></span><br><span class="line"><span class="keyword">const</span> R = [<span class="string">&#x27;3&#x27;</span>]</span><br><span class="line"><span class="keyword">const</span> result = <span class="string">&#x27;1&#x27;</span> | <span class="string">&#x27;2&#x27;</span> | TupleToUnion&lt;args&gt;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 第三次迭代</span></span><br><span class="line"><span class="keyword">const</span> L = <span class="string">&#x27;3&#x27;</span></span><br><span class="line"><span class="keyword">const</span> R = [<span class="string">&#x27;&#x27;</span>]</span><br><span class="line"><span class="keyword">const</span> result = <span class="string">&#x27;1&#x27;</span> | <span class="string">&#x27;2&#x27;</span> | <span class="string">&#x27;3&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p>说白了就是递归的思想，想通了也不难。</p>
+<p>在<a target="_blank" rel="noopener" href="https://jkchao.github.io/typescript-book-chinese/tips/infer.html#%E4%B8%80%E4%BA%9B%E7%94%A8%E4%BE%8B">深入理解TypeScritp</a>中看到一种解法，也很巧妙：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> TupleToUnion&lt;T <span class="keyword">extends</span> <span class="built_in">any</span>[]&gt; = T <span class="keyword">extends</span> <span class="built_in">Array</span>&lt;infer R&gt; ? R : <span class="built_in">never</span></span><br></pre></td></tr></table></figure>
+
+<p>该实现的前提是：<strong>tuple 类型在一定条件下，是可以赋值给数组类型</strong></p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> TTuple = [<span class="built_in">string</span>, <span class="built_in">number</span>];</span><br><span class="line"><span class="keyword">type</span> TArray = <span class="built_in">Array</span>&lt;<span class="built_in">string</span> | <span class="built_in">number</span>&gt;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Res = TTuple <span class="keyword">extends</span> TArray ? <span class="literal">true</span> : <span class="literal">false</span>; <span class="comment">// true</span></span><br><span class="line"><span class="keyword">type</span> ResO = TArray <span class="keyword">extends</span> TTuple ? <span class="literal">true</span> : <span class="literal">false</span>; <span class="comment">// false</span></span><br></pre></td></tr></table></figure>
+
+<p>那么，之后再利用<code>infer</code>类型推导的功能，<code>T extends Array&lt;infer R&gt;</code>进入<code>true</code>分支，就很容易得到想要的结果了。</p>
+<h3 id="Union-to-Intersection"><a href="#Union-to-Intersection" class="headerlink" title="Union to Intersection"></a><a target="_blank" rel="noopener" href="https://github.com/type-challenges/type-challenges/blob/main/questions/00055-hard-union-to-intersection/README.md">Union to Intersection</a></h3><p>要求：将联合类型转换为交叉类型</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> I = Union2Intersection&lt;<span class="string">&#x27;foo&#x27;</span> | <span class="number">42</span> | <span class="literal">true</span>&gt; <span class="comment">// expected to be &#x27;foo&#x27; &amp; 42 &amp; true</span></span><br></pre></td></tr></table></figure>
+
+<p>这个挑战的标签是<code>hard</code>, 还是很有挑战性的。主要涉及到上述注意点中的第三点，</p>
+<p>即：<strong>当<code>infer</code>在逆变的位置上时，同一类型变量的多个候选类型将会被推断为交叉类型。</strong></p>
+<p>直接给出<code>stackoverflow</code>上的<a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/50374908/transform-union-type-to-intersection-type">解答</a>:</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> UnionToIntersection&lt;U&gt; = (U <span class="keyword">extends</span> <span class="built_in">any</span> ? <span class="function">(<span class="params">k: U</span>) =&gt;</span> <span class="built_in">void</span> : <span class="built_in">never</span>) <span class="keyword">extends</span> (<span class="function">(<span class="params">k: infer I</span>) =&gt;</span> <span class="built_in">void</span>) ? I : <span class="built_in">never</span>;</span><br></pre></td></tr></table></figure>
+
+<p>具体实现可以分为以下几个步骤：</p>
+<ul>
+<li><p>  利用<code>extends</code>分配条件类型语句将联合类型中的每一个处理成<code>(x: U) =&gt; any</code>这样的函数类型</p>
+</li>
+<li><p>然后利用当<code>infer</code>在逆变的位置上时，同一类型变量的多个候选类型将会被推断为交叉类型，得到想要的结果。</p>
+<p>  其中，逆变的过程类似如下：</p>
+  <figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> T1 = &#123; <span class="attr">name</span>: <span class="built_in">string</span> &#125;;</span><br><span class="line"><span class="keyword">type</span> T2 = &#123; <span class="attr">age</span>: <span class="built_in">number</span> &#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Bar&lt;T&gt; = T <span class="keyword">extends</span> &#123; <span class="attr">a</span>: <span class="function">(<span class="params">x: infer U</span>) =&gt;</span> <span class="built_in">void</span>; b: <span class="function">(<span class="params">x: infer U</span>) =&gt;</span> <span class="built_in">void</span> &#125; ? U : <span class="built_in">never</span>;</span><br><span class="line"><span class="comment">// 处在逆变位置时，推导出来的为交叉类型</span></span><br><span class="line"><span class="keyword">type</span> T21 = Bar&lt;&#123; <span class="attr">a</span>: <span class="function">(<span class="params">x: T1</span>) =&gt;</span> <span class="built_in">void</span>; b: <span class="function">(<span class="params">x: T2</span>) =&gt;</span> <span class="built_in">void</span> &#125;&gt;; <span class="comment">// T1 &amp; T2</span></span><br></pre></td></tr></table></figure>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1></li>
+</ul>
+<ol>
+<li><p>作用：<strong>类型推导</strong>，在类型未推导时进行占位，等到真正推导成功后，它能准确地返回正确的类型</p>
+</li>
+<li><p>注意点：</p>
+</li>
+</ol>
+<ul>
+<li>  <code>infer</code>只能在 extends 条件语句中使用，声明变量只能在true分支中使用</li>
+<li>  对使用了函数重载的函数进行类型推断时，以最后一个签名为准，因为一般这个签名是用来处理所有情况的签名。</li>
+<li>  当<code>infer</code>在协变的位置上时，同一类型变量的多个候选类型将会被推断为联合类型；当<code>infer</code>在逆变的位置上时，同一类型变量的多个候选类型将会被推断为交叉类型。</li>
+</ul>
+<p><strong>更多</strong></p>
+<p><a target="_blank" rel="noopener" href="https://juejin.cn/post/7105778922851139598">TypeScript类型操作中的关键字详解（一）：keyof &amp; in</a></p>
+<p><a target="_blank" rel="noopener" href="https://juejin.cn/post/7106038466139389959">TypeScript类型操作中的关键字详解（二）：extends</a></p>
+<p><strong>参考</strong></p>
+<p><a target="_blank" rel="noopener" href="https://juejin.cn/post/6999441997236797470">精读《Typescript infer 关键字》</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/Microsoft/TypeScript/pull/21496#"><br>Type inference in conditional types</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/type-challenges/type-challenges">type-challenges</a></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/TypeScript/" rel="tag"># TypeScript</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/06/06/TypeScript%E7%B1%BB%E5%9E%8B%E4%BD%93%E6%93%8D%E4%B8%AD%E7%9A%84%E5%85%B3%E9%94%AE%E5%AD%97%E8%AF%A6%E8%A7%A3%EF%BC%88%E4%BA%8C%EF%BC%89/" rel="prev" title="TypeScript类型体操中的关键字详解（二）">
+      <i class="fa fa-chevron-left"></i> TypeScript类型体操中的关键字详解（二）
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BD%9C%E7%94%A8"><span class="nav-number">1.</span> <span class="nav-text">作用</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%B3%A8%E6%84%8F%E7%82%B9"><span class="nav-number">2.</span> <span class="nav-text">注意点</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#infer%E5%8F%AA%E8%83%BD%E5%9C%A8-extends-%E6%9D%A1%E4%BB%B6%E8%AF%AD%E5%8F%A5%E4%B8%AD%E4%BD%BF%E7%94%A8%EF%BC%8C%E5%A3%B0%E6%98%8E%E5%8F%98%E9%87%8F%E5%8F%AA%E8%83%BD%E5%9C%A8true%E5%88%86%E6%94%AF%E4%B8%AD%E4%BD%BF%E7%94%A8"><span class="nav-number">2.1.</span> <span class="nav-text">infer只能在 extends 条件语句中使用，声明变量只能在true分支中使用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AF%B9%E4%BD%BF%E7%94%A8%E4%BA%86%E5%87%BD%E6%95%B0%E9%87%8D%E8%BD%BD%E7%9A%84%E5%87%BD%E6%95%B0%E8%BF%9B%E8%A1%8C%E7%B1%BB%E5%9E%8B%E6%8E%A8%E6%96%AD"><span class="nav-number">2.2.</span> <span class="nav-text">对使用了函数重载的函数进行类型推断</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#infer%E7%9A%84%E4%BD%8D%E7%BD%AE%E4%BC%9A%E5%BD%B1%E5%93%8D%E5%88%B0%E6%8E%A8%E6%96%AD%E7%9A%84%E7%BB%93%E6%9E%9C"><span class="nav-number">2.3.</span> <span class="nav-text">infer的位置会影响到推断的结果</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B1%BB%E5%9E%8B%E4%BD%93%E6%93%8D%E5%AE%9E%E6%88%98"><span class="nav-number">3.</span> <span class="nav-text">类型体操实战</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#First-of-Array"><span class="nav-number">3.0.1.</span> <span class="nav-text">First of Array</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Capitalize"><span class="nav-number">3.0.2.</span> <span class="nav-text">Capitalize</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Tuple-to-Union"><span class="nav-number">3.0.3.</span> <span class="nav-text">Tuple to Union</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Union-to-Intersection"><span class="nav-number">3.0.4.</span> <span class="nav-text">Union to Intersection</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">4.</span> <span class="nav-text">总结</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="martisss"
+      src="/uploads/avatar.gif">
+  <p class="site-author-name" itemprop="name">martisss</p>
+  <div class="site-description" itemprop="description">孩子，快逃！！！</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">22</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">21</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/martisss" title="Martisss → https:&#x2F;&#x2F;github.com&#x2F;martisss" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>Martisss</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+      <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=441491828&auto=1&height=66"></iframe>
+      
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">martisss</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+  <script src="/js/wobblewindow.js"></script>
+  <script>
+    //只在桌面版网页启用特效
+    if( window.innerWidth > 768  ){
+      $(document).ready(function () {
+        
+          $('#header').wobbleWindow({
+            radius: 50,
+            movementTop: false,
+            movementLeft: false,
+            movementRight: false,
+            debug: false,
+          });
+        
+
+        
+          $('#sidebar').wobbleWindow({
+            radius: 50,
+            movementLeft: false,
+            movementTop: false,
+            movementBottom: false,
+            position: 'fixed',
+            debug: false,
+          });
+        
+
+        
+          $('#footer').wobbleWindow({
+            radius: 50,
+            movementBottom: false,
+            movementLeft: false,
+            movementRight: false,
+            offsetX: ,
+            position: 'absolute',
+            debug: false,
+          });
+        
+      });
+    }
+  </script>
+
+</body>
+<!--动态线条背景-->
+<script type="text/javascript"
+color="220,220,220" opacity='0.7' zIndex="-2" count="800" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js">
+</script>
+</html>
